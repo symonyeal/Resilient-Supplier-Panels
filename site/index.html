@@ -8,6 +8,7 @@
   <title>Supplier Resilience Lab · Coverage, checked</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="style.css">
+  <script src="vendor/plotly-basic-4.1.1.min.js" defer></script>
   <script src="data.js" defer></script>
   <script src="app.js" defer></script>
 </head>
@@ -15,7 +16,7 @@
   <a class="skip" href="#lab">Skip to the interactive case</a>
   <header class="top"><div class="wrap nav">
     <a class="brand" href="#"><span class="brand-mark" aria-hidden="true">sr<span>l</span></span><span>Supplier<br>Resilience Lab</span></a>
-    <nav aria-label="Main navigation"><a href="#lab">Explore</a><a href="#evidence">Evidence</a><a href="#method">Method</a><a href="https://github.com/symonyeal/Supplier-Resilience-Lab">Source <span aria-hidden="true">↗</span></a></nav>
+    <nav aria-label="Main navigation"><a href="#lab">Explore</a><a href="#evidence">Evidence</a><a href="#outcomes">Outcomes</a><a href="#method">Method</a><a href="https://github.com/symonyeal/Supplier-Resilience-Lab">Source <span aria-hidden="true">↗</span></a></nav>
   </div></header>
 
   <main>
@@ -83,12 +84,34 @@
       <div class="evidence-grid"><div class="finding"><span class="finding-number" id="resilient-count">—</span><h3>primary baskets could survive any one supplier failure.</h3><p>On this snapshot, single-qualified products block backup coverage. The blocking product is identified directly from the matrix.</p><a class="text-link" href="https://github.com/symonyeal/Supplier-Resilience-Lab/blob/main/docs/findings/2026-10-15-supplier-resilience.md">Read the full findings <span aria-hidden="true">↗</span></a></div><div class="benchmark-table"><table><caption>Berge completes more runs; FK-B emits its first panel earlier.</caption><thead><tr><th scope="col">Enumeration route</th><th scope="col">Complete runs</th><th scope="col">Median first panel</th></tr></thead><tbody id="benchmark-rows"></tbody></table><p class="fine" id="benchmark-note"></p><p class="fine">Timeouts and output caps are censored. First-panel medians exclude runs that emitted no panel; sample sizes appear below each time.</p></div></div>
     </div></section>
 
-    <section class="wrap method-section" id="method"><div class="section-heading"><div><p class="eyebrow">03 / Model and assurance</p><h2>Every panel comes with a reason to trust it.</h2></div><p>A checked model with a defined boundary: qualification coverage under stated supplier failures.</p></div>
+    <section class="wrap outcomes-section" id="outcomes" aria-labelledby="outcomes-title">
+      <div class="section-heading"><div><p class="eyebrow">03 / All measured outcomes</p><h2 id="outcomes-title">Large alternative families come from large supplier pools.</h2></div><p id="outcomes-summary"></p></div>
+      <div class="filters" role="group" aria-label="Filter outcomes">
+        <label>Granularity<select id="f-class"><option value="">All classes</option></select></label>
+        <label>Basket rule<select id="f-rule"><option value="">All rules</option></select></label>
+        <label>Failure budget<select id="f-k"><option value="">k = 0 and 1</option><option value="0">k = 0</option><option value="1">k = 1</option></select></label>
+        <label>Outcome<select id="f-outcome"><option value="">All outcomes</option><option value="exact">Exact count</option><option value="bound">Lower bound only</option><option value="infeasible">Infeasible</option></select></label>
+        <label>Product<input id="f-product" type="search" placeholder="Search product names" autocomplete="off"></label>
+        <button class="button" id="f-reset" type="button">Reset filters</button>
+      </div>
+      <div class="panel-box chart-box">
+        <div class="box-heading"><h3>Minimal panels against eligible suppliers</h3><span class="small-label" id="outcome-count"></span></div>
+        <div id="outcome-chart" role="img" aria-label="Scatter of minimal panel counts against eligible suppliers, both on log scales"></div>
+        <p class="fine" id="chart-note"></p>
+      </div>
+      <div class="outcomes-grid">
+        <div class="panel-box"><div class="table-scroll outcome-scroll"><table class="outcome-table"><caption>Every instance in the filter. Select one to inspect it.</caption><thead><tr><th scope="col">Basket</th><th scope="col">k</th><th scope="col">Eligible</th><th scope="col">Minimum</th><th scope="col">Minimal panels</th></tr></thead><tbody id="outcome-rows"></tbody></table></div>
+          <div class="download-row"><button class="button" id="download-outcomes" type="button">Download filtered CSV <span aria-hidden="true">↓</span></button><button class="button" id="download-record" type="button">Download selected record JSON</button></div></div>
+        <section class="panel-box" id="record" aria-live="polite" aria-labelledby="record-title"></section>
+      </div>
+    </section>
+
+    <section class="wrap method-section" id="method"><div class="section-heading"><div><p class="eyebrow">04 / Model and assurance</p><h2>Every panel comes with a reason to trust it.</h2></div><p>A checked model with a defined boundary: qualification coverage under stated supplier failures.</p></div>
       <ol class="method-steps"><li><span class="step-number">01</span><h3>Preserve the source</h3><p>A frozen workbook, exact product tokens and hashed mappings make each qualification traceable.</p></li><li><span class="step-number">02</span><h3>Find the panels</h3><p>MILP finds a minimum-cardinality panel. Hypergraph methods enumerate inclusion-minimal alternatives.</p></li><li><span class="step-number">03</span><h3>Check independently</h3><p>Matrix witnesses check feasibility and minimality. A separate MILP searches for missing panels.</p></li></ol>
       <div class="assumptions"><div><h3>What this establishes</h3><p>Every product retains a qualified supplier under the modelled failures. “Minimal” means no supplier can be removed; “minimum” means least cardinality.</p></div><div><h3>What still requires evidence</h3><p>Capacity, cost, willingness to bid, delivery times, shared plants and common ownership. This is a research case study, not a purchasing recommendation.</p></div></div>
       <details class="provenance"><summary>Inspect source, software and certificate provenance</summary><dl id="provenance"></dl><p><a href="cases.json" download>Download all certified cases</a> · <a href="document-1.0.json" download>Exchange schema 1.0</a> · <a href="https://github.com/symonyeal/Supplier-Resilience-Lab/blob/main/docs/MODEL.md">Model and proofs</a></p></details>
     </section>
-      <section class="reproduce"><div class="wrap reproduce-inner"><div><p class="eyebrow">04 / Reproduce the work</p><h2>Open data. Inspectable mathematics.<br>A working command line.</h2><p>Build the cases locally, inspect the certificates, or use the package with your own basket.</p></div><div><pre><code>python -m pip install "setuptools&gt;=77" wheel
+      <section class="reproduce"><div class="wrap reproduce-inner"><div><p class="eyebrow">05 / Reproduce the work</p><h2>Open data. Inspectable mathematics.<br>A working command line.</h2><p>Build the cases locally, inspect the certificates, or use the package with your own basket.</p></div><div><pre><code>python -m pip install "setuptools&gt;=77" wheel
 python -m pip install --no-build-isolation .
 srl build --basket examples/canned.csv --k 1 -o basket.json
 srl solve basket.json -o solution.json</code></pre><a class="text-link" href="https://github.com/symonyeal/Supplier-Resilience-Lab#reproduce">Installation and verification <span aria-hidden="true">↗</span></a></div></div></section>

@@ -39,7 +39,10 @@ Berge completed 84 of 88 enumerations, compared with 76 for FK-B and MILP enumer
 These are historical measurements at code `09cb123`, with a 10 s enumeration limit.
 The practical conclusion is to use the MILP and matrix witnesses for the minimum and
 bottlenecks, and enumerate when alternatives matter. The current release does not
-relabel those timings as a fresh experiment. [Findings](docs/findings/2026-10-15-supplier-resilience.md)
+relabel those timings as a fresh experiment. The site's [outcome explorer](https://symonyeal.github.io/Supplier-Resilience-Lab/#outcomes)
+lists all 88 instances, with filters, products, minimum panels, essential suppliers,
+infeasibility witnesses and route runs. Each saved minimum, essential set and witness is
+re-certified from the matrix at build time; the 4 unfinished enumerations show lower bounds. [Findings](docs/findings/2026-10-15-supplier-resilience.md)
 · [Protocol](docs/BENCHMARKS.md) · [Validation](docs/VALIDATION.md)
 
 ## Reproduce
@@ -53,8 +56,9 @@ python analysis/build_site.py
 ```
 
 The last command rebuilds the three cases only after their certificates and independent
-exhaustion checks pass. Open `site/index.html`; no server or external JavaScript library
-is required. `site/data.js` and `site/cases.json` are generated, committed artifacts.
+exhaustion checks pass, and exports the 88 saved outcomes only after their matrix
+certificates pass. Open `site/index.html`; no server or network is required. The chart
+library (Plotly basic 4.1.1, MIT) is vendored in `site/vendor/`. `site/data.js` and `site/cases.json` are generated, committed artifacts.
 
 Use the installed command to reproduce the lead case:
 

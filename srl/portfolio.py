@@ -7,6 +7,8 @@ from importlib.metadata import distribution
 from pathlib import Path
 from statistics import median
 
+from scipy.stats import spearmanr
+
 from . import audit, bench, certify, contracts, qbl, solve
 from .resources import data_path
 
@@ -91,10 +93,37 @@ def case(M, names, id, title, note, P):
             "outages": outages, "modes": modes}
 
 
-def evidence(path):
-    """Summaries of the original seed-1 measurements, retaining their revision and limits."""
+KEEP = ("class", "rule", "size", "k", "P", "min", "essential", "infeasibility", "runs",
+        "count_exact", "complete_routes_agree", "milp_exhaustion", "orbits", "sensitivity")
+
+
+def outcome(x, M):
+    """One saved record, its minimum, essential set and infeasibility witness re-certified
+    from the matrix. Without a complete run the count is the lower bound max_r count_r."""
+    I = audit.basket(M, x["P"], x["k"])
+    m, T = x["min"], x["min"]["panel"]
+    if sorted(map(len, I.E)) != x["stats"]["E_p_sizes"] or len(I.V) != x["stats"]["V"]:
+        raise ValueError(f"saved record disagrees with the matrix: {x['P']}")
+    if not (m["status"] == "optimal" and certify.minimal(I, T) and len(T) == m["size"]
+            if T is not None else m["status"] == "infeasible" and certify.infeasibility(I)):
+        raise ValueError(f"saved minimum fails its matrix certificate: {x['P']}")
+    W = json.loads(json.dumps([certify.infeasibility(I), certify.essential(I)]))
+    if W != [x["infeasibility"], x["essential"]]:
+        raise ValueError(f"saved essential set or witness disagrees: {x['P']}")
+    return {**{key: x.get(key) for key in KEEP}, "V": len(I.V), "E_p": [len(E) for E in I.E],
+            "count_lower_bound": max(r["count"] for r in x["runs"])}
+
+
+def evidence(path, S=None, M=None):
+    """Summaries and every record of the original seed-1 measurements, retaining their
+    revision and limits. The records are re-certified, not rerun."""
     R = json.loads(Path(path).read_bytes())
     X = R["instances"]
+    if M is None:
+        S, _, _, _, M = audit.matrix(qbl.read(data_path("raw/QBL.xlsx")))
+    records = [outcome(x, M) for x in X]
+    used = {v for x in records for v in (x["min"]["panel"] or []) + list(x["essential"] or {})}
+    feasible = [x for x in records if x["min"]["status"] == "optimal"]
     primary = [x for x in X if x["rule"] in ("uniform", "overlap") and x["k"] == 1]
     routes = []
     for method in bench.STREAMS:
@@ -104,7 +133,13 @@ def evidence(path):
                        "runs": len(runs), "first_median_s": median(first),
                        "first_n": len(first)})
     return {"instances": len(X), "resilient": sum(x["min"]["status"] == "optimal" for x in primary),
-            "primary": len(primary), "routes": routes, "provenance": R["provenance"]}
+            "primary": len(primary), "routes": routes, "provenance": R["provenance"],
+            "records": records, "names": {v: S[v]["name"] for v in sorted(used)},
+            "checks": {"matrix_records": len(records),
+                       "partial": sum(x["count_exact"] is None for x in records)},
+            "spearman_V_count": round(float(spearmanr(  # partial runs enter at their bound
+                *zip(*((x["V"], x["count_lower_bound"]) for x in feasible))).statistic), 2),
+            "feasible": len(feasible)}
 
 
 def build(destination, root):
@@ -125,7 +160,7 @@ def build(destination, root):
         "identity_candidates": sum(k == "identity_candidate" for _, k, _ in issues),
         "snapshot": json.loads(data_path("manifest.json").read_bytes())["QBL.xlsx"]},
         "cases": [case(M, {v: s["name"] for v, s in S.items()}, *c) for c in CASES],
-        "evidence": evidence(root / "results/suite-seed1.json")}
+        "evidence": evidence(root / "results/suite-seed1.json", S, M)}
     if payload["provenance"]["data_sha256"] != payload["provenance"]["snapshot"]["sha256"]:
         raise ValueError("public case data does not match the frozen manifest")
     destination.mkdir(parents=True, exist_ok=True)

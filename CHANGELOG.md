@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Outcome explorer for all 88 seed-1 instances: filters by class, rule, failure budget,
+  outcome and product; a log-log exhibit of minimal panels against eligible suppliers;
+  per-instance products, minimum panel, essential suppliers, infeasibility witness and
+  route runs; filtered CSV and per-record JSON downloads.
+- Saved minima, essential sets and infeasibility witnesses are re-certified from the
+  matrix before export. Partial enumerations are exported as lower bounds.
+
 ## 0.2.0 — 2026-10-15
 
 - Public interactive case study with three certified USDA baskets, panel comparison,
