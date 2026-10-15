@@ -49,3 +49,4 @@ supplement 404 raw material,broad,supplement 404 raw material,supplement 404 raw
 dry edible beans and lentils,broad,dry edible beans and lentils,dry edible beans,names a group of pulses
 pan - pancakeswholewheat fz,program,pan - pancakeswholewheat fz,pan1,merged: same product as PAN1 - Pancakes Whole Wheat Fz (judgement call)
 em - evaporated milk,program,em - evaporated milk,evd,merged: same name as EVD - Evaporated Milk (judgement call)
+100127 - beef can-24/24 oz 110477 - chicken pouch 36/10 oz,material,100127 - beef can-24/24 oz|110477 - chicken pouch 36/10 oz,100127 - beef can-24/24 oz|110477 - chicken pouch 36/10 oz,two material numbers written on one line of the cell (parse repair)

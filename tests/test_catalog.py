@@ -37,3 +37,13 @@ def test_multi_product_tokens_reach_both_products():
     D = catalog.load({t for _, t, _ in Q})
     I = qbl.instance(S, Q, ["dfm - fluid milk"], product=lambda t: D[t][1])
     assert I.E == (frozenset({"r0002"}),)
+
+
+def test_no_snapshot_token_holds_two_codes_unsplit():
+    """A line naming two materials or programmes is two qualifications (docs/DATA.md)."""
+    import re
+    _, Q, _ = qbl.records(qbl.read(RAW))
+    D = catalog.load({t for _, t, _ in Q})
+    two = re.compile(r"\d{6} - .* \d{6} - |^[a-z]{1,5}\d? - .* [a-z]{2,5}\d? - [a-z]")
+    assert all(len(s) == 2 for t, (_, s, _, _) in D.items() if two.search(t)
+               and t != "pa - pasta - pasta product")
