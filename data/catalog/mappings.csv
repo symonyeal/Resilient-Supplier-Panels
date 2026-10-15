@@ -1,0 +1,51 @@
+token,class,strict,merged,justification
+dyo - high protein yogurt dfm - fluid milk,program,dyo - high protein yogurt|dfm - fluid milk,dyo|dfm,two programme codes written on one line of the cell (parse repair)
+uhd - ultra high temperature milk cr - crackers (saltine),program,uhd - ultra high temperature milk|cr - crackers (saltine),uhd|cr,two programme codes written on one line of the cell (parse repair)
+uhd - ultra high temperture milk,program,uhd - ultra high temperature milk,uhd,same code UHD; misspelling of 'temperature'
+tor1 - tortillaswholewheat fz,program,tor1 - tortillas whole wheat fz,tor1,same code TOR1; spacing variant
+tor1 - tortillas wholewheat fz,program,tor1 - tortillas whole wheat fz,tor1,same code TOR1; spacing variant
+pa - pasta - pasta product,program,pa - pasta - pasta product,pa,code PA; name differs from 'pa - pasta' so kept apart in strict
+pp - pasta products,program,pp - pasta products,pa,code PP is also 'peanut products'; strict keeps the token; merged reads it as pasta (PA) by name — judgement call
+rice products,commodity,rice products,rp,merged: same name as programme RP - Rice Products (judgement call)
+rice (domestic),commodity,rice (domestic),rp,merged: rice programme RP (judgement call)
+fluid milk,commodity,fluid milk,dfm,merged: same name as programme DFM - Fluid Milk
+"milk, fresh-fluid",commodity,"milk, fresh-fluid",dfm,merged: fluid milk programme DFM (judgement call)
+uht milk products,commodity,uht milk products,uhd,merged: UHT milk programme UHD (judgement call)
+pasta products,commodity,pasta products,pa,merged: same name as programme PA - Pasta
+peanut products,commodity,peanut products,pp,merged: same name as programme PP - Peanut Products
+corn products,commodity,corn products,cp,merged: same name as programme CP - Corn Products
+"cheese, mozzarella",commodity,"cheese, mozzarella",dmoz,merged: programme DMOZ - Mozzarella
+fresh fruits,broad,fresh fruits,fresh fruit,plural of 'fresh fruit'
+"fruit, fresh",broad,"fruit, fresh",fresh fruit,inverted form of 'fresh fruit'
+"vegetable, fresh",broad,"vegetable, fresh",fresh vegetables,inverted form of 'fresh vegetables'
+"fruit, dried",broad,"fruit, dried",dried fruit,inverted form of 'dried fruit'
+frozen vegetable,broad,frozen vegetable,frozen vegetables,singular of 'frozen vegetables'
+"vegetable, frozen",broad,"vegetable, frozen",frozen vegetables,inverted form of 'frozen vegetables'
+fresh sweetpotatoes,commodity,fresh sweetpotatoes,fresh sweet potatoes,spacing variant of 'fresh sweet potatoes'
+dried beans,broad,dried beans,dry edible beans,merged: synonyms of dry edible beans (judgement call)
+dried edible beans,broad,dried edible beans,dry edible beans,merged: synonym of dry edible beans (judgement call)
+dry beans,broad,dry beans,dry edible beans,merged: synonym of dry edible beans (judgement call)
+frozen fruit,broad,frozen fruit,frozen fruit,names a group of fruits
+fresh fruit,broad,fresh fruit,fresh fruit,names a group of fruits
+fresh vegetables,broad,fresh vegetables,fresh vegetables,names a group of vegetables
+frozen vegetables,broad,frozen vegetables,frozen vegetables,names a group of vegetables
+"vegetable, dried",broad,"vegetable, dried",dried vegetables,names a group of vegetables
+commodities f&v,broad,commodities f&v,commodities f&v,names all fruit and vegetable commodities
+non-standard,broad,non-standard,non-standard,names no product
+fresh citrus,broad,fresh citrus,fresh citrus,names a group of fruits
+dried fruit,broad,dried fruit,dried fruit,names a group of fruits
+canned vegetables,broad,canned vegetables,canned vegetables,names a group of vegetables
+canned fruit,broad,canned fruit,canned fruit,names a group of fruits
+bottled juice,broad,bottled juice,bottled juice,names juices of any fruit
+frozen juice,broad,frozen juice,frozen juice,names juices of any fruit
+tree nuts,broad,tree nuts,tree nuts,names a group of nuts
+nuts,broad,nuts,nuts,names a group of nuts
+meat products,broad,meat products,meat products,names a group across species
+beef products,broad,beef products,beef products,names a group of beef products
+egg products,broad,egg products,egg products,names a group of egg products
+emergency prods-pkgd,broad,emergency prods-pkgd,emergency prods-pkgd,names a programme category
+supplement 404 raw material,broad,supplement 404 raw material,supplement 404 raw material,names no product
+"dry edible beans, peas, and lentils",broad,"dry edible beans, peas, and lentils",dry edible beans,names a group of pulses
+dry edible beans and lentils,broad,dry edible beans and lentils,dry edible beans,names a group of pulses
+pan - pancakeswholewheat fz,program,pan - pancakeswholewheat fz,pan1,merged: same product as PAN1 - Pancakes Whole Wheat Fz (judgement call)
+em - evaporated milk,program,em - evaporated milk,evd,merged: same name as EVD - Evaporated Milk (judgement call)
