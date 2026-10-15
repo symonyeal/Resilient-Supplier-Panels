@@ -38,7 +38,8 @@ def main(argv=None):
     e.add_argument("--cap", type=int, default=bench.LIMITS["cap"])
     s = sub.add_parser("bench")
     s.add_argument("--seed", type=int, required=True)
-    s.add_argument("--timeout", type=float, default=bench.LIMITS["timeout_s"])
+    s.add_argument("--timeout", type=float, default=bench.LIMITS["timeout_s"],
+                   help="calibration only; the main suite uses bench.LIMITS")
     s.add_argument("--no-variants", action="store_true", help="skip sensitivity reruns")
     s = sub.add_parser("report")
     s.add_argument("file")
@@ -56,11 +57,12 @@ def main(argv=None):
     elif a.cmd == "build":
         S, _Q, _issues, _D, M = audit.matrix(qbl.read(bench.RAW), a.variant)
         missing = [p for p in a.products if p not in M]
-        assert not missing, f"not a {a.variant} product: {missing}"
+        if missing:
+            raise SystemExit(f"not a {a.variant} product: {missing}")
         E = [sorted(M[p][1]) for p in a.products]
         print(json.dumps({"V": sorted(set().union(*E)), "P": a.products, "E": E, "k": a.k,
                           "F": [f.split(",") for f in a.fail], "variant": a.variant,
-                          "data_sha256": bench.provenance(bench.LIMITS, None)["data_sha256"],
+                          "data_sha256": bench.data_sha256(),
                           "names": {s: S[s]["name"] for e in E for s in e}}, indent=1))
     elif a.cmd == "solve":
         d, I = load(a.file)
@@ -72,17 +74,21 @@ def main(argv=None):
     elif a.cmd == "enum":
         d, I = load(a.file)
         if a.method == "exhaustive":
-            P, r = solve.exhaustive(I), {"method": "exhaustive", "status": "complete"}
+            C = solve.exhaustive(I)
+            r = {"method": "exhaustive", "status": "complete", "count": len(C),
+                 "stored": len(C)}
         else:
-            P, r = bench.run(a.method, I, a.timeout, a.cap, bench.LIMITS["K"])
-        print(json.dumps(dict(d, run=r, panels=[sorted(T) for T in P]), indent=1))
+            C, r = bench.run(a.method, I, a.timeout, a.cap, bench.LIMITS["K"])
+        print(json.dumps(dict(d, run=r, panels=[sorted(T) for T in C]), indent=1))
     elif a.cmd == "verify":
         d, I = load(a.file)
-        P = [frozenset(T) for T in d["panels"]]
-        ok = all(certify.minimal(I, T) for T in P)
-        out = {"panels": len(P), "all_feasible_and_minimal": ok, "run": d["run"]["status"]}
-        if d["run"]["status"] == "complete" and d["run"].get("stored", len(P)) == len(P):
-            out["milp_exhaustion"] = certify.complete(I, P)[0]
+        C = [frozenset(T) for T in d["panels"]]
+        r = d["run"]
+        out = {"panels": len(C), "all_feasible_and_minimal": all(certify.minimal(I, T)
+                                                                  for T in C),
+               "run": r["status"]}
+        if r["status"] == "complete" and r["count"] == len(C):   # whole family stored
+            out["milp_exhaustion"] = certify.complete(I, C)[0]
         print(json.dumps(out, indent=1))
     elif a.cmd == "bench":
         L = dict(bench.LIMITS, timeout_s=a.timeout)
