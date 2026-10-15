@@ -1,0 +1,23 @@
+[project]
+name = "srl"
+version = "0.1.0"
+description = "Resilient qualified-supplier panels from the USDA AMS Qualified Bidders List"
+requires-python = ">=3.12"
+license = { text = "GPL-3.0-or-later" }
+authors = [{ name = "Saimon Y. Islam" }]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+addopts = "-p no:cacheprovider"
+markers = ["slow: process-isolated enumeration or the full snapshot suite"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+# E501 is not in ruff's default selection; select it so line-length is enforced.
+extend-select = ["E501"]
+# E741 rejects l, I and O as names; the sources use them as symbols.
+# I001 wraps imports one name per line, against the compact register of these files.
+ignore = ["E741", "I001"]
