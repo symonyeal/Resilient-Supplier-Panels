@@ -1,0 +1,24 @@
+{
+  "QBL.xlsx": {
+    "url": "https://www.ams.usda.gov/sites/default/files/media/QBL.xlsx",
+    "page": "https://www.ams.usda.gov/selling-food/solicitations",
+    "retrieved_utc": "2026-10-15T07:16:47Z",
+    "sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+    "bytes": 113416,
+    "last_modified": "Fri, 02 Oct 2026 10:56:37 GMT",
+    "stated_date": null,
+    "release": "current snapshot; no historical releases linked",
+    "terms": "none stated in file or page; U.S. Government work (17 U.S.C. 105), presumed public domain"
+  },
+  "CPPNewVendorQualificationRequirements.pdf": {
+    "url": "https://www.ams.usda.gov/sites/default/files/media/CPPNewVendorQualificationRequirements.pdf",
+    "page": "https://www.ams.usda.gov/selling-food-to-usda/resources",
+    "retrieved_utc": "2026-10-15T07:16:47Z",
+    "sha256": "e42a883f24577777e84a4b0e09abc1a754b12098e419301b4a0f975e69ffa9fc",
+    "bytes": 2055687,
+    "last_modified": "Mon, 15 Sep 2025 04:48:57 GMT",
+    "stated_date": null,
+    "release": "current snapshot",
+    "terms": "none stated; U.S. Government work (17 U.S.C. 105), presumed public domain"
+  }
+}
