@@ -75,3 +75,50 @@ Not checked:
 Agreement of Berge with FK-B tests the shared scenario hypergraph against itself. The
 independent test of that transformation is the agreement of exhaustive search and MILP
 exhaustion, both of which read the matrix.
+
+## Maintenance assessment (2026-10-15)
+
+Baseline `13c6dc9` passed 31 tests, ruff and pip check. Focused regressions nevertheless
+reproduced these defects:
+
+- MILP enumeration discarded unresolved HiGHS statuses, and the worker called the run
+  complete. The status now survives the generator and process boundary; unresolved solves
+  give neither an exact count nor agreement with an infeasibility witness.
+- Completeness accepted invalid families: `{∅}` could certify a nonempty basket complete.
+  Families are now checked for minimality first. CLI verification rejects invalid or
+  duplicate panels and a falsely claimed complete family with exit status 1.
+- PowerShell 5.1 redirection produced UTF-16 JSON that the CLI could not load. JSON is now
+  read as bytes, so the standard decoder handles UTF-8, UTF-8 BOM and UTF-16.
+- Invalid instances admitted duplicate suppliers, qualifications outside V and fractional
+  failure budgets. These are now input errors, checked independently of Python assertions.
+- Reports called unresolved minima infeasible and failed when sensitivity runs were absent.
+  They now preserve statuses and label unmeasured sensitivity results.
+- The pre-reduction edge count omitted discarded superset edges. It now counts every
+  generated scenario edge. Signature classes now also preserve each explicit failure set.
+
+Verified on code `2df0db0`, Python 3.14.7, the frozen QBL hash in the manifest, and the
+installed thesis revision `1bb9de4` (the installation's commit matches the pin):
+
+- **69 tests passed**; ruff and pip check passed. The added tests cover solver-status fault
+  injection through an actual worker process, invalid certificates, input validation,
+  shell encodings, measurement definitions and saved-result reproduction.
+- All **88** saved instances have the same minimum size/status, infeasibility witness and
+  essential-supplier certificates when recomputed from the matrix. All **55** feasible
+  instances retain certified minimal stored panels.
+- All **84** established exact counts were reproduced with Berge; every regenerated panel
+  was certified minimal, and independently encoded MILP exhaustion found no missing panel.
+- The README's PowerShell build → solve → enumerate → verify sequence returned **1,284**
+  distinct certified panels and a complete exhaustion check.
+- The saved report rebuilds without changes. Raw data, benchmark results and published
+  findings remain at their original revisions.
+
+**Historical metadata discrepancy.** In **72 of 88** saved records,
+`H_edges_before_reduction` omits scenario edges removed as supersets. All other recorded
+structural fields agreed with recomputation. The count is fixed for future runs; the old
+JSON retains its original measurements and provenance. No reported conclusion uses that
+field.
+
+**Not measured:** a fresh timed benchmark campaign; completion of the four censored cases;
+new snapshots; memory use. The re-enumerations above validate counts, not old timings or
+the exact panel identities of historical streams (those panels were not stored in the
+suite JSON). Solver failure paths were injected in tests, not observed in these 88 solves.
