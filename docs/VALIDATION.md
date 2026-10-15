@@ -122,3 +122,44 @@ field.
 new snapshots; memory use. The re-enumerations above validate counts, not old timings or
 the exact panel identities of historical streams (those panels were not stored in the
 suite JSON). Solver failure paths were injected in tests, not observed in these 88 solves.
+
+## Portfolio release 0.2.0
+
+The case data was regenerated from committed source `6db6053`. Its complete source
+fingerprint, exact input hashes, installed thesis revision and clean-source flag are in
+`site/cases.json`. This is separate from the historical seed-1 benchmark provenance.
+
+| Real basket | k | Minimum size | Complete minimal-panel count |
+| --- | ---: | ---: | ---: |
+| canned products | 0 | 1 | 80 |
+| canned products | 1 | 2 | 1,284 |
+| poultry | 0 | 1 | 2 |
+| poultry | 1 | 2 | 1 |
+| scarce products | 0 | 3 | 2 |
+| scarce products | 1 | infeasible | 0 |
+
+Source: `python analysis/build_site.py`, frozen QBL and strict mappings. Every family is
+fully stored, every panel has direct matrix minimality certificates, a separately encoded
+MILP finds no omitted panel, and minimum sizes agree with the complete families. Outage
+coverage is independently rechecked in `tests/test_portfolio.py`.
+
+Checks:
+
+- `python -m pytest -q`: **81 passed**; includes the original saved minima and report
+  reproduction, public JSON contracts, CSV errors, data overrides and generated cases.
+- `python -m ruff check .`: **All checks passed!**
+- `python -m pip check`: **No broken requirements found.**
+- `python analysis/check_browser.py`: retained/lost/infeasible coverage, alternative
+  selection, supplier search, report and family downloads, keyboard access and a 390 px
+  viewport. Desktop and mobile renderings were inspected locally using installed Edge.
+- `python -m build --no-isolation`: wheel and source distribution built. The installed
+  wheel's `srl` entry point was exercised from a temporary directory with no checkout on
+  its import path: audit, build, solve, enumeration, schema and independent verification
+  of 1,284 distinct panels.
+
+The CI workflow repeats Python and installed-wheel checks on Windows and hosted Ubuntu,
+and browser checks in Chromium. Pages deployment follows successful CI for that revision.
+
+Not measured: a new timed main-suite campaign, operational cost/capacity/delivery outcomes,
+longitudinal supplier identity, or real correlated disruptions. The paired outages are
+labelled hypothetical stress tests. There is no claim of procurement adoption.
