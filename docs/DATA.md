@@ -38,7 +38,8 @@ read as a qualification for a narrower product.
 ## Mapping variants
 
 - **strict** (primary). Product = token, with three exceptions:
-  - two lines that each hold two programme codes are split;
+  - three lines that each hold two codes (two programme pairs and one material pair) are
+    split;
   - a misspelling under the same code is corrected (`temperture`);
   - spacing variants of `TOR1` are unified.
 - **merged** (sensitivity). Programme tokens are read as their code, so `WF - Wheat Flour`

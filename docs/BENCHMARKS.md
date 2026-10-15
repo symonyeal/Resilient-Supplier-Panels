@@ -110,3 +110,16 @@ A first seed-1 run on code `0b03a16` was stopped after 39 instances; its log is
 
 None of these changes the limits, the basket selection or the seed. The main suite was rerun
 whole on the corrected code, and only that rerun is reported.
+
+### Superseded second main run
+
+A complete seed-1 run on code `0156e5e` finished in 555 s; its log is
+`results/suite-seed1-superseded.log`. Its tables showed that one material token held two
+material numbers on one line (`100127 - beef can-24/24 oz 110477 - chicken pouch 36/10 oz`).
+That token had been read as a single product with one supplier, so it falsely blocked k = 1
+in five material baskets.
+
+The token is now split in `mappings.csv`, by the same parse repair already applied to the
+two programme-code pairs. `test_catalog.py` asserts that no such token remains. The limits,
+the basket rules and the seed are unchanged. The suite was rerun whole, and only that run is
+reported.
