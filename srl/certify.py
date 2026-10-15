@@ -11,7 +11,7 @@ from scipy.optimize import Bounds, LinearConstraint, milp
 def feasible(I, T):
     """T meets E_p minus F for every p and every F in the failure model (MODEL, Thm 2)."""
     T = set(T)
-    return (all(len(T & Ep) >= I.k + 1 for Ep in I.E)
+    return (T <= set(I.V) and all(len(T & Ep) >= I.k + 1 for Ep in I.E)
             and all(T & (Ep - F) for Ep in I.E for F in I.F))
 
 
@@ -69,7 +69,11 @@ def complete(I, family):
     """Is every minimal panel in `family`? Search min Σx over feasible T that contain no
     member of the family: Σ_{v∈S}(1 − x_v) ≥ 1 for S ∈ family. Encoded here, separately
     from solve.py. Returns ("complete", None), ("missing", a minimal panel not listed) or
-    ("highs status s", None). Assurance: HiGHS result, not a proof."""
+    ("invalid", None) for a family with a nonminimal member, or ("highs status s", None).
+    Assurance: HiGHS result, not a proof."""
+    family = tuple(frozenset(S) for S in family)
+    if not all(minimal(I, S) for S in family):
+        return "invalid", None
     U = I.support()
     i = {v: j for j, v in enumerate(U)}
     rows, lb = [], []

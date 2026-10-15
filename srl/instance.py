@@ -21,9 +21,18 @@ class Instance:
     F: tuple = ()
 
     def __post_init__(self):
+        object.__setattr__(self, "V", tuple(self.V))
+        object.__setattr__(self, "P", tuple(self.P))
         object.__setattr__(self, "E", tuple(frozenset(e) for e in self.E))
         object.__setattr__(self, "F", tuple(frozenset(f) for f in self.F))
-        assert len(self.P) == len(self.E) and self.k >= 0
+        if type(self.k) is not int or self.k < 0:
+            raise ValueError("k must be a nonnegative integer")
+        if len(set(self.V)) != len(self.V) or len(set(self.P)) != len(self.P):
+            raise ValueError("V and P must have distinct labels")
+        if len(self.P) != len(self.E):
+            raise ValueError("each product must have one supplier set")
+        if any(not S <= set(self.V) for S in self.E + self.F):
+            raise ValueError("qualification and failure sets must be subsets of V")
 
     def with_k(self, k):
         return replace(self, k=k)

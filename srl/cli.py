@@ -13,7 +13,7 @@ def today():
 
 
 def load(path):
-    d = json.loads(Path(path).read_text())
+    d = json.loads(Path(path).read_bytes())
     return d, Instance(V=tuple(d["V"]), P=tuple(d["P"]), E=d["E"], k=d["k"], F=d.get("F", []))
 
 
@@ -60,8 +60,13 @@ def main(argv=None):
         if missing:
             raise SystemExit(f"not a {a.variant} product: {missing}")
         E = [sorted(M[p][1]) for p in a.products]
-        print(json.dumps({"V": sorted(set().union(*E)), "P": a.products, "E": E, "k": a.k,
-                          "F": [f.split(",") for f in a.fail], "variant": a.variant,
+        V, F = sorted(set().union(*E)), [f.split(",") for f in a.fail]
+        try:
+            Instance(V=V, P=a.products, E=E, k=a.k, F=F)
+        except ValueError as e:
+            ap.error(str(e))
+        print(json.dumps({"V": V, "P": a.products, "E": E, "k": a.k,
+                          "F": F, "variant": a.variant,
                           "data_sha256": bench.data_sha256(),
                           "names": {s: S[s]["name"] for e in E for s in e}}, indent=1))
     elif a.cmd == "solve":
@@ -86,10 +91,15 @@ def main(argv=None):
         r = d["run"]
         out = {"panels": len(C), "all_feasible_and_minimal": all(certify.minimal(I, T)
                                                                   for T in C),
+               "distinct_panels": len(set(C)) == len(C),
                "run": r["status"]}
-        if r["status"] == "complete" and r["count"] == len(C):   # whole family stored
+        ok = out["all_feasible_and_minimal"] and out["distinct_panels"]
+        if ok and r["status"] == "complete" and r["count"] == len(C):
             out["milp_exhaustion"] = certify.complete(I, C)[0]
+            ok = out["milp_exhaustion"] == "complete"
         print(json.dumps(out, indent=1))
+        if not ok:
+            raise SystemExit(1)
     elif a.cmd == "bench":
         L = dict(bench.LIMITS, timeout_s=a.timeout)
         bench.suite(a.seed, L, out=bench.ROOT / f"results/suite-seed{a.seed}.json",

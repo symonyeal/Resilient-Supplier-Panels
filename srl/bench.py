@@ -13,6 +13,7 @@ import re
 import subprocess
 import time
 from importlib.metadata import version
+from math import comb, isfinite
 from pathlib import Path
 
 from fka.algorithm import fk_a
@@ -67,19 +68,32 @@ def baskets(M, seed):
 def _child(method, I, conn):
     conn.send(("start", 0.0))
     t0 = time.perf_counter()
-    for T in STREAMS[method](I):
-        conn.send(("panel", time.perf_counter() - t0, sorted(T)))
-    conn.send(("done", time.perf_counter() - t0))
+    stream = iter(STREAMS[method](I))
+    try:
+        while True:
+            try:
+                T = next(stream)
+            except StopIteration as e:
+                conn.send(("done", time.perf_counter() - t0, e.value or "complete"))
+                return
+            conn.send(("panel", time.perf_counter() - t0, sorted(T)))
+    finally:
+        conn.close()
 
 
 def run(method, I, timeout, cap, K):
     """One process-isolated enumeration of Tr(H).
 
     OUTPUT  panels . the first ≤ cap panels received
-            r ...... status complete | timeout | cap | error; count = panels received,
+            r ...... status complete | timeout | cap | error | highs status s;
+                     count = panels received,
                      stored = panels kept. Berge emits only after it has finished, so it is
                      never stopped at the cap: its count is exact, its storage capped.
     """
+    if not isfinite(timeout) or timeout <= 0:
+        raise ValueError("timeout must be finite and positive")
+    if type(cap) is not int or cap < 0 or type(K) is not int or K < 1:
+        raise ValueError("cap must be a nonnegative integer and K a positive integer")
     a, b = mp.Pipe(duplex=False)
     p = mp.Process(target=_child, args=(method, I, b), daemon=True)
     p.start()
@@ -91,7 +105,8 @@ def run(method, I, timeout, cap, K):
         while (left := timeout - (time.perf_counter() - t0)) > 0 and a.poll(left):
             msg = a.recv()
             if msg[0] == "done":
-                status, total = "complete", msg[1]
+                status = msg[2]
+                total = msg[1] if status == "complete" else None
                 break
             n += 1
             if n <= cap:
@@ -102,10 +117,14 @@ def run(method, I, timeout, cap, K):
                 break
     except EOFError:
         status = "error"
-    p.terminate()
-    p.join()
+    finally:
+        p.terminate()
+        p.join()
+        a.close()
+    exitcode = p.exitcode if status == "error" else None
+    p.close()
     return panels, {"method": method, "status": status, "count": n, "stored": len(panels),
-                    "exitcode": p.exitcode if status == "error" else None,
+                    "exitcode": exitcode,
                     "t_first": times[0] if times else None,
                     "t_K": times[K - 1] if len(times) >= K else None, "t_total": total}
 
@@ -119,26 +138,27 @@ def timed(method, I):
 
 
 def stats(I):
-    """Structure of an instance, and its supplier signature classes {E-membership: [v]}."""
-    H, _, prov = hypergraph(I)
+    """Structure and supplier classes with equal membership in every E_p and explicit F."""
+    H, _, _ = hypergraph(I)
     sizes = sorted(len(E) for E in I.E)
     deg = sorted(sum(v in E for E in I.E) for v in I.V)
     sig = {}
     for v in I.V:
-        sig.setdefault(tuple(v in E for E in I.E), []).append(v)
+        sig.setdefault(tuple(v in E for E in I.E + I.F), []).append(v)
     return {"P": len(I.P), "V": len(I.V), "incidences": sum(sizes),
             "density": round(sum(sizes) / max(1, len(I.P) * len(I.V)), 4),
             "E_p_sizes": sizes,
             "supplier_degree_min_median_max": [deg[0], deg[len(deg) // 2], deg[-1]] if deg
             else [],
             "H_edges_after_reduction": len(H),
-            "H_edges_before_reduction": sum(len(g) for g in prov.values()),
+            "H_edges_before_reduction": sum(comb(len(E), min(I.k, len(E))) + len(I.F)
+                                            for E in I.E),
             "signature_classes": len(sig),
             "largest_class": max(map(len, sig.values()), default=0)}, sig
 
 
 def orbits(C, sig):
-    """|C| up to permutations within signature classes (they fix every E_p and 𝓕_k):
+    """|C| up to permutations within signature classes (they fix every E_p and explicit F):
     the number of distinct class multisets."""
     cls = {v: i for i, vs in enumerate(sig.values()) for v in vs}
     return len({tuple(sorted(cls[v] for v in T)) for T in C})
@@ -179,8 +199,9 @@ def instance_record(I, L):
                   "certified_minimal": T is not None and certify.minimal(I, T)}
     rec["essential"] = None if ess is None else {v: list(w) for v, w in sorted(ess.items())}
     rec["t_certify_min"] = time.perf_counter() - t0
-    rec["highs_agrees_with_witness"] = (status == "infeasible") == (rec["infeasibility"]
-                                                                  is not None)
+    rec["highs_agrees_with_witness"] = (
+        (status == "infeasible") == (rec["infeasibility"] is not None)
+        if status in ("optimal", "infeasible") else None)
     fams = {}
     for m in STREAMS:
         panels, r = run(m, I, L["timeout_s"], L["cap"], L["K"])
@@ -263,5 +284,6 @@ def suite(seed, L=LIMITS, out=None, variants=True):
 def sens(J):
     """Sensitivity variant: feasibility and minimum only (one HiGHS solve)."""
     status, T = solve.milp(J)
-    return {"min": len(T) if T is not None else None, "feasible": status == "optimal",
+    return {"min": len(T) if T is not None else None,
+            "feasible": status == "optimal" if status in ("optimal", "infeasible") else None,
             "status": status}
