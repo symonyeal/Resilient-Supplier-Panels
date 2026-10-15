@@ -176,7 +176,7 @@ const kinds = { exact: "Exact count", bound: "Lower bound", infeasible: "Infeasi
 const count = x => kind(x) === "infeasible" ? "0" : x.count_exact !== null ? number(x.count_exact) : `≥ ${number(x.count_lower_bound)}`;
 const basket = x => `${x.class} · ${x.rule} · ${x.size} products`;
 const supplier = v => D.evidence.names[v] || v;
-const seconds = t => t === null ? "—" : t < 1 ? `${(t * 1000).toPrecision(2)} ms` : `${t.toFixed(2)} s`;
+const seconds = t => t === null ? "—" : t < 1 ? `${Number((t * 1000).toPrecision(2))} ms` : `${t.toFixed(2)} s`;
 const token = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 function matches(x) {
@@ -213,7 +213,7 @@ function renderChart(R, shown) {
   Plotly.react(div, traces, {
     margin: { l: 64, r: 12, t: 8, b: 56 }, paper_bgcolor: "rgba(0,0,0,0)", plot_bgcolor: "rgba(0,0,0,0)",
     font: { family: token("--font"), color: token("--muted"), size: 13 }, hovermode: "closest",
-    legend: { orientation: "h", y: 1.08, x: 0 },
+    legend: { orientation: "h", x: 0, y: 1.02, yanchor: "bottom" },
     xaxis: axis("Eligible suppliers |V| (log scale)", [3, 5, 10, 20, 50, 100]),
     yaxis: axis("Minimal panels (log scale)", [1, 10, 100, 1000, 10000]) },
     { displayModeBar: false, responsive: true });
