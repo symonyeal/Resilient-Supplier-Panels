@@ -145,6 +145,10 @@ def write(path):
           f"Suite wall time {res['t_suite']:.0f} s. Assumptions: strict mapping, all eligible "
           "suppliers, k-failure model; qualification only (no capacity, price or lead time)."
           f"\n\n{tables(res)}")
+    from .verdicts import score
+    md += "\n".join(exhibit("Pre-registered tests (docs/findings/hypotheses.md)",
+                            ["test", "result"],
+                            [f"| {k} | {v} |" for k, v in score(path).items()]))
     out = Path(path).parents[1] / f"docs/findings/results-seed{p['seed']}.md"
     out.write_text(md, encoding="utf-8")
     return out
