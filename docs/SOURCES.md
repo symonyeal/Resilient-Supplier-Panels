@@ -28,3 +28,16 @@ Status:
 | B. Tomlin, "On the value of mitigation and contingency strategies for managing supply chain disruption risks", *Management Science* 52(5) (2006) 639–657 | dual sourcing as a disruption strategy (context only) | cited |
 | L. V. Snyder et al., "OR/MS models for supply chain disruptions: a review", *IIE Transactions* 48(2) (2016) 89–109 | disruption-model context | cited |
 | Q. Huangfu, J. A. J. Hall, "Parallelizing the dual revised simplex method", *Math. Prog. Comp.* 10 (2018) 119–142; HiGHS via SciPy `milp` | MILP baseline | cited |
+
+## Software delivery
+
+- [PyPA, Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/):
+  inspected 2026-10-15, build-system, project dependencies and command entry points.
+- [Setuptools, Extending or Customizing](https://setuptools.pypa.io/en/latest/userguide/extension.html):
+  inspected 2026-10-15; no custom backend is needed. Explicit package mappings include the
+  canonical frozen data in the wheel.
+- [GitHub, custom Pages workflows](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages)
+  and [Pages REST API](https://docs.github.com/en/rest/pages/pages): inspected 2026-10-15,
+  Actions deployment and workflow build configuration.
+- [Playwright Python installation](https://playwright.dev/python/docs/intro): inspected
+  2026-10-15, browser installation and browser automation; Edge locally, Chromium in CI.

@@ -9,7 +9,6 @@ import json
 import multiprocessing as mp
 import platform
 import random
-import re
 import subprocess
 import time
 from importlib.metadata import version
@@ -21,12 +20,13 @@ from fka.memo import fk_a_memo
 from fka.hypergraph import Hypergraph
 
 from . import audit, catalog, certify, qbl, solve
+from . import THESIS_REV
 from .instance import Instance, hypergraph
+from .resources import data_path
 
 ROOT = Path(__file__).resolve().parents[1]
-RAW = ROOT / "data/raw/QBL.xlsx"
-THESIS = re.search(r"Hypergraph-Transversal-Thesis@(\w+)",
-                   (ROOT / "requirements.txt").read_text()).group(1)
+RAW = data_path("raw/QBL.xlsx")
+THESIS = THESIS_REV
 SIZES = (3, 5, 8, 12, 20)
 CLASSES = ("description", "program", "naics", "material")
 # Main-suite limits, set from calibration (docs/BENCHMARKS.md, Calibration record).
@@ -37,7 +37,7 @@ STREAMS = {"berge": solve.berge, "fkb": solve.fkb_stream, "milp": solve.milp_str
 
 
 def data_sha256():
-    return hashlib.sha256(RAW.read_bytes()).hexdigest()
+    return hashlib.sha256(data_path("raw/QBL.xlsx").read_bytes()).hexdigest()
 
 
 def baskets(M, seed):
@@ -238,7 +238,7 @@ def provenance(L, seed):
     git = lambda *a: subprocess.run(["git", *a], cwd=ROOT, capture_output=True, check=False,
                                     text=True).stdout.strip()
     sha = data_sha256()
-    frozen = json.loads((ROOT / "data/manifest.json").read_text())["QBL.xlsx"]["sha256"]
+    frozen = json.loads(data_path("manifest.json").read_bytes())["QBL.xlsx"]["sha256"]
     return {"data_sha256": sha, "data_matches_manifest": sha == frozen,
             "code_rev": git("rev-parse", "HEAD"),
             "dirty": bool(git("status", "--porcelain", "--untracked-files=no")),
@@ -251,7 +251,7 @@ def provenance(L, seed):
 def suite(seed, L=LIMITS, out=None, variants=True):
     """Run every basket of `seed` at k ∈ {0, 1}; sensitivity variants by one HiGHS solve."""
     t0 = time.perf_counter()
-    rows = qbl.read(RAW)
+    rows = qbl.read(data_path("raw/QBL.xlsx"))
     S, _, issues, D, M = audit.matrix(rows)
     MM = audit.matrix(rows, "merged")[4]
     merged = catalog.merged_of(D)
@@ -277,6 +277,7 @@ def suite(seed, L=LIMITS, out=None, variants=True):
                   flush=True)
     res["t_suite"] = time.perf_counter() - t_start
     if out:
+        Path(out).parent.mkdir(parents=True, exist_ok=True)
         Path(out).write_text(json.dumps(res, indent=1, default=list))
     return res
 

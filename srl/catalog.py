@@ -10,9 +10,7 @@ Strict product = the token itself unless a mapping says otherwise.
 """
 import csv
 import re
-from pathlib import Path
-
-MAPPINGS = Path(__file__).resolve().parents[1] / "data/catalog/mappings.csv"
+from .resources import data_path
 PACK = re.compile(r"\b(can|cans|pkg|ctn|carton|bag|bags|box|pouch|bulk|lb|lbs|oz|dozen|jug|"
                   r"bottle|frz|iqf|chilled|jar|tote|drum|pail|case)\b")
 CLASSES = ("material", "naics", "program", "description", "commodity", "broad")
@@ -28,9 +26,9 @@ def rule(t):
     return "description" if PACK.search(t) else "commodity"
 
 
-def load(tokens, path=MAPPINGS):
+def load(tokens, path=None):
     """Dictionary entry for every token: {t: (class, strict, merged, justification)}."""
-    with open(path, encoding="utf-8") as f:
+    with open(path or data_path("catalog/mappings.csv"), encoding="utf-8") as f:
         over = {r["token"]: r for r in csv.DictReader(f)}
     D = {}
     for t in tokens:

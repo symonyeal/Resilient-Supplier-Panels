@@ -1,10 +1,43 @@
+[build-system]
+requires = ["setuptools>=77", "wheel>=0.45"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "srl"
-version = "0.1.0"
+version = "0.2.0"
 description = "Resilient qualified-supplier panels from the USDA AMS Qualified Bidders List"
-requires-python = ">=3.12"
-license = { text = "GPL-3.0-or-later" }
+readme = "README.md"
+requires-python = ">=3.14"
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 authors = [{ name = "Saimon Y. Islam" }]
+dependencies = [
+    "numpy>=2.0",
+    "scipy>=1.14",
+    "fka @ git+https://github.com/symonyeal/Hypergraph-Transversal-Thesis@1bb9de48ab91629a7ae9d97488c2181b4098806d",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "ruff==0.16.7", "build>=1.3", "jsonschema>=4.0"]
+browser = ["playwright>=1.55"]
+
+[project.scripts]
+srl = "srl.cli:main"
+
+[project.urls]
+Homepage = "https://symonyeal.github.io/Supplier-Resilience-Lab/"
+Repository = "https://github.com/symonyeal/Supplier-Resilience-Lab"
+Issues = "https://github.com/symonyeal/Supplier-Resilience-Lab/issues"
+
+[tool.setuptools]
+packages = ["srl", "srl.data", "srl.data.raw", "srl.data.catalog", "srl.schemas"]
+package-dir = {"srl.data" = "data"}
+
+[tool.setuptools.package-data]
+"srl.schemas" = ["*.json"]
+"srl.data" = ["manifest.json"]
+"srl.data.raw" = ["QBL.xlsx"]
+"srl.data.catalog" = ["mappings.csv"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]

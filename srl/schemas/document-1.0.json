@@ -1,0 +1,46 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://symonyeal.github.io/Supplier-Resilience-Lab/document-1.0.json",
+ "title": "Supplier Resilience Lab exchange document 1.0",
+ "oneOf": [{"$ref": "#/$defs/instance"}, {"$ref": "#/$defs/solution"},
+           {"$ref": "#/$defs/enumeration"}],
+ "$defs": {
+  "labels": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+  "sets": {"type": "array", "items": {"$ref": "#/$defs/labels"}},
+  "matrix": {
+   "type": "object", "required": ["schema_version", "kind", "V", "P", "E", "k", "F"],
+   "properties": {
+    "schema_version": {"const": "1.0"}, "V": {"$ref": "#/$defs/labels"},
+    "P": {"$ref": "#/$defs/labels"}, "E": {"$ref": "#/$defs/sets"},
+    "F": {"$ref": "#/$defs/sets"}, "k": {"type": "integer", "minimum": 0},
+    "data_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "mappings_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+   }
+  },
+  "instance": {"allOf": [{"$ref": "#/$defs/matrix"},
+                            {"properties": {"kind": {"const": "instance"}}}]},
+  "solution": {
+   "type": "object",
+   "required": ["schema_version", "kind", "instance", "status", "panel", "witnesses",
+                "infeasibility", "essential"],
+   "properties": {
+    "schema_version": {"const": "1.0"}, "kind": {"const": "solution"},
+    "instance": {"$ref": "#/$defs/instance"}, "status": {"type": "string"},
+    "panel": {"oneOf": [{"$ref": "#/$defs/labels"}, {"type": "null"}]}
+   },
+   "if": {"properties": {"status": {"const": "optimal"}}},
+   "then": {"properties": {"panel": {"$ref": "#/$defs/labels"}}},
+   "else": {"properties": {"panel": {"type": "null"}}}
+  },
+  "enumeration": {"allOf": [{"$ref": "#/$defs/matrix"}, {
+   "required": ["run", "panels"],
+   "properties": {
+    "kind": {"const": "enumeration"}, "panels": {"$ref": "#/$defs/sets"},
+    "run": {"type": "object", "required": ["status", "count", "stored"],
+            "properties": {"status": {"type": "string"},
+                           "count": {"type": "integer", "minimum": 0},
+                           "stored": {"type": "integer", "minimum": 0}}}
+   }
+  }]}
+ }
+}

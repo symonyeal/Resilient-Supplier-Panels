@@ -5,7 +5,7 @@ import urllib.request
 from datetime import datetime, UTC
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+from .resources import data_path
 
 
 def fetch(url, dir):
@@ -21,8 +21,8 @@ def fetch(url, dir):
 
 def fetch_all():
     """Fetch every manifest source; report whether each matches the frozen snapshot."""
-    frozen = json.loads((ROOT / "data/manifest.json").read_text())
-    out = ROOT / "data/fetched"
+    frozen = json.loads(data_path("manifest.json").read_bytes())
+    out = Path("data/fetched")
     out.mkdir(parents=True, exist_ok=True)
     got = {}
     for name, m in frozen.items():
