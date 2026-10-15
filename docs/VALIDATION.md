@@ -50,9 +50,28 @@ Every instance record in `results/suite-seed*.json` carries:
 - for complete families:
   - agreement between routes (A);
   - MILP exhaustion (S);
-  - exhaustive agreement where the support is at most 16 (X);
+  - exhaustive agreement where the support is at most 18 (X);
   - an FK-A duality decision within 200,000 nodes (F);
   - the essential set equal to the intersection of the family (D, A).
 
-The counts of these checks are read from `results/suite-seed1.json` in
-[findings](findings/2026-10-15-supplier-resilience.md).
+### Seed 1 (code `09cb123`, clean; data hash = manifest; 88 instances)
+
+| Check | Level | Passed |
+| --- | --- | --- |
+| minimum panel certified minimal (or infeasible) | D | 88 / 88 |
+| HiGHS infeasibility ⇔ matrix witness | D, S | 88 / 88 |
+| every panel returned by every route certified minimal (partial runs included) | D | 88 / 88 instances |
+| complete routes agree on the family | A | 83 / 83 with a fully stored family |
+| MILP exhaustion finds no missing panel | S | 83 / 83 |
+| exhaustive search agrees (support ≤ 18) | X | 46 / 46 |
+| essential set = intersection of the complete family | D, A | 50 / 50 |
+| FK-A decides C = Tr(H); `fk_a_memo` agrees | F | 46 / 46 (families ≤ 2,000) |
+
+Not checked:
+- families that every route left incomplete (4 primary cases), and families above 2,000
+  panels by FK-A;
+- any check under the sensitivity variants beyond feasibility and the minimum.
+
+Agreement of Berge with FK-B tests the shared scenario hypergraph against itself. The
+independent test of that transformation is the agreement of exhaustive search and MILP
+exhaustion, both of which read the matrix.
