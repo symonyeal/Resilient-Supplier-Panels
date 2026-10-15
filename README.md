@@ -1,94 +1,100 @@
 # Supplier Resilience Lab
 
-[Interactive case study](https://symonyeal.github.io/Supplier-Resilience-Lab/) ·
-[Technical case study](docs/CASE_STUDY.md) ·
+**If one supplier drops out, can every product in a basket still be bought?** This project
+answers that question for food products on the USDA's public list of approved suppliers,
+and shows which suppliers to rely on.
+
+[Live site](https://symonyeal.github.io/Supplier-Resilience-Lab/) ·
+[Case study](docs/CASE_STUDY.md) ·
 [Release 0.2.0](https://github.com/symonyeal/Supplier-Resilience-Lab/releases/tag/v0.2.0)
 
-Which qualified suppliers cover a food basket, and which panels retain coverage after a
-supplier fails? This project connects public USDA qualification data, exact optimization
-and independent certificates to an inspectable decision workflow.
+## The short answer
 
-**Qualification coverage only.** Capacity, prices, delivery performance and supplier
-independence require additional evidence.
+- **Most baskets have no backup.** In 30 of 40 baskets drawn from the list (3 to 20
+  products each), no combination of suppliers survives the loss of any one supplier.
+- **The cause is always one product.** Each of those 30 baskets contains a product that only
+  one supplier is approved to provide. Choosing suppliers differently cannot fix that.
+  Approving a second supplier for that product can.
+- **Where backup is possible, it is cheap in suppliers.** In the other 10 baskets, 2 to 6
+  suppliers cover every product even if any one of them fails.
 
-## The lead case
+## The question
 
-Three canned products have 21 eligible suppliers on the frozen USDA Qualified Bidders List.
+The USDA's Agricultural Marketing Service approves vendors for specific products before they
+may bid on its food purchases. The approved vendors and their products appear on the
+[Qualified Bidders List](https://www.ams.usda.gov/selling-food/solicitations).
 
-| Requirement | Minimum suppliers | Inclusion-minimal panels |
-| --- | ---: | ---: |
-| Current coverage | 1 | 80 |
-| Survive any one supplier failure | 2 | 1,284 |
+A buyer chooses a *panel*: a set of suppliers that together cover every product in a basket.
+A resilient panel still covers every product after any one supplier fails. The questions
+are how small a resilient panel can be, how many choices exist, and which suppliers cannot
+be replaced.
 
-Source: [certified generated cases](site/cases.json), strict mapping, QBL snapshot retrieved
-2026-10-15. Every eligible supplier is retained. All panels pass direct matrix certificates;
-a separately encoded MILP finds no omitted panel.
+## Three examples
 
-The [demo](https://symonyeal.github.io/Supplier-Resilience-Lab/) lets you change the basket,
-coverage requirement, panel and hypothetical outage. Inspect lost coverage and alternatives,
-search the qualification matrix, and download a decision report or a complete family that
-can be reverified locally. All model results are precomputed; the browser runs no solver.
-Two further real cases show a forced backup panel and a single-source bottleneck.
+| Basket | Approved suppliers | Smallest resilient panel | Resilient panels to choose from |
+| --- | ---: | ---: | ---: |
+| Canned pinto beans, vegetarian beans, tomato sauce | 21 | 2 | 1,284 |
+| Three frozen or chilled chicken products | 6 | 2 | 1 |
+| Dry lentils, canned pears, fresh sweet potatoes | 4 | none | 0 |
 
-## What the experiment found
+Panels are counted only when no supplier in them is redundant.
 
-The original seed-1 campaign covered 88 real-data instances. Single-failure coverage was
-feasible for 10 of 40 primary baskets. A single MILP minimum took a median of 0.8 ms;
-Berge completed 84 of 88 enumerations, compared with 76 for FK-B and MILP enumeration.
+- **Canned:** 1,284 options leave room to choose on price, capacity and delivery record.
+- **Poultry:** one product has only two approved suppliers, so both are required. A single
+  resilient panel means the buyer has no choice.
+- **Scarce:** lentils and sweet potatoes each have one approved supplier. No panel is
+  resilient until another supplier is approved.
 
-These are historical measurements at code `09cb123`, with a 10 s enumeration limit.
-The practical conclusion is to use the MILP and matrix witnesses for the minimum and
-bottlenecks, and enumerate when alternatives matter. The current release does not
-relabel those timings as a fresh experiment. The site's [outcome explorer](https://symonyeal.github.io/Supplier-Resilience-Lab/#outcomes)
-lists all 88 instances, with filters, products, minimum panels, essential suppliers,
-infeasibility witnesses and route runs. Each saved minimum, essential set and witness is
-re-certified from the matrix at build time; the 4 unfinished enumerations show lower bounds. [Findings](docs/findings/2026-10-15-supplier-resilience.md)
-· [Protocol](docs/BENCHMARKS.md) · [Validation](docs/VALIDATION.md)
+On the [live site](https://symonyeal.github.io/Supplier-Resilience-Lab/) you can pick a
+basket and a panel, fail a supplier, and see which products lose coverage. You can download
+a one-page report. All [88 measured cases](https://symonyeal.github.io/Supplier-Resilience-Lab/#outcomes)
+(44 baskets, each with and without a failure) can be browsed and filtered.
 
-## Reproduce
+## What this does and does not tell you
 
-Python 3.14 and Git are required. From a clone of this repository:
+**Does:** whether the approvals on paper allow full coverage when a supplier fails, which
+suppliers are irreplaceable, and which product is the bottleneck.
+
+**Does not:** capacity, price, delivery record, or whether a supplier will bid. It also does
+not show whether two suppliers share a plant or an owner. A listed vendor need not be the
+producer, and a billing address is not a plant. The data is one snapshot (retrieved
+2026-10-15), not a history. This is research, not a purchasing recommendation.
+
+## How the results are checked
+
+1. **Fixed source.** The USDA workbook is frozen and fingerprinted, so every result names
+   the exact data it came from.
+2. **Two methods.** An optimisation solver finds the smallest resilient panel; a typical basket
+   takes under a millisecond. Enumeration algorithms from the author's MSc thesis list every
+   alternative.
+3. **Independent check.** Separate code checks every panel directly against the USDA list.
+   A second solver checks that no panel was missed.
+
+Benchmark timings are historical (one run, October 2026) and were not rerun for this release.
+[Findings](docs/findings/2026-10-15-supplier-resilience.md) ·
+[Validation](docs/VALIDATION.md)
+
+## Try it on your own basket
+
+Requires Python 3.14 and Git. From a copy of this repository:
 
 ```text
 python -m pip install "setuptools>=77" wheel
-python -m pip install --no-build-isolation ".[dev]"
-python analysis/build_site.py
-```
-
-The last command rebuilds the three cases only after their certificates and independent
-exhaustion checks pass, and exports the 88 saved outcomes only after their matrix
-certificates pass. Open `site/index.html`; no server or network is required. The chart
-library (Plotly basic 4.1.1, MIT) is vendored in `site/vendor/`. `site/data.js` and `site/cases.json` are generated, committed artifacts.
-
-Use the installed command to reproduce the lead case:
-
-```text
+python -m pip install --no-build-isolation .
 srl build --basket examples/canned.csv --k 1 -o basket.json
 srl solve basket.json -o solution.json
-srl enum basket.json --method berge -o family.json
-srl verify family.json
 ```
 
-Expected: an optimal two-supplier panel, 1,284 distinct certified minimal panels, and
-`milp_exhaustion: complete`. `python -m srl` is equivalent if Python's Scripts directory
-is not on PATH. The release wheel includes the frozen data and mappings and works away
-from the checkout. [Commands, schemas and data locations](docs/INTERFACE.md)
+Replace `examples/canned.csv` with your own list of products. `--k 1` means "survive any one
+failure". Expected result for the example: a two-supplier panel.
 
-Verify or build a distribution:
+## For technical readers
 
-```text
-python -m pytest -q
-python -m ruff check .
-python -m pip check
-python -m build --no-isolation
-python analysis/check_install.py dist/srl-0.2.0-py3-none-any.whl
-```
-
-Optional browser verification: install `.[browser]`, then run
-`python analysis/check_browser.py`. It uses installed Edge on Windows; hosted CI installs
-Chromium. CI checks Windows and Ubuntu, the installed wheel, and browser interactions.
-
-## How it works
+A panel T is feasible when, for every product p, it keeps a qualified member under every
+modelled failure. For any k failures this means |T ∩ E_p| ≥ k + 1. Minimal panels are the
+minimal transversals of a scenario hypergraph. MILP gives a minimum-cardinality panel;
+Berge and FK-B enumerate. Matrix witnesses certify minimality, and a separately encoded
+MILP certifies that no panel is missing. Proofs are in [MODEL](docs/MODEL.md).
 
 ```mermaid
 flowchart LR
@@ -102,39 +108,42 @@ flowchart LR
     G --> H[Static interactive site]
 ```
 
-A panel T is feasible when it meets every product's surviving supplier set under every
-modelled failure. For any k supplier failures, this is equivalent to having at least
-k + 1 qualified panel members for each product. Minimal panels are exactly the minimal
-transversals of the scenario hypergraph. The transformation, reductions, boundary cases
-and certificates are proved in [MODEL](docs/MODEL.md).
+Seed-1 suite (code `09cb123`, 10 s limit): median MILP minimum 0.8 ms; Berge completed 84
+of 88 enumerations, FK-B and MILP enumeration 76. The 4 unfinished enumerations are
+reported as lower bounds. [Protocol](docs/BENCHMARKS.md)
 
 | Responsibility | Code |
 | --- | --- |
 | Read qualifications and preserve provenance | `srl/qbl.py`, `srl/catalog.py` |
-| Build the failure model and scenario hypergraph | `srl/instance.py` |
+| Failure model and scenario hypergraph | `srl/instance.py` |
 | Solve and enumerate | `srl/solve.py` |
-| Certify directly from the matrix | `srl/certify.py` |
-| Exchange versioned documents and select data | `srl/contracts.py`, `srl/resources.py` |
-| Build checked public cases | `srl/portfolio.py`, `analysis/build_site.py` |
-| Benchmark, report and score pre-registered tests | `srl/bench.py`, `srl/report.py`, `srl/verdicts.py` |
+| Certify from the matrix | `srl/certify.py` |
+| Versioned documents and data selection | `srl/contracts.py`, `srl/resources.py` |
+| Public cases and site data | `srl/portfolio.py`, `analysis/build_site.py` |
+| Benchmark and report | `srl/bench.py`, `srl/report.py`, `srl/verdicts.py` |
 
-## Scope and continuation
+Full reproduction and checks:
 
-This is one qualification snapshot, with no backtest or disruption probabilities. Supplier
-IDs are snapshot row identities; 31 identity candidates remain unresolved. Billing addresses
-are not operating sites. Product granularity contains explicit interpretation choices.
-The two-supplier stress test does not assert common ownership or a shared facility.
+```text
+python -m pip install --no-build-isolation ".[dev]"
+python analysis/build_site.py      # rebuilds site/data.js and site/cases.json after certificates pass
+srl enum basket.json --method berge -o family.json
+srl verify family.json             # 1,284 certified panels; milp_exhaustion: complete
+python -m pytest -q
+python -m ruff check .
+python analysis/check_browser.py   # needs .[browser]; uses Edge on Windows
+```
 
-Next research questions include richer operational inputs and symmetry-aware enumeration.
-They require separate data and validation. [Open work](docs/OPEN.md) ·
-[Decisions](docs/DECISIONS.md) · [Sources](docs/SOURCES.md) ·
-[Glossary](GLOSSARY.md) · [Changelog](CHANGELOG.md)
+The site opens from `site/index.html` with no server or network; Plotly basic 4.1.1 (MIT) is
+vendored. Supplier IDs are snapshot rows; 31 possible duplicate identities are unresolved.
+[Interface](docs/INTERFACE.md) · [Data](docs/DATA.md) · [Decisions](docs/DECISIONS.md) ·
+[Open work](docs/OPEN.md) · [Sources](docs/SOURCES.md) · [Glossary](GLOSSARY.md) ·
+[Changelog](CHANGELOG.md)
 
 ## Licence and attribution
 
-GPL-3.0-or-later; see [LICENSE](LICENSE). The project imports the author's
+GPL-3.0-or-later; see [LICENSE](LICENSE). Uses the author's
 [Hypergraph-Transversal-Thesis](https://github.com/symonyeal/Hypergraph-Transversal-Thesis)
-(S. Y. Islam, MSc thesis, SFU 2024), pinned at
-`1bb9de48ab91629a7ae9d97488c2181b4098806d`, also GPL-3.0-or-later.
-USDA data is presumed public domain as a U.S. Government work; no terms are stated in
-the workbook. [Provenance and source register](docs/SOURCES.md)
+(S. Y. Islam, MSc thesis, SFU 2024), pinned at `1bb9de48`. USDA data is presumed public
+domain as a U.S. Government work; the workbook states no terms.
+[Source register](docs/SOURCES.md)
