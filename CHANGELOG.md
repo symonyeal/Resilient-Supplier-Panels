@@ -8,6 +8,8 @@
   route runs; filtered CSV and per-record JSON downloads.
 - Saved minima, essential sets and infeasibility witnesses are re-certified from the
   matrix before export. Partial enumerations are exported as lower bounds.
+- Site copy rewritten answer-first: findings as headlines, figures read from the data,
+  one-line notes; marketing strip and repeated caveats removed.
 
 ## 0.2.0 — 2026-10-15
 

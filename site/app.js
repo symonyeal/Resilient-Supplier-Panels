@@ -76,22 +76,24 @@ function render() {
   for (const b of $("case-tabs").children) b.setAttribute("aria-pressed", String(b.dataset.case === c.id));
   for (const radio of document.querySelectorAll('[name="budget"]')) radio.checked = radio.value === state.k;
   $("case-title").textContent = c.title;
-  $("case-note").textContent = c.note;
+  $("case-note").textContent = m.count
+    ? `${number(m.count)} minimal panel${m.count === 1 ? "" : "s"}; the smallest has ${m.minimum_size}.`
+    : `No panel: ${m.infeasibility[0]} has too few qualified suppliers.`;
   $("panel").replaceChildren(...m.panels.map((p, i) => option(i,
     `${i === 0 ? "Minimum panel" : `Alternative ${i + 1}`} · ${p.members.length} suppliers`)));
   if (!p) $("panel").append(option("", "No feasible panel"));
   $("panel").value = p ? String(state.panel) : "";
   $("panel").disabled = !p;
-  $("shortlist-note").textContent = `${m.panels.length} shown of ${number(m.count)} minimal panels. Full family available below.`;
+  $("shortlist-note").textContent = `${m.panels.length} of ${number(m.count)} shown.`;
   $("outage").replaceChildren(...c.outages.map(o => option(o.id, o.label)));
   $("outage").value = o.id;
   $("outage").disabled = !p;
   $("outage-note").textContent = o.failed.length
-    ? `Hypothetical outage: ${o.failed.map(v => name(c, v)).join("; ")}. No shared ownership is assumed.`
-    : "The outage is a hypothetical stress test, not an observed event.";
+    ? `Hypothetical: ${o.failed.map(v => name(c, v)).join("; ")} fail${o.failed.length === 1 ? "s" : ""}.`
+    : "Hypothetical stress test.";
   $("result-metrics").replaceChildren(
     metric(number(m.minimum_size), "Minimum panel size"),
-    metric(number(m.count), "Minimal panels · exact count"),
+    metric(number(m.count), "Minimal panels"),
     metric(m.essential === null ? "—" : Object.keys(m.essential).length, "Essential suppliers"));
   $("panel-results").hidden = !p;
   $("infeasible").hidden = !!p;
@@ -102,7 +104,7 @@ function render() {
     $("selected-suppliers").replaceChildren(...p.members.map(v => {
       const failed = o.failed.includes(v);
       const item = node("div", undefined, `supplier${failed ? " failed" : ""}`);
-      item.append(node("strong", name(c, v)), node("span", failed ? "Unavailable in this stress test" : "Available in this stress test"));
+      item.append(node("strong", name(c, v)), node("span", failed ? "Failed" : "Available"));
       return item;
     }));
     $("coverage-rows").replaceChildren(...c.products.map((product, j) => {
@@ -113,12 +115,12 @@ function render() {
       return row;
     }));
   } else {
-    $("coverage-status").textContent = "Coverage requirement is infeasible";
+    $("coverage-status").textContent = "No resilient panel exists";
     $("status-tag").textContent = "Matrix witness";
     const [product] = m.infeasibility;
     const j = c.products.indexOf(product);
     $("infeasible").replaceChildren(node("strong", `Blocked by: ${product}`),
-      node("span", `This product has ${c.product_sizes[j]} qualified supplier(s). Surviving any ${state.k} failure(s) requires at least ${Number(state.k) + 1}. Choosing a larger panel cannot remove this qualification bottleneck.`));
+      node("span", `${c.product_sizes[j]} qualified; k = ${state.k} needs ${Number(state.k) + 1}. Only a new qualification fixes this.`));
   }
   $("alternative-count").textContent = `${m.panels.length} shown`;
   $("alternatives").replaceChildren(...m.panels.map((p, i) => {
@@ -129,7 +131,7 @@ function render() {
     const heading = node("strong", i === 0 ? "Minimum panel" : `Alternative ${i + 1}`);
     heading.append(node("span", `${p.members.length} suppliers`));
     b.append(heading, node("span", p.members.map(v => name(c, v)).join(" · ")),
-      node("span", p.outages[o.id].covered ? "Coverage retained under this outage" : "Coverage lost under this outage"));
+      node("span", p.outages[o.id].covered ? "Survives this outage" : "Fails this outage"));
     b.addEventListener("click", () => {
       state.panel = i;
       render();
@@ -137,7 +139,7 @@ function render() {
     });
     return b;
   }));
-  if (!p) $("alternatives").append(node("p", "No feasible alternatives exist under this requirement. Inspect the blocking product above, or select k = 0.", "fine"));
+  if (!p) $("alternatives").append(node("p", "None. Select k = 0.", "fine"));
   renderMatrix();
 }
 
@@ -159,14 +161,21 @@ function escape(text) {
 function report() {
   const { c, m, p, o, result } = current();
   const e = escape;
-  const status = result ? result.covered ? "Coverage retained" : "Coverage lost" : "Requirement infeasible";
-  const rows = c.products.map((product, j) => `<tr><td>${e(product)}</td><td>${result ? result.suppliers[j].map(v => e(name(c, v))).join("; ") || "None" : "No feasible panel"}</td></tr>`).join("");
-  const witnesses = p ? p.members.map(v => {
+  const names = vs => vs.map(v => e(name(c, v))).join("; ");
+  const status = result ? result.covered ? "Coverage retained" : "Coverage lost" : "No resilient panel exists";
+  const rows = c.products.map((product, j) => `<tr><td>${e(product)}</td><td>${result ? names(result.suppliers[j]) || "None" : "—"}</td></tr>`).join("");
+  const certificates = p ? p.members.map(v => {
     const [product, F] = p.witnesses[v];
-    return `<li>${e(name(c, v))}: removing this supplier loses ${e(product)} when ${F.length ? F.map(w => e(name(c, w))).join("; ") : "no other supplier"} fails.</li>`;
-  }).join("") : `<li>Infeasibility witness: ${e(JSON.stringify(m.infeasibility))}</li>`;
+    return `<li>${e(name(c, v))}: sole cover of ${e(product)}${F.length ? ` if ${names(F)} fails` : ""}.</li>`;
+  }).join("") : `<li>Infeasible: ${e(m.infeasibility[0])} has too few qualified suppliers.</li>`;
   const provenance = Object.entries(D.provenance).filter(([k]) => k !== "snapshot").map(([k, v]) => `<dt>${e(k)}</dt><dd>${e(v)}</dd>`).join("");
-  return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(c.title)} — decision report</title><style>body{max-width:900px;margin:45px auto;padding:0 20px;font:16px/1.6 system-ui;color:#202a27}h1{line-height:1.2}table{width:100%;border-collapse:collapse}td,th{text-align:left;border-bottom:1px solid #ccc;padding:12px}dd{margin:0 0 12px;font:13px/1.6 monospace;overflow-wrap:anywhere}dt{font-weight:600}p{max-width:75ch}</style><h1>Supplier Resilience Lab: ${e(c.title)}</h1><p><strong>${e(status)}</strong>. Original panel requirement: survive any ${e(state.k)} supplier failure(s). Outage checked here: ${o.failed.length ? o.failed.map(v => e(name(c, v))).join("; ") : "none"}.</p><p>Selected panel: ${p ? p.members.map(v => e(name(c, v))).join("; ") : "none"}. Minimum panel size: ${e(m.minimum_size ?? "infeasible")}. Complete family: ${e(m.count)} minimal panels.</p><table><caption>Coverage under the selected outage</caption><thead><tr><th>Product</th><th>Surviving qualified panel suppliers</th></tr></thead><tbody>${rows}</tbody></table><h2>Original panel certificates</h2><ul>${witnesses}</ul><p>All exported panels were independently checked for minimality; MILP exhaustion returned ${e(m.checks.milp_exhaustion)}. The selected outage is a hypothetical stress test. It is not evidence of common ownership or an actual event.</p><h2>Scope and source</h2><p>Qualification coverage only. Capacity, price, delivery performance and plant independence are not established. Supplier IDs are snapshot row identities. This report is a research result, not a purchasing recommendation.</p><p>QBL retrieved ${e(D.provenance.snapshot.retrieved_utc)}. <a href="${e(D.provenance.snapshot.url)}">USDA source</a>. <a href="${repo}">Code and methods</a>.</p><dl>${provenance}</dl></html>`;
+  return `<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${e(c.title)}: report</title><style>body{max-width:900px;margin:45px auto;padding:0 20px;font:16px/1.6 system-ui;color:#202a27}h1{line-height:1.2}table{width:100%;border-collapse:collapse}td,th{text-align:left;border-bottom:1px solid #ccc;padding:12px}dd{margin:0 0 12px;font:13px/1.6 monospace;overflow-wrap:anywhere}dt{font-weight:600}p{max-width:75ch}</style>`
+    + `<h1>${e(status)}: ${e(c.title)}</h1>`
+    + `<p>Panel: ${p ? names(p.members) : "none"}. Survives any ${e(state.k)} failure. Outage tested: ${o.failed.length ? names(o.failed) : "none"} (hypothetical). Minimum ${e(m.minimum_size ?? "—")}; ${e(m.count)} minimal panels in total.</p>`
+    + `<table><thead><tr><th>Product</th><th>Surviving suppliers</th></tr></thead><tbody>${rows}</tbody></table>`
+    + `<h2>Certificates</h2><ul>${certificates}</ul><p>Every panel certified minimal from the matrix; exhaustion check ${e(m.checks.milp_exhaustion)}.</p>`
+    + `<h2>Scope</h2><p>Qualification coverage only: not capacity, price, delivery or plant independence. Not a purchasing recommendation.</p>`
+    + `<p>USDA QBL retrieved ${e(D.provenance.snapshot.retrieved_utc)}. <a href="${e(D.provenance.snapshot.url)}">Source</a> · <a href="${repo}">Code</a>.</p><dl>${provenance}</dl></html>`;
 }
 
 const ROUTES = { berge: "Berge", fkb: "FK-B", milp: "MILP enumeration" };
@@ -237,24 +246,24 @@ function renderRecord(R) {
   metrics.append(metric(number(x.V), "Eligible suppliers"), metric(number(x.min.size), "Minimum panel size"),
     metric(count(x), { exact: "Minimal panels · exact", bound: "Minimal panels · lower bound", infeasible: "No feasible panel" }[kind(x)]));
   const list = items => { const u = node("ul"); u.append(...items.map(([t, c]) => node("li", t, c))); return u; };
-  const parts = [head, title, metrics, node("h4", "Products and qualified suppliers |E_p|"),
-    list(x.P.map((p, j) => [`${p}: ${x.E_p[j]} qualified`, x.E_p[j] <= x.k ? "scarce" : ""]))];
+  const parts = [head, title, metrics, node("h4", "Qualified suppliers per product"),
+    list(x.P.map((p, j) => [`${p}: ${x.E_p[j]}`, x.E_p[j] <= x.k ? "scarce" : ""]))];
   if (kind(x) === "infeasible") {
     const [product] = x.infeasibility;
     const n = x.E_p[x.P.indexOf(product)];
     parts.push(node("h4", "Infeasibility witness"),
-      node("p", `${product} has ${n} qualified supplier(s); surviving any ${x.k} failure(s) requires ${x.k + 1}. No panel meets the requirement.`, "fine"));
+      node("p", `${product}: ${n} qualified; k = ${x.k} needs ${x.k + 1}.`, "fine"));
   } else {
     const E = Object.entries(x.essential);
-    parts.push(node("h4", "A minimum panel (MILP; minimality certified from the matrix)"), list(x.min.panel.map(v => [supplier(v)])),
-      node("h4", "Essential suppliers (in every minimal panel)"),
-      E.length ? list(E.map(([v, [p, F]]) => [`${supplier(v)}: without it, ${p} is uncovered${F.length ? ` once ${F.map(supplier).join("; ")} fails` : ""}.`]))
-        : node("p", "None. Every supplier has a replacement.", "fine"));
+    parts.push(node("h4", "Minimum panel"), list(x.min.panel.map(v => [supplier(v)])),
+      node("h4", "Essential suppliers"),
+      E.length ? list(E.map(([v, [p, F]]) => [`${supplier(v)}: sole cover of ${p}${F.length ? ` if ${F.map(supplier).join("; ")} fails` : ""}`]))
+        : node("p", "None.", "fine"));
   }
   const table = node("table");
   const tr = node("tr");
   for (const h of ["Route", "Status", "Panels", "First", "Total"]) { const th = node("th", h); th.scope = "col"; tr.append(th); }
-  table.append(node("caption", "Enumeration routes under the seed-1 limits"), node("thead"), node("tbody"));
+  table.append(node("thead"), node("tbody"));
   table.tHead.append(tr);
   table.tBodies[0].append(...x.runs.map(r => {
     const row = node("tr");
@@ -264,9 +273,9 @@ function renderRecord(R) {
   const scroll = node("div", undefined, "table-scroll");
   scroll.append(table);
   const s = x.sensitivity;
-  parts.push(node("h4", "Runs and checks"), scroll, node("p",
-    `MILP exhaustion: ${x.milp_exhaustion || "not run (no complete family)"}. Complete routes agree: ${x.complete_routes_agree === null ? "no complete route" : x.complete_routes_agree ? "yes" : "no"}.`
-    + (s ? ` Sensitivity minimum: merged mappings ${number(s.merged.min)}, identity candidates merged ${number(s.identity_candidates_merged.min)}.` : ""), "fine"));
+  parts.push(node("h4", "Runs"), scroll, node("p",
+    `Exhaustion check: ${x.milp_exhaustion || "not run"}. Routes agree: ${x.complete_routes_agree === null ? "n/a" : x.complete_routes_agree ? "yes" : "no"}.`
+    + (s ? ` Minimum with merged mappings: ${number(s.merged.min)}.` : ""), "fine"));
   $("record").replaceChildren(...parts);
 }
 
@@ -313,8 +322,8 @@ function initialiseOutcomes() {
   const distinct = key => [...new Set(R.map(x => x[key]))];
   $("f-class").append(...distinct("class").map(v => option(v, v)));
   $("f-rule").append(...distinct("rule").map(v => option(v, v)));
-  $("outcomes-summary").textContent = `${R.length} instances: ${R.length / 2} baskets in four granularity classes, each at k = 0 and k = 1. Saved results, re-certified from the matrix; not rerun.`;
-  $("chart-note").textContent = `Spearman ρ = ${B.spearman_V_count} across ${B.feasible} feasible instances. The ${R.length - B.feasible} infeasible instances have no panel and are omitted from the log axes; the table lists them. Open triangles are lower bounds from the ${B.checks.partial} instances in which every route stopped at the ${B.provenance.limits.timeout_s} s limit. Source: USDA QBL, seed-1 suite, code ${B.provenance.code_rev.slice(0, 7)}.`;
+  $("outcomes-summary").textContent = `All ${R.length} saved results, re-certified from the matrix; not rerun.`;
+  $("chart-note").textContent = `Spearman ρ = ${B.spearman_V_count}, n = ${B.feasible} feasible. ${R.length - B.feasible} infeasible: table only. △ lower bound (run stopped at ${B.provenance.limits.timeout_s} s). USDA QBL, seed 1, code ${B.provenance.code_rev.slice(0, 7)}.`;
   for (const [id, key] of [["f-class", "class"], ["f-rule", "rule"], ["f-k", "k"], ["f-outcome", "outcome"]])
     $(id).addEventListener("change", e => { O[key] = e.target.value; renderOutcomes(); });
   $("f-product").addEventListener("input", e => { O.product = e.target.value; renderOutcomes(); });
@@ -339,7 +348,9 @@ function initialise() {
   $("hero-eligible").textContent = number(lead.eligible);
   $("hero-minimum").textContent = number(lead.modes["1"].minimum_size);
   $("hero-count").textContent = number(lead.modes["1"].count);
-  $("hero-source").textContent = `USDA QBL · ${D.provenance.snapshot.retrieved_utc.slice(0, 10)} snapshot · all panels certified`;
+  const counts = D.cases.map(c => c.modes["1"].count);
+  $("lab-title").textContent = `Resilient options range from ${number(Math.max(...counts))} panels to ${Math.min(...counts) ? number(Math.min(...counts)) : "none"}.`;
+  $("hero-source").textContent = `USDA QBL, ${D.provenance.snapshot.retrieved_utc.slice(0, 10)} · all panels certified`;
   $("case-tabs").replaceChildren(...D.cases.map((c, i) => {
     const b = node("button", `${String(i + 1).padStart(2, "0")} / ${c.title}`);
     b.type = "button";
@@ -370,16 +381,24 @@ function initialise() {
     download(`${c.id}-k${state.k}-family.json`, JSON.stringify(family, null, 1) + "\n", "application/json");
   });
   const B = D.evidence;
-  $("resilient-count").textContent = `${B.resilient} / ${B.primary}`;
-  $("benchmark-summary").textContent = `${B.instances} real-data instances from the frozen seed-1 suite. These historical measurements are distinct from the interactive case builds.`;
+  const blocked = B.records.filter(x => x.k === 1 && x.rule !== "scarce" && x.min.status !== "optimal");
+  const sizes = B.records.filter(x => x.k === 1 && x.rule !== "scarce" && x.min.status === "optimal").map(x => x.min.size);
+  const single = blocked.filter(x => Math.min(...x.E_p) === 1).length;
+  $("h-fail").textContent = blocked.length;
+  $("h-primary").textContent = B.primary;
+  $("resilient-count").textContent = `${blocked.length} / ${B.primary}`;
+  $("finding-note").textContent = `${single === blocked.length ? "In every one" : `In ${single}`}, a product has one qualified supplier. In the other ${sizes.length}, ${Math.min(...sizes)}–${Math.max(...sizes)} suppliers suffice.`;
+  $("benchmark-summary").textContent = `${B.instances} instances, seed 1. Historical timings; not rerun.`;
+  const best = B.routes.reduce((a, r) => r.complete > a.complete ? r : a);
+  $("benchmark-caption").textContent = `${ROUTES[best.method]} finishes the most enumerations: ${best.complete} of ${best.runs}.`;
   $("benchmark-rows").replaceChildren(...B.routes.map(r => {
     const row = node("tr");
     const time = node("td", `${(r.first_median_s * 1000).toPrecision(2)} ms`);
-    time.append(node("small", `n = ${r.first_n} emitting runs`));
+    time.append(node("small", `n = ${r.first_n}`));
     row.append(node("td", ROUTES[r.method]), node("td", `${r.complete} / ${r.runs}`), time);
     return row;
   }));
-  $("benchmark-note").textContent = `Seed 1 · code ${B.provenance.code_rev.slice(0, 7)} · ${B.provenance.limits.timeout_s} s per enumeration · ${number(B.provenance.limits.cap)} output cap (Berge may count beyond it) · child-process timings.`;
+  $("benchmark-note").textContent = `Code ${B.provenance.code_rev.slice(0, 7)} · ${B.provenance.limits.timeout_s} s limit · ${number(B.provenance.limits.cap)} output cap · stopped runs censored · first-panel medians over runs that emitted one.`;
   const p = D.provenance;
   const entries = { "QBL retrieved (UTC)": p.snapshot.retrieved_utc, "Data SHA-256": p.data_sha256,
     "Mappings SHA-256": p.mappings_sha256, "Case build code": p.code_rev + (p.dirty ? " (working changes)" : ""),
