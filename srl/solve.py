@@ -50,11 +50,13 @@ def milp(I, cuts=()):
 def milp_stream(I):
     """All minimal panels in nondecreasing size: an optimum avoiding supersets of the
     panels found is minimal (a proper feasible subset would be cheaper and still
-    avoid them); infeasibility of the cut problem proves completeness."""
+    avoid them); infeasibility of the cut problem proves completeness.
+    Returns the stopping status: complete only after infeasibility, else highs status s."""
     found = []
     while (r := milp(I, found))[0] == "optimal":
         found.append(r[1])
         yield r[1]
+    return "complete" if r[0] == "infeasible" else r[0]
 
 
 def exhaustive(I):

@@ -9,7 +9,7 @@ from .bench import RAW
 
 
 def score(path):
-    R = json.loads(Path(path).read_text())
+    R = json.loads(Path(path).read_bytes())
     X = R["instances"]
     prim = [x for x in X if x["rule"] in ("uniform", "overlap")]
     feas = [x for x in prim if x["min"]["size"] is not None]
@@ -42,18 +42,21 @@ def score(path):
         return r["t_first"] if r["t_first"] is not None else float("inf")
 
     late = [x for x in X if total(x, "berge") > 0.1 and x["min"]["size"] is not None]
-    h2v = {v: sum(x["sensitivity"][v]["feasible"] for x in small1)
-           for v in ("merged", "identity_candidates_merged")}
-    dirn = {v: {"infeasible->feasible": sum(x["sensitivity"][v]["feasible"]
-                                             and x["min"]["size"] is None for x in prim),
-                "feasible->infeasible": sum(not x["sensitivity"][v]["feasible"]
-                                             and x["min"]["size"] is not None for x in prim)}
-            for v in ("merged", "identity_candidates_merged")}
-    flip = {v: sum(x["sensitivity"][v]["feasible"] != (x["min"]["size"] is not None)
-                   for x in prim) for v in ("merged", "identity_candidates_merged")}
-    dmin = {v: sum(x["sensitivity"][v]["feasible"] and x["min"]["size"] is not None
-                   and x["sensitivity"][v]["min"] != x["min"]["size"] for x in prim)
-            for v in ("merged", "identity_candidates_merged")}
+    h2v, dirn, flip, dmin = {}, {}, {}, {}
+    for v in ("merged", "identity_candidates_merged"):
+        if not prim or any(x.get("sensitivity", {}).get(v, {}).get("feasible") is None
+                           or x["min"]["status"] not in ("optimal", "infeasible") for x in prim):
+            h2v[v] = dirn[v] = flip[v] = dmin[v] = "not measured"
+            continue
+        h2v[v] = sum(x["sensitivity"][v]["feasible"] for x in small1)
+        dirn[v] = {"infeasible->feasible": sum(x["sensitivity"][v]["feasible"]
+                                              and x["min"]["size"] is None for x in prim),
+                   "feasible->infeasible": sum(not x["sensitivity"][v]["feasible"]
+                                              and x["min"]["size"] is not None for x in prim)}
+        flip[v] = sum(x["sensitivity"][v]["feasible"] != (x["min"]["size"] is not None)
+                      for x in prim)
+        dmin[v] = sum(x["sensitivity"][v]["feasible"] and x["min"]["size"] is not None
+                      and x["sensitivity"][v]["min"] != x["min"]["size"] for x in prim)
     return {
         "H1 precise products with >=3 suppliers": f"{n3}/{n} = {n3 / n:.3f} (threshold 0.25)",
         "H2 primary size<=8 baskets k=1 feasible": f"{len(ok1)}/{len(small1)} (threshold 0.5)",
@@ -68,8 +71,10 @@ def score(path):
         "H5 / K7 H2 numerator under variant (of the same baskets)": h2v,
         "H5 / K7 minimum changes where both feasible (primary)": dmin,
         "K1 precise incidence share": A["incidences_precise_share"],
-        "K3 size<=8 k=1 feasible share": round(len(ok1) / len(small1), 3),
-        "K4 median exact |Tr| over feasible primary": median(x["count_exact"] for x in exact),
+        "K3 size<=8 k=1 feasible share": round(len(ok1) / len(small1), 3)
+        if small1 else "not measured",
+        "K4 median exact |Tr| over feasible primary": median(x["count_exact"] for x in exact)
+        if exact else "not measured",
         "K5 primary runs stopped (timeout or cap)": f"{len(stopped)}/{len(runs)}",
         "K6 instances where FK-B is slower than the faster of Berge and MILP":
             f"{len(fkb_slowest)}/{len(X)}",
