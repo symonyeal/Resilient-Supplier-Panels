@@ -20,11 +20,15 @@ def check(url, screenshots=None):
         page.on("console", lambda m: errors.append(m.text) if m.type == "error" else None)
         page.goto(url)
         expect(page.locator("#hero-count")).to_have_text("1,284")
+        expect(page.locator("#hero-title")).to_have_text(
+            "30 of 40 sampled baskets cannot survive one supplier failure.")
+        expect(page.locator("#lab-title")).to_have_text(
+            "Resilient options range from 1,284 panels to none.")
         expect(page.locator("#coverage-status")).to_have_text("Coverage retained")
         if screenshots:
             Path(screenshots).mkdir(parents=True, exist_ok=True)
             page.screenshot(path=str(Path(screenshots) / "desktop.png"))
-        page.get_by_label("Simulated outage", exact=True).select_option("pair")
+        page.get_by_label("Outage", exact=True).select_option("pair")
         expect(page.locator("#coverage-status")).to_have_text("Coverage lost")
         expect(page.locator("#status-tag")).to_have_text("0 / 3 products")
         page.locator('[name="budget"][value="0"]').check()
@@ -39,7 +43,7 @@ def check(url, screenshots=None):
         page.locator("#supplier-search").fill("not-a-supplier-xyz")
         expect(page.locator("#matrix-body")).to_contain_text("No suppliers match")
         page.locator('[data-case="scarce"]').click()
-        expect(page.locator("#coverage-status")).to_have_text("Coverage requirement is infeasible")
+        expect(page.locator("#coverage-status")).to_have_text("No resilient panel exists")
         expect(page.locator("#panel")).to_be_disabled()
         expect(page.locator("#infeasible")).to_contain_text("Blocked by:")
         page.locator("#reset").click()
@@ -49,7 +53,7 @@ def check(url, screenshots=None):
         event.value.save_as(path)
         report = path.read_text(encoding="utf-8")
         assert "Coverage retained" in report and "1bb9de48" in report
-        assert "qualification" in report.lower() and "Original panel certificates" in report
+        assert "qualification" in report.lower() and "Certificates" in report
         with page.expect_download() as event:
             page.locator("#download-family").click()
         path = Path(tmp) / event.value.suggested_filename
