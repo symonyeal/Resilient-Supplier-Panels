@@ -33,6 +33,16 @@ Each entry gives the decision, the alternatives, the evidence and the date.
 - v is essential iff V \ {v} is infeasible (MODEL, Theorem 3.2). This is O(Σ|E_p|), it is
   exact, and it does not depend on any enumeration completing.
 
+**Enumeration exhaustion must retain the solver's stopping status** (2026-10-15).
+- A generator ending does not establish that HiGHS proved infeasibility. `milp_stream`
+  returns its status; the worker propagates it. Only infeasibility of the cut problem
+  produces `complete`. Unresolved sensitivity feasibility and solver/witness agreement
+  are `None`, rather than false verdicts.
+- Completeness is checked only after every supplied panel is certified minimal. An
+  invalid panel must never become an exclusion cut that falsely proves exhaustion.
+- The maintenance recheck is recorded in [VALIDATION](VALIDATION.md). Historical suite
+  timings and metadata retain their original revision; no timed suite was rerun.
+
 ## Tested and refused
 
 **Specialist enumerators (SHD, RS; Murakami–Uno)** (2026-10-15).

@@ -23,6 +23,12 @@ any k failures:  T feasible ⇔ |T ∩ E_p| ≥ k + 1 for all p
 
 Proofs, edge cases and certificates are in [docs/MODEL.md](docs/MODEL.md).
 
+Install the dependencies with Python 3.14 and Git available:
+
+```text
+python -m pip install -r requirements.txt
+```
+
 ## Strongest measured finding
 
 On 88 basket instances (seed 1, [findings](docs/findings/2026-10-15-supplier-resilience.md)):
@@ -72,6 +78,8 @@ vendors qualified for all three products. Berge finds all 1,284 minimal panels i
 | `python -m srl report results/suite-seed1.json` | rebuild [results-seed1.md](docs/findings/results-seed1.md) from saved results |
 
 Gate: `python -m pytest -q; python -m ruff check .; python -m pip check`.
+The [maintenance assessment](docs/VALIDATION.md#maintenance-assessment-2026-10-15)
+records fixes, rechecked results and the limits of the recheck.
 
 ## Layout
 
