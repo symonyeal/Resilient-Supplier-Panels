@@ -39,6 +39,7 @@ def main(argv=None):
     s = sub.add_parser("bench")
     s.add_argument("--seed", type=int, required=True)
     s.add_argument("--timeout", type=float, default=bench.LIMITS["timeout_s"])
+    s.add_argument("--no-variants", action="store_true", help="skip sensitivity reruns")
     s = sub.add_parser("report")
     s.add_argument("file")
     a = ap.parse_args(argv)
@@ -85,7 +86,8 @@ def main(argv=None):
         print(json.dumps(out, indent=1))
     elif a.cmd == "bench":
         L = dict(bench.LIMITS, timeout_s=a.timeout)
-        bench.suite(a.seed, L, out=bench.ROOT / f"results/suite-seed{a.seed}.json")
+        bench.suite(a.seed, L, out=bench.ROOT / f"results/suite-seed{a.seed}.json",
+                    variants=not a.no_variants)
     elif a.cmd == "report":
         from .report import write
         write(a.file)

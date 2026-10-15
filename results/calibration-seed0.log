@@ -1,0 +1,41 @@
+description uniform s= 3 k=0 V= 11 min=3 berge:complete/21 fkb:complete/21 milp:complete/21
+description uniform s= 3 k=1 V= 11 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description overlap s= 3 k=0 V=  6 min=1 berge:complete/2 fkb:complete/2 milp:complete/2
+description overlap s= 3 k=1 V=  6 min=2 berge:complete/1 fkb:complete/1 milp:complete/1
+description uniform s= 5 k=0 V= 14 min=5 berge:complete/10 fkb:complete/10 milp:complete/10
+description uniform s= 5 k=1 V= 14 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description overlap s= 5 k=0 V=  7 min=3 berge:complete/1 fkb:complete/1 milp:complete/1
+description overlap s= 5 k=1 V=  7 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description uniform s= 8 k=0 V= 32 min=6 berge:complete/372 fkb:complete/372 milp:complete/372
+description uniform s= 8 k=1 V= 32 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description overlap s= 8 k=0 V= 14 min=3 berge:complete/3 fkb:complete/3 milp:complete/3
+description overlap s= 8 k=1 V= 14 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description uniform s=12 k=0 V=161 min=11 berge:complete/3888 fkb:timeout/321 milp:timeout/610
+description uniform s=12 k=1 V=161 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description overlap s=12 k=0 V=  6 min=1 berge:complete/2 fkb:complete/2 milp:complete/2
+description overlap s=12 k=1 V=  6 min=3 berge:complete/1 fkb:complete/1 milp:complete/1
+description uniform s=20 k=0 V= 45 min=17 berge:timeout/0 fkb:timeout/251 milp:timeout/639
+description uniform s=20 k=1 V= 45 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+description overlap s=20 k=0 V= 21 min=3 berge:complete/19 fkb:complete/19 milp:complete/19
+description overlap s=20 k=1 V= 21 min=6 berge:complete/6 fkb:complete/6 milp:complete/6
+description scarce  s= 3 k=0 V=  3 min=3 berge:complete/1 fkb:complete/1 milp:complete/1
+description scarce  s= 3 k=1 V=  3 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+program     uniform s= 3 k=0 V=  7 min=2 berge:complete/2 fkb:complete/2 milp:complete/2
+program     uniform s= 3 k=1 V=  7 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+program     overlap s= 3 k=0 V= 50 min=1 berge:complete/359 fkb:complete/359 milp:complete/359
+program     overlap s= 3 k=1 V= 50 min=2 berge:timeout/0 fkb:timeout/436 milp:timeout/310
+program     uniform s= 5 k=0 V= 14 min=5 berge:complete/30 fkb:complete/30 milp:complete/30
+program     uniform s= 5 k=1 V= 14 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+program     overlap s= 5 k=0 V= 26 min=1 berge:complete/223 fkb:complete/223 milp:complete/223
+program     overlap s= 5 k=1 V= 26 min=4 berge:complete/879 fkb:timeout/401 milp:timeout/211
+program     uniform s= 8 k=0 V= 63 min=7 berge:timeout/0 fkb:timeout/339 milp:timeout/728
+program     uniform s= 8 k=1 V= 63 min=None berge:complete/0 fkb:complete/0 milp:complete/0
+program     overlap s= 8 k=0 V= 41 min=2 berge:timeout/0 fkb:timeout/388 milp:timeout/207
+program     overlap s= 8 k=1 V= 41 min=5 berge:timeout/0 fkb:timeout/336 milp:timeout/190
+program     uniform s=12 k=0 V= 72 min=8 berge:timeout/0 fkb:timeout/311 milp:timeout/299
+
+real	10m28.725s
+user	0m0.046s
+sys	0m0.436s
+
+[exited with code 0]
