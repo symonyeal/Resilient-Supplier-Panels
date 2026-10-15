@@ -47,7 +47,7 @@ def tables(res):
         if m0 is not None and m1 is not None and b in primary:
             inc.append(m1 - m0)
         w = r1["infeasibility"]
-        rows.append(f"| {b} | {r0['stats']['V']} | {sec(m0)} | "
+        rows.append(f"| {b} | {r0['stats']['V']} | {m0 if m0 is not None else 'infeasible'} | "
                     f"{m1 if m1 is not None else 'infeasible'} | "
                     f"{'' if w is None else w[0]} |")
     feas = sum(by[(b, 1)]["min"]["size"] is not None for b in primary)

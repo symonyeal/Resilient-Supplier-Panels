@@ -62,4 +62,5 @@ def hypergraph(I):
 
 
 def decode(labels, t):
+    """Bitset t over the support -> the set of supplier ids."""
     return frozenset(labels[i] for i in verts(t))

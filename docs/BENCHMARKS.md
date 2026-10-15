@@ -20,7 +20,8 @@ is retained, so no instance is a restricted candidate universe.
 - **Failure models:** k = 0 and k = 1 (any single supplier fails).
 - **Primary baskets** (the population for H2 and H3): `uniform` ∪ `overlap`.
 - **Scalability cases:** sizes 12 and 20.
-- **Tiny instances:** support ≤ 16, which are also checked by exhaustive search.
+- **Tiny instances:** support ≤ 18, which are also checked by exhaustive search (the spec's
+  bound; an earlier draft of the code used 16).
 - **Synthetic fixtures** live in `tests/` only and support no empirical claim.
 - **Seeds:** seed 0 is calibration and is never reported as a finding; seed 1 is the main
   suite.
@@ -98,3 +99,14 @@ point it had covered 35 instances.
   not measured.
 - **Repeats** of runs under 1 s happen in-process, which removes about 1 s of process start
   per repeat. The first timing of each run is still process-isolated.
+
+### Aborted first main run
+
+A first seed-1 run on code `0b03a16` was stopped after 39 instances; its log is
+`results/suite-seed1-aborted.log`. A review had found three defects in the harness:
+- a crashed child was recorded as `timeout`;
+- HiGHS statuses other than optimal or infeasible were read as optimal;
+- the dirty flag counted untracked files.
+
+None of these changes the limits, the basket selection or the seed. The main suite was rerun
+whole on the corrected code, and only that rerun is reported.

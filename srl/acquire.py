@@ -9,6 +9,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def fetch(url, dir):
+    """Download url into dir; return its register entry (time, SHA-256, size, Last-Modified)."""
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 (srl acquire)"})
     with urllib.request.urlopen(req, timeout=60) as r:
         body, lm = r.read(), r.headers.get("Last-Modified")

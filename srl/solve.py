@@ -8,37 +8,42 @@ from itertools import combinations
 import numpy as np
 from scipy.optimize import Bounds, LinearConstraint, milp as highs
 
+from fka.hypergraph import Hypergraph
 from fka.transversal import transversal
 from fkb.algorithm import cnf_value, dnf_value, fk_b
 from fkb.dualize import initial_cnf, maximum_false_point
 
 from . import certify
-from .instance import Hypergraph, decode, hypergraph
+from .instance import decode, hypergraph
 
 
 def _rows(I, U):
+    """Rows A x ≥ b of the feasibility system over suppliers U."""
     A, b = [], []
     for Ep in I.E:
-        A.append([v in Ep for v in U]), b.append(I.k + 1)
+        A.append([v in Ep for v in U])
+        b.append(I.k + 1)
         for F in I.F:
-            A.append([v in Ep - F for v in U]), b.append(1)
+            A.append([v in Ep - F for v in U])
+            b.append(1)
     return A, b
 
 
 def milp(I, cuts=()):
     """Minimum-cardinality feasible panel containing no S ∈ cuts.
-    OUTPUT ("optimal", T) | ("infeasible", None)."""
+    OUTPUT ("optimal", T) | ("infeasible", None) | ("highs status s", None)."""
     U = I.support()
     A, b = _rows(I, U)
     for S in cuts:                                       # Σ_{v∈S} x_v ≤ |S| − 1
-        A.append([-(v in S) for v in U]), b.append(1 - len(S))
+        A.append([-(v in S) for v in U])
+        b.append(1 - len(S))
     if not U:
         ok = not any(b_i > 0 for b_i in b)
         return ("optimal", frozenset()) if ok else ("infeasible", None)
     r = highs(np.ones(len(U)), integrality=np.ones(len(U)), bounds=Bounds(0, 1),
               constraints=LinearConstraint(np.array(A, float), b, np.inf))
-    if r.status == 2:
-        return "infeasible", None
+    if r.status != 0:
+        return ("infeasible" if r.status == 2 else f"highs status {r.status}"), None
     return "optimal", frozenset(v for v, x in zip(U, r.x) if x > 0.5)
 
 

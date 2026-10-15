@@ -89,3 +89,20 @@ def test_random_agreement_certificates_and_permutation_invariance():
         rng.shuffle(pi)
         J = Instance(V=tuple(pi), P=I.P[::-1], E=I.E[::-1], k=I.k)
         assert set(solve.berge(J)) == Tr
+
+
+def test_random_agreement_with_correlated_scenarios_and_k():
+    """Failure model 𝓕_k ∪ 𝓕₀ (MODEL): routes through H agree with exhaustive search on
+    the matrix, and every certificate holds."""
+    rng = random.Random(1)
+    for trial in range(40):
+        I = random_instance(rng, n=rng.randint(3, 9), m=rng.randint(1, 5), k=trial % 2)
+        F = [set(rng.sample(I.V, rng.randint(1, 3))) for _ in range(rng.randint(1, 3))]
+        I = Instance(V=I.V, P=I.P, E=I.E, k=I.k, F=F)
+        Tr = all_routes(I)
+        assert all(certify.minimal(I, T) for T in Tr)
+        assert certify.complete(I, Tr) == ("complete", None)
+        if Tr:
+            assert {v for v in I.support() if all(v in T for T in Tr)} == set(certify.essential(I))
+        else:
+            assert certify.infeasibility(I) is not None

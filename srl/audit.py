@@ -2,10 +2,12 @@
 from collections import Counter, defaultdict
 
 from . import catalog, qbl
+from .instance import Instance
 
 
 def matrix(rows, variant="strict"):
-    """Products and E_p for a variant: {product: (class, suppliers)}."""
+    """Qualification matrix of a variant.
+    OUTPUT S, Q, issues (qbl.records), D (catalog), M = {product: (class, E_p)}."""
     S, Q, issues = qbl.records(rows)
     D = catalog.load({t for _, t, _ in Q})
     j = 1 if variant == "strict" else 2
@@ -18,12 +20,20 @@ def matrix(rows, variant="strict"):
     return S, Q, issues, D, {p: (cls[p], E[p]) for p in E}
 
 
+def basket(M, P, k=0):
+    """Instance for basket P with every eligible supplier: V = ∪ E_p."""
+    E = [M[p][1] for p in P]
+    return Instance(V=tuple(sorted(set().union(*E))), P=tuple(P), E=E, k=k)
+
+
 def hist(xs, top=3):
     h = Counter(min(x, top) for x in xs)
     return {f"{n}" if n < top else f">={top}": h[n] for n in range(top + 1)}
 
 
 def audit(rows):
+    """Stage 0 questions (docs/DATA.md): identities, tokens, granularity, supplier counts
+    per product and per supplier, repeated signatures, share of precise incidences."""
     S, Q, issues, D, M = matrix(rows)
     kinds = Counter(k for _, k, _ in issues)
     by_class = defaultdict(list)

@@ -39,3 +39,9 @@ def test_essential_claims_only_from_complete_or_certified_sources():
     rec = {"essential": {"a": ["p", []]}, "count_exact": None}
     assert report.essential(rec) == "1 (matrix witness)"
     assert report.essential({"essential": None, "count_exact": None}) == "— (infeasible)"
+
+
+@pytest.mark.slow
+def test_a_crashed_child_is_an_error_not_a_censored_timeout():
+    _, r = bench.run("no such method", SMALL, timeout=30.0, cap=10, K=1)
+    assert r["status"] == "error" and r["count"] == 0

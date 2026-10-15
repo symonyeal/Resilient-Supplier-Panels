@@ -2,7 +2,7 @@
 
 Harmless normalisation (whitespace, case, spacing round " - ", ZIP zero-padding) is done
 here. Semantic interpretation (granularity, merged products) is in srl/catalog.py and
-data/catalog/products.csv. See docs/DATA.md.
+data/catalog/mappings.csv. See docs/DATA.md.
 """
 import re
 import zipfile
