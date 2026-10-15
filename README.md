@@ -1,122 +1,136 @@
-# Supplier-Resilience-Lab
+# Supplier Resilience Lab
 
-Which inclusion-minimal panels of USDA-qualified food suppliers cover a product basket and
-keep that coverage after any single supplier fails?
+[Interactive case study](https://symonyeal.github.io/Supplier-Resilience-Lab/) ·
+[Technical case study](docs/CASE_STUDY.md) ·
+[Release 0.2.0](https://github.com/symonyeal/Supplier-Resilience-Lab/releases/tag/v0.2.0)
 
-The project answers this exactly:
-- on the public USDA AMS *Qualified Bidders List* (frozen snapshot of 2026-10-15);
-- with the hypergraph-transversal algorithms of the author's MSc thesis;
-- against MILP and Berge baselines;
-- with every result certified from the qualification matrix.
+Which qualified suppliers cover a food basket, and which panels retain coverage after a
+supplier fails? This project connects public USDA qualification data, exact optimization
+and independent certificates to an inspectable decision workflow.
 
-It establishes **qualification coverage only**: not capacity, price, lead time or supply
-continuity.
+**Qualification coverage only.** Capacity, prices, delivery performance and supplier
+independence require additional evidence.
 
-Let V be the suppliers, P the basket, E_p the suppliers qualified for p, and 𝓕 the failure
-scenarios (∅ ∈ 𝓕). Then
+## The lead case
 
-```text
-T feasible  ⇔  T ∩ (E_p \ F) ≠ ∅  for all p ∈ P, F ∈ 𝓕
-minimal feasible panels = Tr(H),   H = { E_p \ F }
-any k failures:  T feasible ⇔ |T ∩ E_p| ≥ k + 1 for all p
-```
+Three canned products have 21 eligible suppliers on the frozen USDA Qualified Bidders List.
 
-Proofs, edge cases and certificates are in [docs/MODEL.md](docs/MODEL.md).
+| Requirement | Minimum suppliers | Inclusion-minimal panels |
+| --- | ---: | ---: |
+| Current coverage | 1 | 80 |
+| Survive any one supplier failure | 2 | 1,284 |
 
-Install the dependencies with Python 3.14 and Git available:
+Source: [certified generated cases](site/cases.json), strict mapping, QBL snapshot retrieved
+2026-10-15. Every eligible supplier is retained. All panels pass direct matrix certificates;
+a separately encoded MILP finds no omitted panel.
 
-```text
-python -m pip install -r requirements.txt
-```
+The [demo](https://symonyeal.github.io/Supplier-Resilience-Lab/) lets you change the basket,
+coverage requirement, panel and hypothetical outage. Inspect lost coverage and alternatives,
+search the qualification matrix, and download a decision report or a complete family that
+can be reverified locally. All model results are precomputed; the browser runs no solver.
+Two further real cases show a forced backup panel and a single-source bottleneck.
 
-## Strongest measured finding
+## What the experiment found
 
-On 88 basket instances (seed 1, [findings](docs/findings/2026-10-15-supplier-resilience.md)):
+The original seed-1 campaign covered 88 real-data instances. Single-failure coverage was
+feasible for 10 of 40 primary baskets. A single MILP minimum took a median of 0.8 ms;
+Berge completed 84 of 88 enumerations, compared with 76 for FK-B and MILP enumeration.
 
-- **Single-supplier products decide resilience.** Surviving any one supplier failure was
-  possible for 10 of 40 primary baskets, and for none of size 12 or 20. Every failure is
-  explained by a product that has exactly one qualified supplier. 48% of precise products
-  have one.
-- **The MILP is fast and decisive.** The minimum panel took a median of 0.8 ms. Where
-  k = 1 is feasible it needs a median of 2 more suppliers (range 1–3).
-- **Alternatives are real but highly symmetric.** 41 of 46 exactly counted cases have at
-  least 2 minimal panels (median 11). Families of up to 3,600 panels collapse to 28
-  classes of interchangeable vendors.
-- **Berge is the practical complete enumerator.** It completed 84 of 88 runs, the largest
-  being 10,406 panels in 6.7 s. FK-B completed 76 of 88 and gives the earliest first panel
-  (≤ 1.2 ms). Thesis memoisation cuts FK-A tree nodes by a median of 1.44×, at most 8.5×.
+These are historical measurements at code `09cb123`, with a 10 s enumeration limit.
+The practical conclusion is to use the MILP and matrix witnesses for the minimum and
+bottlenecks, and enumerate when alternatives matter. The current release does not
+relabel those timings as a fresh experiment. [Findings](docs/findings/2026-10-15-supplier-resilience.md)
+· [Protocol](docs/BENCHMARKS.md) · [Validation](docs/VALIDATION.md)
 
-**Verdict.** MILP and matrix witnesses are the practical default. FK-family enumeration is
-mainly a research comparison here, useful when one needs alternatives quickly from a
-family too large to finish.
+## Reproduce
 
-## Example
-
-A basket of three canned products, required to survive any one supplier failure:
+Python 3.14 and Git are required. From a clone of this repository:
 
 ```text
-python -m srl build "beans pinto can" "beans vegetarian can" "tomato sauce can" --k 1 > b.json
-python -m srl solve b.json        # optimal: 2 suppliers; no essential supplier
-python -m srl enum b.json --method berge > e.json
-python -m srl verify e.json       # 1284 minimal panels, all certified; MILP exhaustion: complete
+python -m pip install "setuptools>=77" wheel
+python -m pip install --no-build-isolation ".[dev]"
+python analysis/build_site.py
 ```
 
-The basket has 21 eligible suppliers and |E_p| = 12, 12, 10. The minimum k = 1 panel is two
-vendors qualified for all three products. Berge finds all 1,284 minimal panels in 0.38 s.
+The last command rebuilds the three cases only after their certificates and independent
+exhaustion checks pass. Open `site/index.html`; no server or external JavaScript library
+is required. `site/data.js` and `site/cases.json` are generated, committed artifacts.
 
-## Commands
+Use the installed command to reproduce the lead case:
 
-| Command | Does |
+```text
+srl build --basket examples/canned.csv --k 1 -o basket.json
+srl solve basket.json -o solution.json
+srl enum basket.json --method berge -o family.json
+srl verify family.json
+```
+
+Expected: an optimal two-supplier panel, 1,284 distinct certified minimal panels, and
+`milp_exhaustion: complete`. `python -m srl` is equivalent if Python's Scripts directory
+is not on PATH. The release wheel includes the frozen data and mappings and works away
+from the checkout. [Commands, schemas and data locations](docs/INTERFACE.md)
+
+Verify or build a distribution:
+
+```text
+python -m pytest -q
+python -m ruff check .
+python -m pip check
+python -m build --no-isolation
+python analysis/check_install.py dist/srl-0.2.0-py3-none-any.whl
+```
+
+Optional browser verification: install `.[browser]`, then run
+`python analysis/check_browser.py`. It uses installed Edge on Windows; hosted CI installs
+Chromium. CI checks Windows and Ubuntu, the installed wheel, and browser interactions.
+
+## How it works
+
+```mermaid
+flowchart LR
+    A[Frozen USDA workbook] --> B[Qualification matrix]
+    B --> C[Minimum panel: MILP]
+    B --> D[Scenario hypergraph]
+    D --> E[Minimal panels: Berge / FK-B]
+    C --> F[Independent matrix certificates]
+    E --> F
+    F --> G[Versioned cases and reports]
+    G --> H[Static interactive site]
+```
+
+A panel T is feasible when it meets every product's surviving supplier set under every
+modelled failure. For any k supplier failures, this is equivalent to having at least
+k + 1 qualified panel members for each product. Minimal panels are exactly the minimal
+transversals of the scenario hypergraph. The transformation, reductions, boundary cases
+and certificates are proved in [MODEL](docs/MODEL.md).
+
+| Responsibility | Code |
 | --- | --- |
-| `python -m srl acquire` | fetch the sources to `data/fetched/` and compare them with the frozen hash (network) |
-| `python -m srl audit` | Stage 0 audit of the frozen snapshot, including its age |
-| `python -m srl build P… [--k K] [--variant merged] [--fail ids]` | instance JSON for a basket |
-| `python -m srl solve I.json` | minimum panel, witnesses, infeasibility and essential suppliers |
-| `python -m srl enum I.json --method berge\|fkb\|milp\|exhaustive` | minimal panels, process-isolated, time limit and cap |
-| `python -m srl verify E.json` | re-certify saved panels and, if complete, run MILP exhaustion |
-| `python -m srl bench --seed 1` | the frozen suite (about 9 min) → `results/suite-seed1.json` |
-| `python -m srl report results/suite-seed1.json` | rebuild [results-seed1.md](docs/findings/results-seed1.md) from saved results |
+| Read qualifications and preserve provenance | `srl/qbl.py`, `srl/catalog.py` |
+| Build the failure model and scenario hypergraph | `srl/instance.py` |
+| Solve and enumerate | `srl/solve.py` |
+| Certify directly from the matrix | `srl/certify.py` |
+| Exchange versioned documents and select data | `srl/contracts.py`, `srl/resources.py` |
+| Build checked public cases | `srl/portfolio.py`, `analysis/build_site.py` |
+| Benchmark, report and score pre-registered tests | `srl/bench.py`, `srl/report.py`, `srl/verdicts.py` |
 
-Gate: `python -m pytest -q; python -m ruff check .; python -m pip check`.
-The [maintenance assessment](docs/VALIDATION.md#maintenance-assessment-2026-10-15)
-records fixes, rechecked results and the limits of the recheck.
+## Scope and continuation
 
-## Layout
+This is one qualification snapshot, with no backtest or disruption probabilities. Supplier
+IDs are snapshot row identities; 31 identity candidates remain unresolved. Billing addresses
+are not operating sites. Product granularity contains explicit interpretation choices.
+The two-supplier stress test does not assert common ownership or a shared facility.
 
-| Model | Module | Source |
-| --- | --- | --- |
-| QBL reader, identities, provenance | `srl/qbl.py` | USDA AMS QBL; vendor qualification requirements |
-| product dictionary, granularity | `srl/catalog.py`, `data/catalog/mappings.csv` | [DATA](docs/DATA.md) |
-| scenario hypergraph, reductions | `srl/instance.py` | MODEL Thm 1–2 |
-| MILP, Berge, FK-B, MILP enumeration, exhaustive | `srl/solve.py` | Berge 1989; Fredman–Khachiyan 1996 via `fka`/`fkb` |
-| certificates | `srl/certify.py` | MODEL Thm 3 |
-| suite, report, pre-registered tests | `srl/bench.py`, `srl/report.py`, `srl/verdicts.py` | [BENCHMARKS](docs/BENCHMARKS.md) |
-
-Further documentation:
-- [GLOSSARY](GLOSSARY.md): terms.
-- [SOURCES](docs/SOURCES.md): provenance.
-- [VALIDATION](docs/VALIDATION.md): checks.
-- [DECISIONS](docs/DECISIONS.md): trade-offs.
-- [OPEN](docs/OPEN.md): continuation.
-
-## Limits
-
-- Qualification is not production capacity, inventory, willingness to bid, price or lead
-  time.
-- A QBL vendor can be a nonmanufacturer that uses subcontractors.
-- Billing addresses are not plants, and no geographic, ownership or upstream independence is
-  modelled.
-- 31 supplier identity candidates are unresolved.
-- Product granularity is judged per token.
-- The project uses a single current snapshot, so it contains no backtest.
-- Disruption is worst-case over scenarios, with no probabilities.
+Next research questions include richer operational inputs and symmetry-aware enumeration.
+They require separate data and validation. [Open work](docs/OPEN.md) ·
+[Decisions](docs/DECISIONS.md) · [Sources](docs/SOURCES.md) ·
+[Glossary](GLOSSARY.md) · [Changelog](CHANGELOG.md)
 
 ## Licence and attribution
 
-GPL-3.0-or-later (see [LICENSE](LICENSE)), because this project imports `fka`/`fkb` from
+GPL-3.0-or-later; see [LICENSE](LICENSE). The project imports the author's
 [Hypergraph-Transversal-Thesis](https://github.com/symonyeal/Hypergraph-Transversal-Thesis)
-(S. Y. Islam, MSc thesis, SFU 2024), which is GPL-3.0-or-later. The pinned revision is
-`1bb9de48ab91629a7ae9d97488c2181b4098806d`.
-
-USDA data is a U.S. Government work. No terms are stated in the file; the data is presumed
-public domain.
+(S. Y. Islam, MSc thesis, SFU 2024), pinned at
+`1bb9de48ab91629a7ae9d97488c2181b4098806d`, also GPL-3.0-or-later.
+USDA data is presumed public domain as a U.S. Government work; no terms are stated in
+the workbook. [Provenance and source register](docs/SOURCES.md)

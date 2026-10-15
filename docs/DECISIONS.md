@@ -53,3 +53,22 @@ Each entry gives the decision, the alternatives, the evidence and the date.
 
 **Dashboard** (2026-10-15).
 - Deferred until verified findings exist.
+- Superseded by release 0.2.0 after the findings and independent recheck. The public site
+  presents precomputed certified cases; it runs no solver and asserts no delivery outcomes.
+
+## Portfolio release 0.2.0
+
+**A static public case study, with the existing solver as its checked core** (2026-10-15).
+- The industry-facing portfolio needs an inspectable decision and reproducible evidence.
+  Three small real baskets show alternatives, forced backup suppliers and infeasibility.
+- Browser interactions select certified outage results; they do not restate the model in
+  JavaScript. No backend, accounts or external JavaScript libraries are needed.
+- Source hashes use LF-normalized Python. The frozen workbook and mapping bytes are
+  hashed exactly. Build provenance distinguishes new case generation from historical
+  benchmark timings.
+- The wheel maps the canonical data directory into package resources at build time;
+  there is one tracked copy of each frozen input. Runtime output paths belong to the caller.
+- Versioned JSON documents retain legacy-instance compatibility. Input errors, solver
+  outcomes, enumeration limits and certificate failures remain distinct.
+- Pages deployment follows successful Windows, hosted Ubuntu and browser checks for the
+  same revision. Release wheels are exercised outside the checkout before publication.

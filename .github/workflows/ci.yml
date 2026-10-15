@@ -6,17 +6,42 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   checks:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.14"
       - run: python -m pip install --upgrade pip
-      - run: python -m pip install -r requirements.txt
+      - run: python -m pip install "setuptools>=77" wheel
+      - run: python -m pip install --no-build-isolation ".[dev]"
       # The frozen snapshot is versioned, so the real-data tests run here without network.
       - run: python -m pytest -q
       - run: python -m ruff check .
       - run: python -m pip check
+      - run: python -m build --no-isolation
+      - run: python analysis/check_install.py dist/srl-0.2.0-py3-none-any.whl
+      - uses: actions/upload-artifact@v4
+        with:
+          name: distributions-${{ matrix.os }}
+          path: dist/*
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.14"
+      - run: python -m pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - run: node --check site/app.js
+      - run: python analysis/check_browser.py

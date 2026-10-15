@@ -5,7 +5,7 @@ from pathlib import Path
 from statistics import median
 
 from . import audit, qbl
-from .bench import RAW
+from .resources import data_path
 
 
 def score(path):
@@ -14,7 +14,7 @@ def score(path):
     prim = [x for x in X if x["rule"] in ("uniform", "overlap")]
     feas = [x for x in prim if x["min"]["size"] is not None]
     exact = [x for x in feas if x["count_exact"] is not None]
-    A = audit.audit(qbl.read(RAW))
+    A = audit.audit(qbl.read(data_path("raw/QBL.xlsx")))
     sp = A["suppliers_per_product"]
     prec = ("material", "naics", "program", "description")
     n3 = sum(sp[c][">=3"] for c in prec)

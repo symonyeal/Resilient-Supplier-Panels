@@ -4,3 +4,7 @@ __pycache__/
 *.egg-info/
 data/fetched/
 results/scratch/
+build/
+dist/
+playwright-report/
+test-results/
