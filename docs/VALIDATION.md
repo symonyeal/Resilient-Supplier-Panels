@@ -163,3 +163,24 @@ and browser checks in Chromium. Pages deployment follows successful CI for that 
 Not measured: a new timed main-suite campaign, operational cost/capacity/delivery outcomes,
 longitudinal supplier identity, or real correlated disruptions. The paired outages are
 labelled hypothetical stress tests. There is no claim of procurement adoption.
+
+## Outcome explorer (2026-10-15)
+
+Source: `python analysis/build_site.py` at `4a4b4ca` (clean source), frozen QBL and strict
+mappings, `results/suite-seed1.json`. All 88 saved records were rebuilt from the matrix:
+every saved minimum is certified minimal at its saved size, and every essential set and
+infeasibility witness equals its recomputation. 84 records carry exact counts; 4 carry
+lower bounds (every route stopped at 10 s). Spearman rank correlation between eligible
+suppliers and minimal panels over the 55 feasible instances: 0.75.
+
+Checks:
+
+- `python -m pytest -q`: **84 passed**; `tests/test_outcomes.py` checks the export against
+  the saved records, rejects an invalid saved minimum and matches the published data.
+- `python -m ruff check .`: **All checks passed!** `python -m pip check`: **No broken
+  requirements found.**
+- `python analysis/check_browser.py`: the previous checks, plus 88 rows, 55 plotted
+  instances, outcome and product filters, an empty filter, record selection, filtered CSV
+  (88 rows) and record JSON downloads. Desktop and 390 px renderings inspected in Edge.
+
+Not measured: no timing was rerun; the explorer shows the historical seed-1 runs.
