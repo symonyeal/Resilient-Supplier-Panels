@@ -26,8 +26,10 @@ RAW = ROOT / "data/raw/QBL.xlsx"
 THESIS = "1bb9de48ab91629a7ae9d97488c2181b4098806d"
 SIZES = (3, 5, 8, 12, 20)
 CLASSES = ("description", "program", "naics", "material")
-LIMITS = {"timeout_s": 60.0, "cap": 10_000, "K": 10, "fka_nodes": 200_000,
-          "exhaustive_support": 16, "repeat_below_s": 1.0, "repeats": 3}
+# Main-suite limits, set from calibration (docs/BENCHMARKS.md, Calibration record).
+LIMITS = {"timeout_s": 10.0, "cap": 10_000, "K": 10, "fka_nodes": 200_000,
+          "fka_max_family": 2_000, "exhaustive_support": 16, "repeat_below_s": 1.0,
+          "repeats": 3}
 STREAMS = {"berge": solve.berge, "fkb": solve.fkb_stream, "milp": solve.milp_stream}
 
 
@@ -86,6 +88,14 @@ def run(method, I, timeout, cap, K):
                     "t_first": times[0] if times else None,
                     "t_K": times[K - 1] if len(times) >= K else None,
                     "t_total": total}
+
+
+def timed(method, I):
+    """In-process rerun of a run already known to finish under a second."""
+    t0 = time.perf_counter()
+    for _ in STREAMS[method](I):
+        pass
+    return time.perf_counter() - t0
 
 
 def stats(I):
@@ -149,9 +159,8 @@ def instance_record(I, L):
     for m in STREAMS:
         panels, r = run(m, I, L["timeout_s"], L["cap"], L["K"])
         if r["status"] == "complete" and r["t_total"] < L["repeat_below_s"]:
-            r["t_total_repeats"] = [r["t_total"]] + [
-                run(m, I, L["timeout_s"], L["cap"], L["K"])[1]["t_total"]
-                for _ in range(L["repeats"] - 1)]
+            r["t_total_repeats"] = [r["t_total"]] + [timed(m, I)
+                                                     for _ in range(L["repeats"] - 1)]
         t0 = time.perf_counter()
         r["all_certified_minimal"] = all(certify.minimal(I, P) for P in panels)
         r["t_certify"] = time.perf_counter() - t0
@@ -170,7 +179,8 @@ def instance_record(I, L):
             rec["exhaustive_agrees"] = set(solve.exhaustive(I)) == F
         rec["count"] = len(F)
         rec["orbits"] = orbits(F, sig)
-        rec["thesis"] = thesis_check(I, F, L["fka_nodes"]) if F else None
+        rec["thesis"] = (thesis_check(I, F, L["fka_nodes"])
+                         if F and len(F) <= L["fka_max_family"] else None)
         if ess is not None:
             rec["essential_matches_family"] = (
                 {v for v in I.support() if all(v in P for P in F)} == set(ess))
@@ -222,7 +232,6 @@ def suite(seed, L=LIMITS, out=None, variants=True):
 
 
 def sens(J, L):
+    """Sensitivity variants: feasibility and minimum only (one HiGHS solve)."""
     status, T = solve.milp(J)
-    panels, r = run("berge", J, L["timeout_s"], L["cap"], L["K"])
-    return {"min": len(T) if T is not None else None, "feasible": status == "optimal",
-            "berge": r["status"], "count": len(panels)}
+    return {"min": len(T) if T is not None else None, "feasible": status == "optimal"}

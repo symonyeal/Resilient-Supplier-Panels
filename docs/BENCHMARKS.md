@@ -68,7 +68,7 @@ subproblems (H4).
 
 ## Limits and calibration
 
-The initial limits are 60 s and 10,000 panels per run, and a campaign of about 15 minutes.
+The initial limits were 60 s and 10,000 panels per run, and a campaign of about 15 minutes.
 
 1. Calibration (seed 0) uses a 10 s limit and measures the share of runs that stop. Its
    result and the main-suite limits are recorded below before the main suite runs.
@@ -76,4 +76,25 @@ The initial limits are 60 s and 10,000 panels per run, and a campaign of about 1
 
 ### Calibration record
 
-(filled in from `results/suite-seed0.json` before seed 1 runs)
+Recorded 2026-10-15, before seed 1 ran. The log is `results/calibration-seed0.log`.
+
+**Run.** Seed 0, 10 s limit, sensitivity reruns on. I stopped it after 10.5 min, by which
+point it had covered 35 instances.
+- Berge completed 29 of 35 runs, FK-B 27 and MILP enumeration 27. 11 of the 35 instances
+  were infeasible, every one of them at k = 1.
+- Timeouts occurred only in uniform baskets of size ≥ 12 and in programme baskets, whose
+  E_p are largest (up to 50 eligible suppliers at size 3).
+- The protocol cost about 18 s per instance. At 60 s the suite of 88 instances could not
+  meet the 15-minute budget.
+
+**Main-suite limits.**
+- **Time limit:** 10 s per enumeration run. The budget forces this. Every run that stops is
+  censored, and whether a 60 s limit would complete it is not measured.
+- **Output cap:** 10,000 panels.
+- **FK-A certificate:** only for complete families of at most 2,000 panels, within 200,000
+  tree nodes. A larger family is reported as not FK-A-certified.
+- **Sensitivity variants** (merged products; identity candidates merged into their match):
+  one HiGHS solve each, giving feasibility and the minimum. Counts under the variants are
+  not measured.
+- **Repeats** of runs under 1 s happen in-process, which removes about 1 s of process start
+  per repeat. The first timing of each run is still process-isolated.
