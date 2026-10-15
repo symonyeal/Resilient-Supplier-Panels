@@ -72,3 +72,16 @@ Each entry gives the decision, the alternatives, the evidence and the date.
   outcomes, enumeration limits and certificate failures remain distinct.
 - Pages deployment follows successful Windows, hosted Ubuntu and browser checks for the
   same revision. Release wheels are exercised outside the checkout before publication.
+
+**Every saved outcome is public, re-certified rather than rerun** (2026-10-15).
+- The site lists all 88 seed-1 records, not only summaries, so a reader can inspect any
+  instance behind a headline number. Timings remain the historical measurements.
+- `portfolio.outcome` rebuilds each basket from the frozen matrix and refuses export when a
+  saved minimum is not certified minimal, or the essential set or infeasibility witness
+  differs. A record without a complete run exports `max_r count_r` as a lower bound.
+- The rank correlation shown (Spearman, eligible suppliers against minimal panels) is
+  computed at build time over feasible instances, partial runs at their bound; the page
+  computes nothing the model computes.
+- Plotly basic 4.1.1 (MIT) is vendored, not loaded from a CDN, so the page keeps working
+  offline and from `file://`, as the static-site decision requires. SHA-256
+  `99784e3abfb07b142a15e521a439e6d9addceadb3f79553fd24c72774f0649ba`.

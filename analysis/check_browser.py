@@ -57,6 +57,33 @@ def check(url, screenshots=None):
         family = json.loads(path.read_bytes())
         assert family["kind"] == "enumeration" and family["run"]["count"] == 1284
         assert len(family["panels"]) == 1284 and family["k"] == 1
+        page.locator("#outcomes").scroll_into_view_if_needed()
+        expect(page.locator("#outcome-count")).to_have_text("88 of 88 shown")
+        expect(page.locator("#outcome-chart .point")).to_have_count(55 + 1)   # feasible + ring
+        if screenshots:
+            page.screenshot(path=str(Path(screenshots) / "outcomes.png"))
+        page.locator("#f-outcome").select_option("bound")
+        expect(page.locator("#outcome-count")).to_have_text("4 of 88 shown")
+        expect(page.locator("#record")).to_contain_text("Minimal panels · lower bound")
+        page.locator("#f-outcome").select_option("infeasible")
+        expect(page.locator("#record")).to_contain_text("Infeasibility witness")
+        page.locator("#f-product").fill("not-a-product-xyz")
+        expect(page.locator("#outcome-rows")).to_contain_text("No instances match")
+        expect(page.locator("#download-record")).to_be_disabled()
+        page.locator("#f-reset").click()
+        page.locator('[data-record="17"]').click()
+        expect(page.locator("#record-title")).to_contain_text("uniform · 20 products, k = 1")
+        with page.expect_download() as event:
+            page.locator("#download-outcomes").click()
+        path = Path(tmp) / event.value.suggested_filename
+        event.value.save_as(path)
+        assert len(path.read_text(encoding="utf-8").splitlines()) == 1 + 88
+        with page.expect_download() as event:
+            page.locator("#download-record").click()
+        path = Path(tmp) / event.value.suggested_filename
+        event.value.save_as(path)
+        record = json.loads(path.read_bytes())
+        assert record["k"] == 1 and record["infeasibility"] and record["provenance"]["seed"] == 1
         page.set_viewport_size({"width": 390, "height": 844})
         page.reload()
         expect(page.locator("#coverage-status")).to_have_text("Coverage retained")
