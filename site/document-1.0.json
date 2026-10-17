@@ -1,7 +1,7 @@
 {
  "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "https://symonyeal.github.io/Supplier-Resilience-Lab/document-1.0.json",
- "title": "Supplier Resilience Lab exchange document 1.0",
+ "$id": "https://symonyeal.github.io/Resilient-Supplier-Panels/document-1.0.json",
+ "title": "Resilient Supplier Panels exchange document 1.0",
  "oneOf": [{"$ref": "#/$defs/instance"}, {"$ref": "#/$defs/solution"},
            {"$ref": "#/$defs/enumeration"}],
  "$defs": {

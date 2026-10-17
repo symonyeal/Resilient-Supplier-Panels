@@ -4,7 +4,7 @@ const $ = id => document.getElementById(id);
 const D = window.DATA;
 const state = { id: "canned", k: "1", panel: 0, outage: "none" };
 const number = n => n === null ? "—" : Number(n).toLocaleString("en-US");
-const repo = "https://github.com/symonyeal/Supplier-Resilience-Lab";
+const repo = "https://github.com/symonyeal/Resilient-Supplier-Panels";
 
 function node(tag, text, cls) {
   const e = document.createElement(tag);

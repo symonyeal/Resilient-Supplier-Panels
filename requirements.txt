@@ -2,4 +2,4 @@ numpy>=2.0
 scipy>=1.14
 pytest>=8.0
 ruff==0.16.7
-fka @ git+https://github.com/symonyeal/Hypergraph-Transversal-Thesis@1bb9de48ab91629a7ae9d97488c2181b4098806d
+fka @ git+https://github.com/symonyeal/Hypergraph-Dualization@1bb9de48ab91629a7ae9d97488c2181b4098806d

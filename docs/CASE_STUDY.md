@@ -1,6 +1,6 @@
 # Can a small supplier panel retain qualification coverage after a failure?
 
-[Interactive case](https://symonyeal.github.io/Supplier-Resilience-Lab/) ·
+[Interactive case](https://symonyeal.github.io/Resilient-Supplier-Panels/) ·
 [Certified case data](../site/cases.json) · [Model and proofs](MODEL.md)
 
 A basket of pinto beans, vegetarian beans and tomato sauce has 21 eligible suppliers on
