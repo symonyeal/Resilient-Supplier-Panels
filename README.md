@@ -1,12 +1,12 @@
-# Supplier Resilience Lab
+# Resilient Supplier Panels
 
 **If one supplier drops out, can every product in a basket still be bought?** This project
 answers that question for food products on the USDA's public list of approved suppliers,
 and shows which suppliers to rely on.
 
-[Live site](https://symonyeal.github.io/Supplier-Resilience-Lab/) ·
+[Live site](https://symonyeal.github.io/Resilient-Supplier-Panels/) ·
 [Case study](docs/CASE_STUDY.md) ·
-[Release 0.2.0](https://github.com/symonyeal/Supplier-Resilience-Lab/releases/tag/v0.2.0)
+[Release 0.2.0](https://github.com/symonyeal/Resilient-Supplier-Panels/releases/tag/v0.2.0)
 
 ## The short answer
 
@@ -45,9 +45,9 @@ Panels are counted only when no supplier in them is redundant.
 - **Scarce:** lentils and sweet potatoes each have one approved supplier. No panel is
   resilient until another supplier is approved.
 
-On the [live site](https://symonyeal.github.io/Supplier-Resilience-Lab/) you can pick a
+On the [live site](https://symonyeal.github.io/Resilient-Supplier-Panels/) you can pick a
 basket and a panel, fail a supplier, and see which products lose coverage. You can download
-a one-page report. All [88 measured cases](https://symonyeal.github.io/Supplier-Resilience-Lab/#outcomes)
+a one-page report. All [88 measured cases](https://symonyeal.github.io/Resilient-Supplier-Panels/#outcomes)
 (44 baskets, each with and without a failure) can be browsed and filtered.
 
 ## What this does and does not tell you
@@ -143,7 +143,7 @@ vendored. Supplier IDs are snapshot rows; 31 possible duplicate identities are u
 ## Licence and attribution
 
 GPL-3.0-or-later; see [LICENSE](LICENSE). Uses the author's
-[Hypergraph-Transversal-Thesis](https://github.com/symonyeal/Hypergraph-Transversal-Thesis)
+[Hypergraph-Dualization](https://github.com/symonyeal/Hypergraph-Dualization)
 (S. Y. Islam, MSc thesis, SFU 2024), pinned at `1bb9de48`. USDA data is presumed public
 domain as a U.S. Government work; the workbook states no terms.
 [Source register](docs/SOURCES.md)

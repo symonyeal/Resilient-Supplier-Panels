@@ -14,7 +14,7 @@ authors = [{ name = "Saimon Y. Islam" }]
 dependencies = [
     "numpy>=2.0",
     "scipy>=1.14",
-    "fka @ git+https://github.com/symonyeal/Hypergraph-Transversal-Thesis@1bb9de48ab91629a7ae9d97488c2181b4098806d",
+    "fka @ git+https://github.com/symonyeal/Hypergraph-Dualization@1bb9de48ab91629a7ae9d97488c2181b4098806d",
 ]
 
 [project.optional-dependencies]
@@ -25,9 +25,9 @@ browser = ["playwright>=1.55"]
 srl = "srl.cli:main"
 
 [project.urls]
-Homepage = "https://symonyeal.github.io/Supplier-Resilience-Lab/"
-Repository = "https://github.com/symonyeal/Supplier-Resilience-Lab"
-Issues = "https://github.com/symonyeal/Supplier-Resilience-Lab/issues"
+Homepage = "https://symonyeal.github.io/Resilient-Supplier-Panels/"
+Repository = "https://github.com/symonyeal/Resilient-Supplier-Panels"
+Issues = "https://github.com/symonyeal/Resilient-Supplier-Panels/issues"
 
 [tool.setuptools]
 packages = ["srl", "srl.data", "srl.data.raw", "srl.data.catalog", "srl.schemas"]

@@ -1,4 +1,4 @@
-# Supplier-Resilience-Lab: design
+# Resilient-Supplier-Panels: design
 
 Approved in conversation 2026-10-15. Scope: Stages 0–2. Stage 3 and any site are out of scope.
 
