@@ -1,5 +1,14 @@
 # Validation
 
+## Common-owner case, 20 October 2026
+
+The frozen-qualification study in COMMON_OWNER_CASE.md was checked by direct exhaustive
+enumeration, matrix feasibility/minimality checks and a separate MILP completeness search
+for each of its four cases. All returned complete. The one-supplier and combined
+one-supplier/common-owner families were compared as sets and agreed exactly. The existing
+suite returned 84 passed; Ruff and dependency checks passed. The pinned thesis revision
+was used. These are conditional coverage checks, not an empirical outage or capacity test.
+
 This file lists what must be checked, how, and what has been checked. A check is a
 certificate (feasibility, a witness, agreement of independent routes, a completeness
 search), never an output snapshot.

@@ -1,0 +1,60 @@
+{
+ "source": "https://www.sec.gov/Archives/edgar/data/100493/000010049325000095/tsn2025q410-kexx21.htm",
+ "relationship": "Tyson Fresh Meats, Inc. is listed as a Tyson Foods subsidiary.",
+ "mapping": {
+  "r0911": "Tyson Foods Inc",
+  "r0912": "Tyson Fresh Meats"
+ },
+ "assumption": "All approved operations of both named entities are unavailable together.",
+ "not_observed": [
+  "outage probability",
+  "plant sharing",
+  "capacity",
+  "outage history"
+ ],
+ "code_revision": "27b65368f0e5399554dafe52c05dca0c400731f7",
+ "provenance": {
+  "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+  "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+  "software_version": "0.2.0",
+  "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d"
+ },
+ "relations": {
+  "single_plus_owner_equals_single_family": true,
+  "approval_panels_excluded_by_group": 11
+ },
+ "results": [
+  {
+   "case": "approvals",
+   "status": "optimal",
+   "panels": 32,
+   "smallest": 2,
+   "infeasibility": null,
+   "independent_completeness": "complete"
+  },
+  {
+   "case": "one_supplier",
+   "status": "optimal",
+   "panels": 168,
+   "smallest": 4,
+   "infeasibility": null,
+   "independent_completeness": "complete"
+  },
+  {
+   "case": "group_only",
+   "status": "optimal",
+   "panels": 21,
+   "smallest": 2,
+   "infeasibility": null,
+   "independent_completeness": "complete"
+  },
+  {
+   "case": "common_owner",
+   "status": "optimal",
+   "panels": 168,
+   "smallest": 4,
+   "infeasibility": null,
+   "independent_completeness": "complete"
+  }
+ ]
+}

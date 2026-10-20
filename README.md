@@ -52,6 +52,10 @@ a one-page report. All [88 measured cases](https://symonyeal.github.io/Resilient
 
 ## What this does and does not tell you
 
+[A common-owner case](docs/COMMON_OWNER_CASE.md) uses a sourced corporate relationship
+and an explicitly assumed joint outage. It compares approval-only, single-supplier
+and common-owner protection using the existing model and frozen data.
+
 **Does:** whether the approvals on paper allow full coverage when a supplier fails, which
 suppliers are irreplaceable, and which product is the bottleneck.
 

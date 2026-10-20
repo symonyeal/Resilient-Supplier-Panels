@@ -29,7 +29,14 @@ Status:
 | L. V. Snyder et al., "OR/MS models for supply chain disruptions: a review", *IIE Transactions* 48(2) (2016) 89–109 | disruption-model context | cited |
 | Q. Huangfu, J. A. J. Hall, "Parallelizing the dual revised simplex method", *Math. Prog. Comp.* 10 (2018) 119–142; HiGHS via SciPy `milp` | MILP baseline | cited |
 
-## Software delivery
+## Common-owner case
+
+- [Tyson Foods, 2025 Form 10-K Exhibit 21](https://www.sec.gov/Archives/edgar/data/100493/000010049325000095/tsn2025q410-kexx21.htm):
+  inspected 2026-10-20. Lists Tyson Fresh Meats, Inc. as a subsidiary. Used only for
+  the explicit corporate-group scenario in COMMON_OWNER_CASE.md; the USDA abbreviated
+  name is a documented match. This establishes no shared plant or failure probability.
+
+## Software delivery sources
 
 - [PyPA, Writing your pyproject.toml](https://packaging.python.org/en/latest/guides/writing-pyproject-toml/):
   inspected 2026-10-15, build-system, project dependencies and command entry points.
