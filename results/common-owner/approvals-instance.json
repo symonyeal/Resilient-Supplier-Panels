@@ -1,0 +1,62 @@
+{
+ "schema_version": "1.0",
+ "kind": "instance",
+ "V": [
+  "r0214",
+  "r0276",
+  "r0291",
+  "r0401",
+  "r0644",
+  "r0663",
+  "r0676",
+  "r0771",
+  "r0797",
+  "r0812",
+  "r0911",
+  "r0912"
+ ],
+ "P": [
+  "chicken legs chilled-bulk",
+  "pork"
+ ],
+ "E": [
+  [
+   "r0644",
+   "r0663",
+   "r0676",
+   "r0911"
+  ],
+  [
+   "r0214",
+   "r0276",
+   "r0291",
+   "r0401",
+   "r0771",
+   "r0797",
+   "r0812",
+   "r0912"
+  ]
+ ],
+ "k": 0,
+ "F": [],
+ "variant": "strict",
+ "code_revision": "27b65368f0e5399554dafe52c05dca0c400731f7",
+ "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+ "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+ "software_version": "0.2.0",
+ "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d",
+ "names": {
+  "r0214": "Daily's Premium Meats, LLC",
+  "r0276": "Fair Oaks Farm",
+  "r0291": "Fatback Pig Project LLC",
+  "r0401": "Hanh Bros. Inc",
+  "r0644": "Out of the Shell LLC",
+  "r0663": "Peco Foods Inc",
+  "r0676": "Pilgrim's Pride",
+  "r0771": "Seaboard Foods, LLC",
+  "r0797": "Smithfield Foods",
+  "r0812": "Spartanburg Meat Processing Company, Inc.",
+  "r0911": "Tyson Foods Inc",
+  "r0912": "Tyson Fresh Meats"
+ }
+}
