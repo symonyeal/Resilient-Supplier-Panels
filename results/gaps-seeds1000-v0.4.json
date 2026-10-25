@@ -1,0 +1,3118 @@
+{
+ "k": 1,
+ "seeds": 1000,
+ "population": {
+  "baskets": 40000,
+  "resilient": 11256
+ },
+ "products": [
+  {
+   "product": "pan1 - pancakes whole wheat fz",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3032,
+   "alone": 402
+  },
+  {
+   "product": "mx1 - exchange of ndm for processed commodities",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1615,
+   "alone": 210
+  },
+  {
+   "product": "311211 cssm corn-soy/instant corn-soy",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2482,
+   "alone": 173
+  },
+  {
+   "product": "311212 kcpg milled rice (bulk)",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2195,
+   "alone": 172
+  },
+  {
+   "product": "100138 - beef chili w/o beans can - 24/24 oz",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 4065,
+   "alone": 170
+  },
+  {
+   "product": "dched - cheddar",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1923,
+   "alone": 170
+  },
+  {
+   "product": "311423 dpp dehydrated potato product",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1596,
+   "alone": 168
+  },
+  {
+   "product": "311211 csb corn-soy blend",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2398,
+   "alone": 166
+  },
+  {
+   "product": "pc - processed cereals (rolled oats)",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2096,
+   "alone": 164
+  },
+  {
+   "product": "em - evaporated milk",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1902,
+   "alone": 162
+  },
+  {
+   "product": "en - egg noodles",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1331,
+   "alone": 157
+  },
+  {
+   "product": "311999 deb",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1576,
+   "alone": 156
+  },
+  {
+   "product": "wf - wheat flour products",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2095,
+   "alone": 155
+  },
+  {
+   "product": "311613 bot-t tallow",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2259,
+   "alone": 154
+  },
+  {
+   "product": "ifd - infant formula",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1271,
+   "alone": 152
+  },
+  {
+   "product": "311211 wsb wheat soy blend",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2475,
+   "alone": 151
+  },
+  {
+   "product": "311211 corn, sorghum, soybeans and wheat products",
+   "class": "naics",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2239,
+   "alone": 149
+  },
+  {
+   "product": "100877 - chicken can - 12/50 oz",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3988,
+   "alone": 145
+  },
+  {
+   "product": "110477 - chicken pouch 36/10 oz",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 4170,
+   "alone": 137
+  },
+  {
+   "product": "100138 - beef chili w/o beans can 24/24 oz",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 4117,
+   "alone": 131
+  },
+  {
+   "product": "rp - rice products (domestic)",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1099,
+   "alone": 91
+  },
+  {
+   "product": "ro - rolled oats",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1070,
+   "alone": 91
+  },
+  {
+   "product": "rc - instant rice cereal",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1140,
+   "alone": 90
+  },
+  {
+   "product": "imd - instant milk",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1694,
+   "alone": 88
+  },
+  {
+   "product": "bfm - bakery flour mix",
+   "class": "program",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 1780,
+   "alone": 74
+  },
+  {
+   "product": "100173 - pork leg (fresh ham) roast, boneless, frozen",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3335,
+   "alone": 54
+  },
+  {
+   "product": "110138 - pork leg (fresh ham), bulk, boneless, frozen",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3382,
+   "alone": 53
+  },
+  {
+   "product": "100184 - 10 lb. frozen hams",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3702,
+   "alone": 52
+  },
+  {
+   "product": "100187 - 5 lb. frozen shingled sliced ham",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3712,
+   "alone": 49
+  },
+  {
+   "product": "100182 - 3 lb. frozen hams",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3656,
+   "alone": 45
+  },
+  {
+   "product": "salmon pink can-24/14.75 oz (33630)",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 292,
+   "alone": 43
+  },
+  {
+   "product": "100188 - 5 lb. frozen diced",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 3752,
+   "alone": 42
+  },
+  {
+   "product": "100967 - 2/7 lg w-mld bag 50 kg",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2807,
+   "alone": 42
+  },
+  {
+   "product": "100975 - 5/20 lg w-mld bag 50 kg",
+   "class": "material",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 2742,
+   "alone": 40
+  },
+  {
+   "product": "sweet potatoes mashed can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 172,
+   "alone": 35
+  },
+  {
+   "product": "tomaot salsa pouch",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 156,
+   "alone": 33
+  },
+  {
+   "product": "apples golden delicious fresh ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 173,
+   "alone": 32
+  },
+  {
+   "product": "beef diced frz ctn-60 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 291,
+   "alone": 27
+  },
+  {
+   "product": "plums pited dried pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 394,
+   "alone": 21
+  },
+  {
+   "product": "chicken, bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 179,
+   "alone": 17
+  },
+  {
+   "product": "egg mix dried pkg-48/6 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 266,
+   "alone": 16
+  },
+  {
+   "product": "lentils dry bag",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 226,
+   "alone": 15
+  },
+  {
+   "product": "chicken large chilled bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 301,
+   "alone": 14
+  },
+  {
+   "product": "turkey taco filling ctn-30 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 181,
+   "alone": 14
+  },
+  {
+   "product": "bison ground lean frz pkg-40/1",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 165,
+   "alone": 14
+  },
+  {
+   "product": "lentils dry bag lentils dry pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 225,
+   "alone": 13
+  },
+  {
+   "product": "pears fresh pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 312,
+   "alone": 12
+  },
+  {
+   "product": "raisins bag",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 331,
+   "alone": 11
+  },
+  {
+   "product": "grape variety fresh 19 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 150,
+   "alone": 11
+  },
+  {
+   "product": "beans baby lima pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 383,
+   "alone": 10
+  },
+  {
+   "product": "beef 100% pty 85/15 frz 1.5 mma ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 339,
+   "alone": 10
+  },
+  {
+   "product": "sweet potatoes mashed frz pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 304,
+   "alone": 10
+  },
+  {
+   "product": "potatoes russet fresh ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 251,
+   "alone": 10
+  },
+  {
+   "product": "turkey breast deli sliced frz pkg-8/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 232,
+   "alone": 10
+  },
+  {
+   "product": "turkey breast smkd deli frz ctn - 40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 230,
+   "alone": 10
+  },
+  {
+   "product": "beans dark red kidney pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 223,
+   "alone": 10
+  },
+  {
+   "product": "apples gala fresh ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 217,
+   "alone": 10
+  },
+  {
+   "product": "turkey thighs bnks sknls chilled-bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 220,
+   "alone": 9
+  },
+  {
+   "product": "frz sweet potato bulk fresh proc",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 200,
+   "alone": 9
+  },
+  {
+   "product": "beef 100% pty 85/15 frz 2.0 mma ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 350,
+   "alone": 8
+  },
+  {
+   "product": "pistachio roasted in shell pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 229,
+   "alone": 8
+  },
+  {
+   "product": "chicken boned can-12/50 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 210,
+   "alone": 8
+  },
+  {
+   "product": "apples fuji fresh f ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 202,
+   "alone": 8
+  },
+  {
+   "product": "beef 100% pty 90/10 frz 2.0 mma ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 323,
+   "alone": 7
+  },
+  {
+   "product": "apples bulk further processing",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 269,
+   "alone": 7
+  },
+  {
+   "product": "turkey consumer pack whole ctn-30-60 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 266,
+   "alone": 7
+  },
+  {
+   "product": "proc potatoes russet fresh bag potatoes round white fresh bag",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 232,
+   "alone": 7
+  },
+  {
+   "product": "chicken f ajit a strips ctn-30 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 317,
+   "alone": 6
+  },
+  {
+   "product": "plums fresh ctn-28 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 287,
+   "alone": 6
+  },
+  {
+   "product": "sweet potato fresh ctn 40",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 261,
+   "alone": 6
+  },
+  {
+   "product": "can corn frz ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 240,
+   "alone": 6
+  },
+  {
+   "product": "pears bosc fresh ctn 45",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 230,
+   "alone": 6
+  },
+  {
+   "product": "pears d'anjou fresh ctn 45",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 229,
+   "alone": 6
+  },
+  {
+   "product": "potatoes round white fresh bag",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 193,
+   "alone": 6
+  },
+  {
+   "product": "frz potatoes russet fresh ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 186,
+   "alone": 6
+  },
+  {
+   "product": "tomato paste pouch",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 174,
+   "alone": 6
+  },
+  {
+   "product": "potatoes russet fresh bag potatoes round white fresh bag",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 157,
+   "alone": 6
+  },
+  {
+   "product": "lamb shoulder rst bnls frz ctn-35-45 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 6
+  },
+  {
+   "product": "k tomato sauce can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 142,
+   "alone": 6
+  },
+  {
+   "product": "apricots diced ex lt sucrose can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 137,
+   "alone": 6
+  },
+  {
+   "product": "beans pinto dry pkg-24/1 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 137,
+   "alone": 6
+  },
+  {
+   "product": "eggs whole liq bulk - tank",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 134,
+   "alone": 6
+  },
+  {
+   "product": "cranberries dried pkg 300/1.16 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 132,
+   "alone": 6
+  },
+  {
+   "product": "fig pieces pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 312,
+   "alone": 5
+  },
+  {
+   "product": "chicken cut up frz ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 292,
+   "alone": 5
+  },
+  {
+   "product": "peas green frz ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 291,
+   "alone": 5
+  },
+  {
+   "product": "apricots diced peled ex lt can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 276,
+   "alone": 5
+  },
+  {
+   "product": "cranberries dried pkg 300/1 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 262,
+   "alone": 5
+  },
+  {
+   "product": "cherries red tart pitted can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 239,
+   "alone": 5
+  },
+  {
+   "product": "sweet potato bulk fresh",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 225,
+   "alone": 5
+  },
+  {
+   "product": "tomato fresh ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 213,
+   "alone": 5
+  },
+  {
+   "product": "k pears slices can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 181,
+   "alone": 5
+  },
+  {
+   "product": "peaches cling slc ex lt sucrose can pears can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 173,
+   "alone": 5
+  },
+  {
+   "product": "apples gala fresh g ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 158,
+   "alone": 5
+  },
+  {
+   "product": "bulk pack chicken",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 153,
+   "alone": 5
+  },
+  {
+   "product": "chicken whole bagged frz pkg-12/4 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 145,
+   "alone": 5
+  },
+  {
+   "product": "potato bulk for process dehy potatoes russet fresh bag potatoes round white fresh bag",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 141,
+   "alone": 5
+  },
+  {
+   "product": "bulk chicken",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 138,
+   "alone": 5
+  },
+  {
+   "product": "pork picnic bnls frz ctn-60 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 121,
+   "alone": 5
+  },
+  {
+   "product": "chicken while bagged frz ctn-36-43 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 298,
+   "alone": 4
+  },
+  {
+   "product": "k corn cob frz cse",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 291,
+   "alone": 4
+  },
+  {
+   "product": "eggs whole liquid bulk-tank",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 260,
+   "alone": 4
+  },
+  {
+   "product": "fresh apple varieties ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 230,
+   "alone": 4
+  },
+  {
+   "product": "turkey hams smkd frz ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 226,
+   "alone": 4
+  },
+  {
+   "product": "oranges fresh bag pkg 12/3 lb grapes variety fresh 19 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 219,
+   "alone": 4
+  },
+  {
+   "product": "fruit and nut mix dried pkg 24/1",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 213,
+   "alone": 4
+  },
+  {
+   "product": "beef patty ckd frz 2.0 mma ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 196,
+   "alone": 4
+  },
+  {
+   "product": "pears slices ex lt sucrose can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 184,
+   "alone": 4
+  },
+  {
+   "product": "red tart pitted cherries can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 180,
+   "alone": 4
+  },
+  {
+   "product": "apples fuji fresh f carton",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 179,
+   "alone": 4
+  },
+  {
+   "product": "chlcken whole bagged frz ctn-36-43 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 171,
+   "alone": 4
+  },
+  {
+   "product": "k corn whole kernel (liq) can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 169,
+   "alone": 4
+  },
+  {
+   "product": "potato white slices can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 167,
+   "alone": 4
+  },
+  {
+   "product": "beans baby lima beans black can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 165,
+   "alone": 4
+  },
+  {
+   "product": "apricots halves ex lt sucrose can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 152,
+   "alone": 4
+  },
+  {
+   "product": "apples fresh pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 4
+  },
+  {
+   "product": "beef patties with spp, 2.7 oz. home-style, fully cooked",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 4
+  },
+  {
+   "product": "iqf beef crumbles, fully cooked, with spp, lightly seasoned",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 4
+  },
+  {
+   "product": "orange juice single ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 4
+  },
+  {
+   "product": "chicken large chilled - bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 146,
+   "alone": 4
+  },
+  {
+   "product": "almond natural whole shell ctn 12/2 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 143,
+   "alone": 4
+  },
+  {
+   "product": "egg 15 dozen",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 141,
+   "alone": 4
+  },
+  {
+   "product": "lamb leg rst bnls frz ctn-38-40 lb-4000",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 132,
+   "alone": 4
+  },
+  {
+   "product": "beef fine ground frz pkg-40/l lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 131,
+   "alone": 4
+  },
+  {
+   "product": "catfish fillets iqf 20/2 lb.",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 126,
+   "alone": 4
+  },
+  {
+   "product": "ci-ttcken leg qtr bag-20 kg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 123,
+   "alone": 4
+  },
+  {
+   "product": "carrots frz ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 283,
+   "alone": 3
+  },
+  {
+   "product": "salmon fillets wild frz pkg-40/1 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 266,
+   "alone": 3
+  },
+  {
+   "product": "chicken leg qtr frz bag 4/10 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 251,
+   "alone": 3
+  },
+  {
+   "product": "tomato diced pouch",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 180,
+   "alone": 3
+  },
+  {
+   "product": "chicken strips frz-ctn 30 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 173,
+   "alone": 3
+  },
+  {
+   "product": "lentils bag-50 kg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 173,
+   "alone": 3
+  },
+  {
+   "product": "apples for further processing bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 160,
+   "alone": 3
+  },
+  {
+   "product": "lamb leg roast frz ctn-38-40 lb-4000",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 152,
+   "alone": 3
+  },
+  {
+   "product": "tomato paste drum tomato paste can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 152,
+   "alone": 3
+  },
+  {
+   "product": "apricots diced peeled ex lt can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 150,
+   "alone": 3
+  },
+  {
+   "product": "peaches cling slc ex lt sucrose can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 148,
+   "alone": 3
+  },
+  {
+   "product": "pork loin roast frz ctn-6/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 141,
+   "alone": 3
+  },
+  {
+   "product": "chicken leg qtrs tray frz pkg-9/4.s lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 139,
+   "alone": 3
+  },
+  {
+   "product": "mushrooms diced frz iqf ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 139,
+   "alone": 3
+  },
+  {
+   "product": "egg patty round frz ctn-25 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 136,
+   "alone": 3
+  },
+  {
+   "product": "lentils pkg-6/4 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 135,
+   "alone": 3
+  },
+  {
+   "product": "pork crumbles w/ spp pkg-4/10 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 135,
+   "alone": 3
+  },
+  {
+   "product": "tomoato paste for bulk processing tomato sauce can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 133,
+   "alone": 3
+  },
+  {
+   "product": "fruit and nut mix dried 24/1 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 131,
+   "alone": 3
+  },
+  {
+   "product": "iqf beef patties with spp, 1.7 oz. home-style, fully cooked",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 130,
+   "alone": 3
+  },
+  {
+   "product": "chjcken leg qtrs frz pkg-8/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 127,
+   "alone": 3
+  },
+  {
+   "product": "chicken legs chilled - bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 125,
+   "alone": 3
+  },
+  {
+   "product": "turkey ground frz - bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 125,
+   "alone": 3
+  },
+  {
+   "product": "pork roast leg frz ctn-32-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 124,
+   "alone": 3
+  },
+  {
+   "product": "beef fresh bnls combo-20/2000 lb bnls beef supplier supplement 211",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 115,
+   "alone": 3
+  },
+  {
+   "product": "broccoli frz pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 280,
+   "alone": 2
+  },
+  {
+   "product": "pears bartlett fresh ctn 45",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 248,
+   "alone": 2
+  },
+  {
+   "product": "dates whole pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 242,
+   "alone": 2
+  },
+  {
+   "product": "chicken consumer split breast pkg 6/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 233,
+   "alone": 2
+  },
+  {
+   "product": "chicken boned can-24/15 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 227,
+   "alone": 2
+  },
+  {
+   "product": "turkey breast cooked ctn-12/3.25 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 210,
+   "alone": 2
+  },
+  {
+   "product": "tomato sauce can rdu sod",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 204,
+   "alone": 2
+  },
+  {
+   "product": "k beans green can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 182,
+   "alone": 2
+  },
+  {
+   "product": "beef fresh bnls bulk combo-20/2000 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 180,
+   "alone": 2
+  },
+  {
+   "product": "pork bnls fresh bulk combo ctn-20/2000lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 166,
+   "alone": 2
+  },
+  {
+   "product": "raisins box raisins ctn raisins pkg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 162,
+   "alone": 2
+  },
+  {
+   "product": "beans black can beans pinto can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 153,
+   "alone": 2
+  },
+  {
+   "product": "k peas can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 150,
+   "alone": 2
+  },
+  {
+   "product": "apples slices can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 2
+  },
+  {
+   "product": "pork bnls leg roasts - bulk ctn-60 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 2
+  },
+  {
+   "product": "strawberry slices frz ctn-30 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 2
+  },
+  {
+   "product": "chicken small chilled - bulk",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 148,
+   "alone": 2
+  },
+  {
+   "product": "bulk tomato paste for processing",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 147,
+   "alone": 2
+  },
+  {
+   "product": "peaches cling can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 140,
+   "alone": 2
+  },
+  {
+   "product": "pistachio roasted in shell pkg 12/2 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 139,
+   "alone": 2
+  },
+  {
+   "product": "strawberry whole unswt iqf - 6/5 ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 139,
+   "alone": 2
+  },
+  {
+   "product": "tomato soup can tomato diced can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 139,
+   "alone": 2
+  },
+  {
+   "product": "pork chops bnls frz pkg-40/1 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 138,
+   "alone": 2
+  },
+  {
+   "product": "almonds roasted whole shell ctn 25 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 137,
+   "alone": 2
+  },
+  {
+   "product": "chjcken leg qtr frz bag-4/10 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 137,
+   "alone": 2
+  },
+  {
+   "product": "sweet potato fresh pkg 12/3 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 137,
+   "alone": 2
+  },
+  {
+   "product": "bulk fresh potatoes",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 135,
+   "alone": 2
+  },
+  {
+   "product": "fresh fruit (bulk apples)",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 135,
+   "alone": 2
+  },
+  {
+   "product": "strawberry slices unswt iqf-ctn 6/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 132,
+   "alone": 2
+  },
+  {
+   "product": "chicken leg qtr bag-4/5 kg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 128,
+   "alone": 2
+  },
+  {
+   "product": "tuna chunk light can-24/12 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 125,
+   "alone": 2
+  },
+  {
+   "product": "beef crumbles w/spp pkg-4/10 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 124,
+   "alone": 2
+  },
+  {
+   "product": "chicken leg qtr bag-15 kg",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 123,
+   "alone": 2
+  },
+  {
+   "product": "lamb shank frz ctn-35-45 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 122,
+   "alone": 2
+  },
+  {
+   "product": "iqf beef patties with spp, 2.2 oz. home-style, fully cooked",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 120,
+   "alone": 2
+  },
+  {
+   "product": "tuna chunk light can - 6/6.5 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 108,
+   "alone": 2
+  },
+  {
+   "product": "cherries dried pkg-4/4 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 253,
+   "alone": 1
+  },
+  {
+   "product": "chicken whole bagged frz ctn 36-43 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 248,
+   "alone": 1
+  },
+  {
+   "product": "fresh oranges ctn 34-39 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 246,
+   "alone": 1
+  },
+  {
+   "product": "k applesauce can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 218,
+   "alone": 1
+  },
+  {
+   "product": "bean pink can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 181,
+   "alone": 1
+  },
+  {
+   "product": "apple braeburn fresh carton",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 177,
+   "alone": 1
+  },
+  {
+   "product": "k h tomato sauce can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 168,
+   "alone": 1
+  },
+  {
+   "product": "apples fuji fresh carton",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 160,
+   "alone": 1
+  },
+  {
+   "product": "apples fresh various type ctn 37-40",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 158,
+   "alone": 1
+  },
+  {
+   "product": "soup crm of mushroom rdu sod ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 154,
+   "alone": 1
+  },
+  {
+   "product": "chicken leg qtr frz bag-15 kg 40015 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 152,
+   "alone": 1
+  },
+  {
+   "product": "chicken boned pouch--36/10 oz",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 150,
+   "alone": 1
+  },
+  {
+   "product": "corn whole kernel (liq) can peas can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 148,
+   "alone": 1
+  },
+  {
+   "product": "almonds roasted whole shell pkg 12/2 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 146,
+   "alone": 1
+  },
+  {
+   "product": "precooked meat box",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 139,
+   "alone": 1
+  },
+  {
+   "product": "beef crumbles w/spp lft opt pkg-4/10 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 134,
+   "alone": 1
+  },
+  {
+   "product": "peaches sling slices ex lt can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 130,
+   "alone": 1
+  },
+  {
+   "product": "almonds roasred whole shell pkg 12/2 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 128,
+   "alone": 1
+  },
+  {
+   "product": "potatoes fresh variety 5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 127,
+   "alone": 1
+  },
+  {
+   "product": "chicken consumer splt breast pkg-6/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 122,
+   "alone": 1
+  },
+  {
+   "product": "pork loin roast frz pkg-12/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 122,
+   "alone": 1
+  },
+  {
+   "product": "beef fine ground lft opt frz ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 194,
+   "alone": 0
+  },
+  {
+   "product": "soup crm of chicken rdu sod ctn",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 182,
+   "alone": 0
+  },
+  {
+   "product": "cranberry juice conc can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 160,
+   "alone": 0
+  },
+  {
+   "product": "fruit and nut mix dried pkg 5/5 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 155,
+   "alone": 0
+  },
+  {
+   "product": "pears slices ex lt can mixed fruit can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 150,
+   "alone": 0
+  },
+  {
+   "product": "cherries dried pkg-8/2 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 149,
+   "alone": 0
+  },
+  {
+   "product": "k chicken cut up frz ctn-40 lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 143,
+   "alone": 0
+  },
+  {
+   "product": "beef i 00% pty 85/15 frz i .5mma ctn 40lb",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 138,
+   "alone": 0
+  },
+  {
+   "product": "peaches freestone can",
+   "class": "description",
+   "suppliers": 1,
+   "approvals": 1,
+   "blocks": 117,
+   "alone": 0
+  }
+ ],
+ "greedy": [
+  {
+   "product": "pan1 - pancakes whole wheat fz",
+   "approvals": 1,
+   "resilient": 11658,
+   "share": 0.2914
+  },
+  {
+   "product": "mx1 - exchange of ndm for processed commodities",
+   "approvals": 2,
+   "resilient": 11881,
+   "share": 0.297
+  },
+  {
+   "product": "pc - processed cereals (rolled oats)",
+   "approvals": 3,
+   "resilient": 12087,
+   "share": 0.3022
+  },
+  {
+   "product": "wf - wheat flour products",
+   "approvals": 4,
+   "resilient": 13148,
+   "share": 0.3287
+  },
+  {
+   "product": "en - egg noodles",
+   "approvals": 5,
+   "resilient": 13421,
+   "share": 0.3355
+  },
+  {
+   "product": "ifd - infant formula",
+   "approvals": 6,
+   "resilient": 13735,
+   "share": 0.3434
+  },
+  {
+   "product": "dched - cheddar",
+   "approvals": 7,
+   "resilient": 14071,
+   "share": 0.3518
+  },
+  {
+   "product": "em - evaporated milk",
+   "approvals": 8,
+   "resilient": 14509,
+   "share": 0.3627
+  },
+  {
+   "product": "bfm - bakery flour mix",
+   "approvals": 9,
+   "resilient": 14961,
+   "share": 0.374
+  },
+  {
+   "product": "imd - instant milk",
+   "approvals": 10,
+   "resilient": 16003,
+   "share": 0.4001
+  },
+  {
+   "product": "rc - instant rice cereal",
+   "approvals": 11,
+   "resilient": 16607,
+   "share": 0.4152
+  },
+  {
+   "product": "rp - rice products (domestic)",
+   "approvals": 12,
+   "resilient": 17401,
+   "share": 0.435
+  },
+  {
+   "product": "ro - rolled oats",
+   "approvals": 13,
+   "resilient": 18471,
+   "share": 0.4618
+  },
+  {
+   "product": "311211 cssm corn-soy/instant corn-soy",
+   "approvals": 14,
+   "resilient": 18644,
+   "share": 0.4661
+  },
+  {
+   "product": "311211 wsb wheat soy blend",
+   "approvals": 15,
+   "resilient": 18897,
+   "share": 0.4724
+  },
+  {
+   "product": "311211 csb corn-soy blend",
+   "approvals": 16,
+   "resilient": 19354,
+   "share": 0.4839
+  },
+  {
+   "product": "311613 bot-t tallow",
+   "approvals": 17,
+   "resilient": 19740,
+   "share": 0.4935
+  },
+  {
+   "product": "311211 corn, sorghum, soybeans and wheat products",
+   "approvals": 18,
+   "resilient": 20373,
+   "share": 0.5093
+  },
+  {
+   "product": "311212 kcpg milled rice (bulk)",
+   "approvals": 19,
+   "resilient": 21616,
+   "share": 0.5404
+  },
+  {
+   "product": "311423 dpp dehydrated potato product",
+   "approvals": 20,
+   "resilient": 22562,
+   "share": 0.5641
+  },
+  {
+   "product": "311999 deb",
+   "approvals": 21,
+   "resilient": 24138,
+   "share": 0.6035
+  },
+  {
+   "product": "100138 - beef chili w/o beans can - 24/24 oz",
+   "approvals": 22,
+   "resilient": 24308,
+   "share": 0.6077
+  },
+  {
+   "product": "100877 - chicken can - 12/50 oz",
+   "approvals": 23,
+   "resilient": 24464,
+   "share": 0.6116
+  },
+  {
+   "product": "100138 - beef chili w/o beans can 24/24 oz",
+   "approvals": 24,
+   "resilient": 24667,
+   "share": 0.6167
+  },
+  {
+   "product": "110477 - chicken pouch 36/10 oz",
+   "approvals": 25,
+   "resilient": 25526,
+   "share": 0.6381
+  },
+  {
+   "product": "100173 - pork leg (fresh ham) roast, boneless, frozen",
+   "approvals": 26,
+   "resilient": 25659,
+   "share": 0.6415
+  },
+  {
+   "product": "110138 - pork leg (fresh ham), bulk, boneless, frozen",
+   "approvals": 27,
+   "resilient": 26265,
+   "share": 0.6566
+  },
+  {
+   "product": "100967 - 2/7 lg w-mld bag 50 kg",
+   "approvals": 28,
+   "resilient": 26502,
+   "share": 0.6625
+  },
+  {
+   "product": "100975 - 5/20 lg w-mld bag 50 kg",
+   "approvals": 29,
+   "resilient": 26925,
+   "share": 0.6731
+  },
+  {
+   "product": "100187 - 5 lb. frozen shingled sliced ham",
+   "approvals": 30,
+   "resilient": 27342,
+   "share": 0.6835
+  },
+  {
+   "product": "100188 - 5 lb. frozen diced",
+   "approvals": 31,
+   "resilient": 27971,
+   "share": 0.6993
+  },
+  {
+   "product": "100184 - 10 lb. frozen hams",
+   "approvals": 32,
+   "resilient": 29074,
+   "share": 0.7268
+  },
+  {
+   "product": "100182 - 3 lb. frozen hams",
+   "approvals": 33,
+   "resilient": 32730,
+   "share": 0.8183
+  },
+  {
+   "product": "salmon pink can-24/14.75 oz (33630)",
+   "approvals": 34,
+   "resilient": 32773,
+   "share": 0.8193
+  },
+  {
+   "product": "salmon fillets wild frz pkg-40/1 lb",
+   "approvals": 35,
+   "resilient": 32847,
+   "share": 0.8212
+  },
+  {
+   "product": "sweet potatoes mashed can",
+   "approvals": 36,
+   "resilient": 32883,
+   "share": 0.8221
+  },
+  {
+   "product": "tomaot salsa pouch",
+   "approvals": 37,
+   "resilient": 32917,
+   "share": 0.8229
+  },
+  {
+   "product": "apples golden delicious fresh ctn",
+   "approvals": 38,
+   "resilient": 32950,
+   "share": 0.8237
+  },
+  {
+   "product": "beef diced frz ctn-60 lb",
+   "approvals": 39,
+   "resilient": 32977,
+   "share": 0.8244
+  },
+  {
+   "product": "plums pited dried pkg",
+   "approvals": 40,
+   "resilient": 32998,
+   "share": 0.8249
+  },
+  {
+   "product": "beans baby lima pkg",
+   "approvals": 41,
+   "resilient": 33031,
+   "share": 0.8258
+  },
+  {
+   "product": "chicken, bulk",
+   "approvals": 42,
+   "resilient": 33053,
+   "share": 0.8263
+  },
+  {
+   "product": "turkey taco filling ctn-30 lb",
+   "approvals": 43,
+   "resilient": 33071,
+   "share": 0.8268
+  },
+  {
+   "product": "lentils dry bag",
+   "approvals": 44,
+   "resilient": 33090,
+   "share": 0.8273
+  },
+  {
+   "product": "bison ground lean frz pkg-40/1",
+   "approvals": 45,
+   "resilient": 33109,
+   "share": 0.8277
+  },
+  {
+   "product": "egg mix dried pkg-48/6 oz",
+   "approvals": 46,
+   "resilient": 33126,
+   "share": 0.8282
+  },
+  {
+   "product": "eggs whole liquid bulk-tank",
+   "approvals": 47,
+   "resilient": 33144,
+   "share": 0.8286
+  },
+  {
+   "product": "apricots diced peled ex lt can",
+   "approvals": 48,
+   "resilient": 33264,
+   "share": 0.8316
+  },
+  {
+   "product": "lentils dry bag lentils dry pkg",
+   "approvals": 49,
+   "resilient": 33279,
+   "share": 0.832
+  },
+  {
+   "product": "beans dark red kidney pkg",
+   "approvals": 50,
+   "resilient": 33368,
+   "share": 0.8342
+  },
+  {
+   "product": "chicken large chilled bulk",
+   "approvals": 51,
+   "resilient": 33382,
+   "share": 0.8346
+  },
+  {
+   "product": "chicken leg qtr frz bag 4/10 lb",
+   "approvals": 52,
+   "resilient": 33415,
+   "share": 0.8354
+  },
+  {
+   "product": "grape variety fresh 19 lb",
+   "approvals": 53,
+   "resilient": 33429,
+   "share": 0.8357
+  },
+  {
+   "product": "chicken cut up frz ctn-40 lb",
+   "approvals": 54,
+   "resilient": 33443,
+   "share": 0.8361
+  },
+  {
+   "product": "raisins bag",
+   "approvals": 55,
+   "resilient": 33456,
+   "share": 0.8364
+  },
+  {
+   "product": "fig pieces pkg",
+   "approvals": 56,
+   "resilient": 33473,
+   "share": 0.8368
+  },
+  {
+   "product": "turkey breast deli sliced frz pkg-8/5 lb",
+   "approvals": 57,
+   "resilient": 33487,
+   "share": 0.8372
+  },
+  {
+   "product": "apples bulk further processing",
+   "approvals": 58,
+   "resilient": 33501,
+   "share": 0.8375
+  },
+  {
+   "product": "cranberries dried pkg 300/1 oz",
+   "approvals": 59,
+   "resilient": 33516,
+   "share": 0.8379
+  },
+  {
+   "product": "cherries dried pkg-4/4 lb",
+   "approvals": 60,
+   "resilient": 33560,
+   "share": 0.839
+  },
+  {
+   "product": "cherries red tart pitted can",
+   "approvals": 61,
+   "resilient": 33576,
+   "share": 0.8394
+  },
+  {
+   "product": "k applesauce can",
+   "approvals": 62,
+   "resilient": 33608,
+   "share": 0.8402
+  },
+  {
+   "product": "pistachio roasted in shell pkg",
+   "approvals": 63,
+   "resilient": 33622,
+   "share": 0.8406
+  },
+  {
+   "product": "dates whole pkg",
+   "approvals": 64,
+   "resilient": 33722,
+   "share": 0.843
+  },
+  {
+   "product": "turkey breast smkd deli frz ctn - 40 lb",
+   "approvals": 65,
+   "resilient": 33736,
+   "share": 0.8434
+  },
+  {
+   "product": "pears fresh pkg",
+   "approvals": 66,
+   "resilient": 33749,
+   "share": 0.8437
+  },
+  {
+   "product": "plums fresh ctn-28 lb",
+   "approvals": 67,
+   "resilient": 33798,
+   "share": 0.8449
+  },
+  {
+   "product": "oranges fresh bag pkg 12/3 lb grapes variety fresh 19 lb",
+   "approvals": 68,
+   "resilient": 33884,
+   "share": 0.8471
+  },
+  {
+   "product": "sweet potatoes mashed frz pkg",
+   "approvals": 69,
+   "resilient": 33898,
+   "share": 0.8475
+  },
+  {
+   "product": "turkey thighs bnks sknls chilled-bulk",
+   "approvals": 70,
+   "resilient": 33912,
+   "share": 0.8478
+  },
+  {
+   "product": "turkey hams smkd frz ctn-40 lb",
+   "approvals": 71,
+   "resilient": 33928,
+   "share": 0.8482
+  },
+  {
+   "product": "turkey consumer pack whole ctn-30-60 lb",
+   "approvals": 72,
+   "resilient": 33972,
+   "share": 0.8493
+  },
+  {
+   "product": "chicken boned can-12/50 oz",
+   "approvals": 73,
+   "resilient": 33986,
+   "share": 0.8497
+  },
+  {
+   "product": "chicken boned can-24/15 oz",
+   "approvals": 74,
+   "resilient": 34007,
+   "share": 0.8502
+  },
+  {
+   "product": "chicken while bagged frz ctn-36-43 lb",
+   "approvals": 75,
+   "resilient": 34062,
+   "share": 0.8516
+  },
+  {
+   "product": "chicken strips frz-ctn 30 lb",
+   "approvals": 76,
+   "resilient": 34090,
+   "share": 0.8522
+  },
+  {
+   "product": "turkey breast cooked ctn-12/3.25 lb",
+   "approvals": 77,
+   "resilient": 34106,
+   "share": 0.8527
+  },
+  {
+   "product": "chicken consumer split breast pkg 6/5 lb",
+   "approvals": 78,
+   "resilient": 34125,
+   "share": 0.8531
+  },
+  {
+   "product": "chicken whole bagged frz ctn 36-43 lb",
+   "approvals": 79,
+   "resilient": 34237,
+   "share": 0.8559
+  },
+  {
+   "product": "potatoes russet fresh ctn",
+   "approvals": 80,
+   "resilient": 34252,
+   "share": 0.8563
+  },
+  {
+   "product": "beef 100% pty 85/15 frz 2.0 mma ctn-40 lb",
+   "approvals": 81,
+   "resilient": 34265,
+   "share": 0.8566
+  },
+  {
+   "product": "beef 100% pty 85/15 frz 1.5 mma ctn-40 lb",
+   "approvals": 82,
+   "resilient": 34279,
+   "share": 0.857
+  },
+  {
+   "product": "beef 100% pty 90/10 frz 2.0 mma ctn-40 lb",
+   "approvals": 83,
+   "resilient": 34305,
+   "share": 0.8576
+  },
+  {
+   "product": "chicken f ajit a strips ctn-30 lb",
+   "approvals": 84,
+   "resilient": 34450,
+   "share": 0.8612
+  },
+  {
+   "product": "pears d'anjou fresh ctn 45",
+   "approvals": 85,
+   "resilient": 34464,
+   "share": 0.8616
+  },
+  {
+   "product": "carrots frz ctn",
+   "approvals": 86,
+   "resilient": 34478,
+   "share": 0.8619
+  },
+  {
+   "product": "k corn cob frz cse",
+   "approvals": 87,
+   "resilient": 34495,
+   "share": 0.8624
+  },
+  {
+   "product": "peas green frz ctn",
+   "approvals": 88,
+   "resilient": 34518,
+   "share": 0.8629
+  },
+  {
+   "product": "broccoli frz pkg",
+   "approvals": 89,
+   "resilient": 34572,
+   "share": 0.8643
+  },
+  {
+   "product": "can corn frz ctn",
+   "approvals": 90,
+   "resilient": 34626,
+   "share": 0.8657
+  },
+  {
+   "product": "k beans green can",
+   "approvals": 91,
+   "resilient": 34668,
+   "share": 0.8667
+  },
+  {
+   "product": "pears bartlett fresh ctn 45",
+   "approvals": 92,
+   "resilient": 34685,
+   "share": 0.8671
+  },
+  {
+   "product": "fresh apple varieties ctn-40 lb",
+   "approvals": 93,
+   "resilient": 34703,
+   "share": 0.8676
+  },
+  {
+   "product": "sweet potato fresh ctn 40",
+   "approvals": 94,
+   "resilient": 34720,
+   "share": 0.868
+  },
+  {
+   "product": "pears bosc fresh ctn 45",
+   "approvals": 95,
+   "resilient": 34739,
+   "share": 0.8685
+  },
+  {
+   "product": "fresh oranges ctn 34-39 lb",
+   "approvals": 96,
+   "resilient": 34763,
+   "share": 0.8691
+  },
+  {
+   "product": "sweet potato bulk fresh",
+   "approvals": 97,
+   "resilient": 34791,
+   "share": 0.8698
+  },
+  {
+   "product": "proc potatoes russet fresh bag potatoes round white fresh bag",
+   "approvals": 98,
+   "resilient": 34838,
+   "share": 0.871
+  },
+  {
+   "product": "fruit and nut mix dried pkg 24/1",
+   "approvals": 99,
+   "resilient": 34855,
+   "share": 0.8714
+  },
+  {
+   "product": "tomato sauce can rdu sod",
+   "approvals": 100,
+   "resilient": 34924,
+   "share": 0.8731
+  },
+  {
+   "product": "frz sweet potato bulk fresh proc",
+   "approvals": 101,
+   "resilient": 34941,
+   "share": 0.8735
+  },
+  {
+   "product": "frz potatoes russet fresh ctn",
+   "approvals": 102,
+   "resilient": 35006,
+   "share": 0.8751
+  },
+  {
+   "product": "lamb leg roast frz ctn-38-40 lb-4000",
+   "approvals": 103,
+   "resilient": 35022,
+   "share": 0.8756
+  },
+  {
+   "product": "k pears slices can",
+   "approvals": 104,
+   "resilient": 35038,
+   "share": 0.876
+  },
+  {
+   "product": "tomato paste pouch",
+   "approvals": 105,
+   "resilient": 35056,
+   "share": 0.8764
+  },
+  {
+   "product": "pears slices ex lt sucrose can",
+   "approvals": 106,
+   "resilient": 35075,
+   "share": 0.8769
+  },
+  {
+   "product": "tomato diced pouch",
+   "approvals": 107,
+   "resilient": 35099,
+   "share": 0.8775
+  },
+  {
+   "product": "cranberry juice conc can",
+   "approvals": 108,
+   "resilient": 35146,
+   "share": 0.8787
+  },
+  {
+   "product": "potatoes round white fresh bag",
+   "approvals": 109,
+   "resilient": 35162,
+   "share": 0.879
+  },
+  {
+   "product": "tomato fresh ctn",
+   "approvals": 110,
+   "resilient": 35205,
+   "share": 0.8801
+  },
+  {
+   "product": "beans baby lima beans black can",
+   "approvals": 111,
+   "resilient": 35222,
+   "share": 0.8806
+  },
+  {
+   "product": "apples fuji fresh f ctn",
+   "approvals": 112,
+   "resilient": 35238,
+   "share": 0.881
+  },
+  {
+   "product": "apples gala fresh ctn",
+   "approvals": 113,
+   "resilient": 35289,
+   "share": 0.8822
+  },
+  {
+   "product": "red tart pitted cherries can",
+   "approvals": 114,
+   "resilient": 35307,
+   "share": 0.8827
+  },
+  {
+   "product": "beans black can beans pinto can",
+   "approvals": 115,
+   "resilient": 35343,
+   "share": 0.8836
+  },
+  {
+   "product": "apples gala fresh g ctn",
+   "approvals": 116,
+   "resilient": 35363,
+   "share": 0.8841
+  },
+  {
+   "product": "apples fuji fresh f carton",
+   "approvals": 117,
+   "resilient": 35381,
+   "share": 0.8845
+  },
+  {
+   "product": "chlcken whole bagged frz ctn-36-43 lb",
+   "approvals": 118,
+   "resilient": 35399,
+   "share": 0.885
+  },
+  {
+   "product": "apples for further processing bulk",
+   "approvals": 119,
+   "resilient": 35417,
+   "share": 0.8854
+  },
+  {
+   "product": "egg 15 dozen",
+   "approvals": 120,
+   "resilient": 35436,
+   "share": 0.8859
+  },
+  {
+   "product": "apples fresh pkg",
+   "approvals": 121,
+   "resilient": 35455,
+   "share": 0.8864
+  },
+  {
+   "product": "apples fuji fresh carton",
+   "approvals": 122,
+   "resilient": 35480,
+   "share": 0.887
+  },
+  {
+   "product": "apple braeburn fresh carton",
+   "approvals": 123,
+   "resilient": 35511,
+   "share": 0.8878
+  },
+  {
+   "product": "apples fresh various type ctn 37-40",
+   "approvals": 124,
+   "resilient": 35545,
+   "share": 0.8886
+  },
+  {
+   "product": "tomato paste drum tomato paste can",
+   "approvals": 125,
+   "resilient": 35564,
+   "share": 0.8891
+  },
+  {
+   "product": "potato white slices can",
+   "approvals": 126,
+   "resilient": 35582,
+   "share": 0.8895
+  },
+  {
+   "product": "apricots halves ex lt sucrose can",
+   "approvals": 127,
+   "resilient": 35600,
+   "share": 0.89
+  },
+  {
+   "product": "raisins box raisins ctn raisins pkg",
+   "approvals": 128,
+   "resilient": 35618,
+   "share": 0.8904
+  },
+  {
+   "product": "iqf beef patties with spp, 2.2 oz. home-style, fully cooked",
+   "approvals": 129,
+   "resilient": 35637,
+   "share": 0.8909
+  },
+  {
+   "product": "bulk chicken",
+   "approvals": 130,
+   "resilient": 35657,
+   "share": 0.8914
+  },
+  {
+   "product": "egg patty round frz ctn-25 lb",
+   "approvals": 131,
+   "resilient": 35676,
+   "share": 0.8919
+  },
+  {
+   "product": "lentils bag-50 kg",
+   "approvals": 132,
+   "resilient": 35695,
+   "share": 0.8924
+  },
+  {
+   "product": "lamb shoulder rst bnls frz ctn-35-45 lb",
+   "approvals": 133,
+   "resilient": 35715,
+   "share": 0.8929
+  },
+  {
+   "product": "tomoato paste for bulk processing tomato sauce can",
+   "approvals": 134,
+   "resilient": 35735,
+   "share": 0.8934
+  },
+  {
+   "product": "eggs whole liq bulk - tank",
+   "approvals": 135,
+   "resilient": 35756,
+   "share": 0.8939
+  },
+  {
+   "product": "pork roast leg frz ctn-32-40 lb",
+   "approvals": 136,
+   "resilient": 35777,
+   "share": 0.8944
+  },
+  {
+   "product": "pork bnls fresh bulk combo ctn-20/2000lb",
+   "approvals": 137,
+   "resilient": 35799,
+   "share": 0.895
+  },
+  {
+   "product": "chicken whole bagged frz pkg-12/4 lb",
+   "approvals": 138,
+   "resilient": 35822,
+   "share": 0.8955
+  },
+  {
+   "product": "peaches cling slc ex lt sucrose can pears can",
+   "approvals": 139,
+   "resilient": 35845,
+   "share": 0.8961
+  },
+  {
+   "product": "iqf beef crumbles, fully cooked, with spp, lightly seasoned",
+   "approvals": 140,
+   "resilient": 35866,
+   "share": 0.8966
+  },
+  {
+   "product": "chicken leg qtr frz bag-15 kg 40015 lb",
+   "approvals": 141,
+   "resilient": 35887,
+   "share": 0.8972
+  },
+  {
+   "product": "chicken boned pouch--36/10 oz",
+   "approvals": 142,
+   "resilient": 35908,
+   "share": 0.8977
+  },
+  {
+   "product": "bean pink can",
+   "approvals": 143,
+   "resilient": 35930,
+   "share": 0.8982
+  },
+  {
+   "product": "pork loin roast frz ctn-6/5 lb",
+   "approvals": 144,
+   "resilient": 35953,
+   "share": 0.8988
+  },
+  {
+   "product": "beans pinto dry pkg-24/1 lb",
+   "approvals": 145,
+   "resilient": 35976,
+   "share": 0.8994
+  },
+  {
+   "product": "soup crm of chicken rdu sod ctn",
+   "approvals": 146,
+   "resilient": 35999,
+   "share": 0.9
+  },
+  {
+   "product": "chjcken leg qtr frz bag-4/10 lb",
+   "approvals": 147,
+   "resilient": 36024,
+   "share": 0.9006
+  },
+  {
+   "product": "bulk pack chicken",
+   "approvals": 148,
+   "resilient": 36049,
+   "share": 0.9012
+  },
+  {
+   "product": "chicken leg qtrs tray frz pkg-9/4.s lb",
+   "approvals": 149,
+   "resilient": 36073,
+   "share": 0.9018
+  },
+  {
+   "product": "k tomato sauce can",
+   "approvals": 150,
+   "resilient": 36098,
+   "share": 0.9024
+  },
+  {
+   "product": "bulk tomato paste for processing",
+   "approvals": 151,
+   "resilient": 36123,
+   "share": 0.9031
+  },
+  {
+   "product": "chicken legs chilled - bulk",
+   "approvals": 152,
+   "resilient": 36149,
+   "share": 0.9037
+  },
+  {
+   "product": "mushrooms diced frz iqf ctn",
+   "approvals": 153,
+   "resilient": 36174,
+   "share": 0.9043
+  },
+  {
+   "product": "bulk fresh potatoes",
+   "approvals": 154,
+   "resilient": 36201,
+   "share": 0.905
+  },
+  {
+   "product": "fruit and nut mix dried pkg 5/5 lb",
+   "approvals": 155,
+   "resilient": 36228,
+   "share": 0.9057
+  },
+  {
+   "product": "lentils pkg-6/4 lb",
+   "approvals": 156,
+   "resilient": 36255,
+   "share": 0.9064
+  },
+  {
+   "product": "lamb shank frz ctn-35-45 lb",
+   "approvals": 157,
+   "resilient": 36283,
+   "share": 0.9071
+  },
+  {
+   "product": "beef patties with spp, 2.7 oz. home-style, fully cooked",
+   "approvals": 158,
+   "resilient": 36311,
+   "share": 0.9078
+  },
+  {
+   "product": "fresh fruit (bulk apples)",
+   "approvals": 159,
+   "resilient": 36340,
+   "share": 0.9085
+  },
+  {
+   "product": "lamb leg rst bnls frz ctn-38-40 lb-4000",
+   "approvals": 160,
+   "resilient": 36370,
+   "share": 0.9093
+  },
+  {
+   "product": "turkey ground frz - bulk",
+   "approvals": 161,
+   "resilient": 36400,
+   "share": 0.91
+  },
+  {
+   "product": "tomato soup can tomato diced can",
+   "approvals": 162,
+   "resilient": 36429,
+   "share": 0.9107
+  },
+  {
+   "product": "pork bnls leg roasts - bulk ctn-60 lb",
+   "approvals": 163,
+   "resilient": 36459,
+   "share": 0.9115
+  },
+  {
+   "product": "beef patty ckd frz 2.0 mma ctn-40 lb",
+   "approvals": 164,
+   "resilient": 36489,
+   "share": 0.9122
+  },
+  {
+   "product": "potatoes russet fresh bag potatoes round white fresh bag",
+   "approvals": 165,
+   "resilient": 36520,
+   "share": 0.913
+  },
+  {
+   "product": "apricots diced ex lt sucrose can",
+   "approvals": 166,
+   "resilient": 36553,
+   "share": 0.9138
+  },
+  {
+   "product": "apricots diced peeled ex lt can",
+   "approvals": 167,
+   "resilient": 36584,
+   "share": 0.9146
+  },
+  {
+   "product": "almond natural whole shell ctn 12/2 lb",
+   "approvals": 168,
+   "resilient": 36616,
+   "share": 0.9154
+  },
+  {
+   "product": "k peas can",
+   "approvals": 169,
+   "resilient": 36648,
+   "share": 0.9162
+  },
+  {
+   "product": "k corn whole kernel (liq) can",
+   "approvals": 170,
+   "resilient": 36707,
+   "share": 0.9177
+  },
+  {
+   "product": "beef i 00% pty 85/15 frz i .5mma ctn 40lb",
+   "approvals": 171,
+   "resilient": 36742,
+   "share": 0.9185
+  },
+  {
+   "product": "orange juice single ctn",
+   "approvals": 172,
+   "resilient": 36780,
+   "share": 0.9195
+  },
+  {
+   "product": "almonds roasted whole shell pkg 12/2 lb",
+   "approvals": 173,
+   "resilient": 36819,
+   "share": 0.9205
+  },
+  {
+   "product": "potato bulk for process dehy potatoes russet fresh bag potatoes round white fresh bag",
+   "approvals": 174,
+   "resilient": 36857,
+   "share": 0.9214
+  },
+  {
+   "product": "cranberries dried pkg 300/1.16 oz",
+   "approvals": 175,
+   "resilient": 36897,
+   "share": 0.9224
+  },
+  {
+   "product": "pork picnic bnls frz ctn-60 lb",
+   "approvals": 176,
+   "resilient": 36937,
+   "share": 0.9234
+  },
+  {
+   "product": "pork crumbles w/ spp pkg-4/10 lb",
+   "approvals": 177,
+   "resilient": 36978,
+   "share": 0.9244
+  },
+  {
+   "product": "sweet potato fresh pkg 12/3 lb",
+   "approvals": 178,
+   "resilient": 37020,
+   "share": 0.9255
+  },
+  {
+   "product": "chicken leg qtr bag-4/5 kg",
+   "approvals": 179,
+   "resilient": 37063,
+   "share": 0.9266
+  },
+  {
+   "product": "almonds roasred whole shell pkg 12/2 lb",
+   "approvals": 180,
+   "resilient": 37109,
+   "share": 0.9277
+  },
+  {
+   "product": "corn whole kernel (liq) can peas can",
+   "approvals": 181,
+   "resilient": 37154,
+   "share": 0.9288
+  },
+  {
+   "product": "peaches cling slc ex lt sucrose can",
+   "approvals": 182,
+   "resilient": 37200,
+   "share": 0.93
+  },
+  {
+   "product": "peaches sling slices ex lt can",
+   "approvals": 183,
+   "resilient": 37250,
+   "share": 0.9313
+  },
+  {
+   "product": "cherries dried pkg-8/2 lb",
+   "approvals": 184,
+   "resilient": 37298,
+   "share": 0.9325
+  },
+  {
+   "product": "k h tomato sauce can",
+   "approvals": 185,
+   "resilient": 37349,
+   "share": 0.9337
+  },
+  {
+   "product": "soup crm of mushroom rdu sod ctn",
+   "approvals": 186,
+   "resilient": 37420,
+   "share": 0.9355
+  },
+  {
+   "product": "strawberry slices frz ctn-30 lb",
+   "approvals": 187,
+   "resilient": 37475,
+   "share": 0.9369
+  },
+  {
+   "product": "beef fine ground frz pkg-40/l lb",
+   "approvals": 188,
+   "resilient": 37531,
+   "share": 0.9383
+  },
+  {
+   "product": "k chicken cut up frz ctn-40 lb",
+   "approvals": 189,
+   "resilient": 37588,
+   "share": 0.9397
+  },
+  {
+   "product": "peaches cling can",
+   "approvals": 190,
+   "resilient": 37647,
+   "share": 0.9412
+  },
+  {
+   "product": "almonds roasted whole shell ctn 25 lb",
+   "approvals": 191,
+   "resilient": 37705,
+   "share": 0.9426
+  },
+  {
+   "product": "beef crumbles w/spp lft opt pkg-4/10 lb",
+   "approvals": 192,
+   "resilient": 37764,
+   "share": 0.9441
+  },
+  {
+   "product": "chicken small chilled - bulk",
+   "approvals": 193,
+   "resilient": 37825,
+   "share": 0.9456
+  },
+  {
+   "product": "strawberry whole unswt iqf - 6/5 ctn",
+   "approvals": 194,
+   "resilient": 37888,
+   "share": 0.9472
+  },
+  {
+   "product": "strawberry slices unswt iqf-ctn 6/5 lb",
+   "approvals": 195,
+   "resilient": 37955,
+   "share": 0.9489
+  },
+  {
+   "product": "beef fresh bnls bulk combo-20/2000 lb",
+   "approvals": 196,
+   "resilient": 38022,
+   "share": 0.9506
+  },
+  {
+   "product": "beef fine ground lft opt frz ctn-40 lb",
+   "approvals": 197,
+   "resilient": 38136,
+   "share": 0.9534
+  },
+  {
+   "product": "apples slices can",
+   "approvals": 198,
+   "resilient": 38211,
+   "share": 0.9553
+  },
+  {
+   "product": "pears slices ex lt can mixed fruit can",
+   "approvals": 199,
+   "resilient": 38287,
+   "share": 0.9572
+  },
+  {
+   "product": "chicken large chilled - bulk",
+   "approvals": 200,
+   "resilient": 38362,
+   "share": 0.959
+  },
+  {
+   "product": "precooked meat box",
+   "approvals": 201,
+   "resilient": 38444,
+   "share": 0.9611
+  },
+  {
+   "product": "fruit and nut mix dried 24/1 lb",
+   "approvals": 202,
+   "resilient": 38525,
+   "share": 0.9631
+  },
+  {
+   "product": "chicken leg qtr bag-15 kg",
+   "approvals": 203,
+   "resilient": 38609,
+   "share": 0.9652
+  },
+  {
+   "product": "pistachio roasted in shell pkg 12/2 lb",
+   "approvals": 204,
+   "resilient": 38692,
+   "share": 0.9673
+  },
+  {
+   "product": "chjcken leg qtrs frz pkg-8/5 lb",
+   "approvals": 205,
+   "resilient": 38778,
+   "share": 0.9695
+  },
+  {
+   "product": "potatoes fresh variety 5 lb",
+   "approvals": 206,
+   "resilient": 38867,
+   "share": 0.9717
+  },
+  {
+   "product": "chicken consumer splt breast pkg-6/5 lb",
+   "approvals": 207,
+   "resilient": 38960,
+   "share": 0.974
+  },
+  {
+   "product": "pork chops bnls frz pkg-40/1 lb",
+   "approvals": 208,
+   "resilient": 39053,
+   "share": 0.9763
+  },
+  {
+   "product": "catfish fillets iqf 20/2 lb.",
+   "approvals": 209,
+   "resilient": 39153,
+   "share": 0.9788
+  },
+  {
+   "product": "iqf beef patties with spp, 1.7 oz. home-style, fully cooked",
+   "approvals": 210,
+   "resilient": 39253,
+   "share": 0.9813
+  },
+  {
+   "product": "beef crumbles w/spp pkg-4/10 lb",
+   "approvals": 211,
+   "resilient": 39354,
+   "share": 0.9839
+  },
+  {
+   "product": "ci-ttcken leg qtr bag-20 kg",
+   "approvals": 212,
+   "resilient": 39461,
+   "share": 0.9865
+  },
+  {
+   "product": "tuna chunk light can-24/12 oz",
+   "approvals": 213,
+   "resilient": 39566,
+   "share": 0.9891
+  },
+  {
+   "product": "pork loin roast frz pkg-12/5 lb",
+   "approvals": 214,
+   "resilient": 39673,
+   "share": 0.9918
+  },
+  {
+   "product": "peaches freestone can",
+   "approvals": 215,
+   "resilient": 39782,
+   "share": 0.9946
+  },
+  {
+   "product": "beef fresh bnls combo-20/2000 lb bnls beef supplier supplement 211",
+   "approvals": 216,
+   "resilient": 39892,
+   "share": 0.9973
+  },
+  {
+   "product": "tuna chunk light can - 6/6.5 oz",
+   "approvals": 217,
+   "resilient": 40000,
+   "share": 1.0
+  }
+ ],
+ "uniform": [
+  {
+   "class": "description",
+   "products": 353,
+   "blockers": 184,
+   "share": {
+    "3": 0.108715,
+    "5": 0.024377,
+    "8": 0.002527,
+    "12": 0.000117,
+    "20": 0.0
+   }
+  },
+  {
+   "class": "program",
+   "products": 43,
+   "blockers": 13,
+   "share": {
+    "3": 0.328985,
+    "5": 0.148043,
+    "8": 0.040363,
+    "12": 0.005639,
+    "20": 3.1e-05
+   }
+  },
+  {
+   "class": "naics",
+   "products": 31,
+   "blockers": 8,
+   "share": {
+    "3": 0.393993,
+    "5": 0.198039,
+    "8": 0.062154,
+    "12": 0.009581,
+    "20": 2.1e-05
+   }
+  },
+  {
+   "class": "material",
+   "products": 24,
+   "blockers": 12,
+   "share": {
+    "3": 0.108696,
+    "5": 0.018634,
+    "8": 0.000673,
+    "12": 0.0,
+    "20": 0.0
+   }
+  }
+ ],
+ "provenance": {
+  "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+  "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+  "software_version": "0.4.0",
+  "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d",
+  "code_rev": "b7a5492ebab118d4dab03cf1fa3ff1ae60cac4be",
+  "code_sha256": "c3c440df35a5ee81f69c5adea6f1d8df6f47928b6911051ea2f532c353036062",
+  "inputs_sha256": {
+   "manifest.json": "b3f5a6f53fd3400042fcdb06d30d423952d45a54b880ce7c1f1281d5fcbd0b1b",
+   "catalog/mappings.csv": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+   "catalog/identities.csv": "20a62ebf8360a6738389067e86cc8781c4e2e4792887f6e49cd36593d46a07a4",
+   "catalog/owners.csv": "2c31a7b1bc71e8e7190e09d75d15bd80ea6bcdb6b0ef94aa733e722e905e31a3",
+   "catalog/usaspending.json": "1418de8397c95ff186ac1105358a2c967e0d2c303fd4556d2209f585c1740252",
+   "raw/QBL-2025-06-20.xlsx": "8ab793d0c6430aa1d93a36bd229da7953b49b2054aa9f5ad27621b383a7e433f",
+   "raw/QBL-2025-11-22.xlsx": "112b7960507ee81d4b28a1bf64091f4c79a6f692fe13709c2d6f34bf8f90676b",
+   "raw/QBL.xlsx": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822"
+  }
+ }
+}

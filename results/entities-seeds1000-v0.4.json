@@ -1,0 +1,346 @@
+{
+ "identities": {
+  "verdicts": {
+   "same": 6,
+   "site": 13,
+   "unresolved": 12
+  },
+  "flips": {
+   "all_candidates": 2,
+   "same_only": 0
+  },
+  "flipped": [
+   {
+    "P": [
+     "100127 - beef can-24/24 oz",
+     "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+     "110730 - pulled pork, fully cooked"
+    ],
+    "k": 1,
+    "strict": true,
+    "all_candidates": false,
+    "same_only": true
+   },
+   {
+    "P": [
+     "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+     "100144 - pork crumbles, fully cooked, with spp, lightly seasoned, \u00bc\u201d dice",
+     "100145 - pork patties with spp, 2.7 oz. home-style, fully cooked, iqf",
+     "100146 - pork patties with spp, 1.2 oz., fully cooked, iqf",
+     "110730 - pulled pork, fully cooked"
+    ],
+    "k": 1,
+    "strict": true,
+    "all_candidates": false,
+    "same_only": true
+   }
+  ]
+ },
+ "owners": {
+  "groups": [
+   {
+    "group": "BellRing Brands",
+    "members": [
+     "r0032",
+     "r0567"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "LKH2T7W17UN5",
+     "MZA3EV7LZJ65"
+    ],
+    "award_dollars": 78110429.2
+   },
+   {
+    "group": "California Dairies",
+    "members": [
+     "r0112",
+     "r0151"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "DE6GE5DKR135",
+     "NAMADQJ1VJJ9"
+    ],
+    "award_dollars": 84981957.65
+   },
+   {
+    "group": "Cargill Incorporated",
+    "members": [
+     "r0122",
+     "r0123",
+     "r0697"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "UCF5DP81ZFG3",
+     "YNWNKJJN8NF1",
+     "ZK5SWMVP86X7"
+    ],
+    "award_dollars": 144618254.31
+   },
+   {
+    "group": "Cargill Meat Solutions",
+    "members": [
+     "r0124",
+     "r0296"
+    ],
+    "backup_inside": [],
+    "ueis": [],
+    "award_dollars": -0.0
+   },
+   {
+    "group": "Central Valley Meat",
+    "members": [
+     "r0145",
+     "r0405"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "H81TTVKZL3A7",
+     "HZFUY8FJAT34"
+    ],
+    "award_dollars": 328010062.51
+   },
+   {
+    "group": "Goodman Food Products",
+    "members": [
+     "r0249",
+     "r0250",
+     "r0366",
+     "r0367"
+    ],
+    "backup_inside": [
+     "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf"
+    ],
+    "ueis": [],
+    "award_dollars": -0.0
+   },
+   {
+    "group": "Grain Millers",
+    "members": [
+     "r0017",
+     "r0374"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "GCCKELUAJLS5",
+     "PC29BNFCZ2F4"
+    ],
+    "award_dollars": 12531223.43
+   },
+   {
+    "group": "JBS S/A",
+    "members": [
+     "r0463",
+     "r0464",
+     "r0465",
+     "r0466",
+     "r0467",
+     "r0676"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "SQNWTNLT4KL1"
+    ],
+    "award_dollars": 190987485.02
+   },
+   {
+    "group": "National Beef",
+    "members": [
+     "r0593",
+     "r0594"
+    ],
+    "backup_inside": [],
+    "ueis": [],
+    "award_dollars": -0.0
+   },
+   {
+    "group": "Peterson Farms",
+    "members": [
+     "r0670",
+     "r0672"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "MH49EA53SKX7",
+     "MK7BCN12P1P7"
+    ],
+    "award_dollars": 50895392.49
+   },
+   {
+    "group": "Philadelphia Macaroni",
+    "members": [
+     "r0673",
+     "r0674"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "HFWATMQBHKA9"
+    ],
+    "award_dollars": 40590915.77
+   },
+   {
+    "group": "Prairie Farms Dairy",
+    "members": [
+     "r0423",
+     "r0685"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "DLP2YDPHLQT7",
+     "KM8HN5U3TRE8"
+    ],
+    "award_dollars": 39443133.75
+   },
+   {
+    "group": "Smithfield Foods",
+    "members": [
+     "r0795",
+     "r0796",
+     "r0797",
+     "r0798",
+     "r0799",
+     "r0800"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "WMMQQM7JK4C8"
+    ],
+    "award_dollars": 3378715.67
+   },
+   {
+    "group": "Teasdale Foods",
+    "members": [
+     "r0863",
+     "r0864"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "M77SN5TH6ET6"
+    ],
+    "award_dollars": 12766754.63
+   },
+   {
+    "group": "Tyson Foods",
+    "members": [
+     "r0870",
+     "r0909",
+     "r0910",
+     "r0911",
+     "r0912"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "MNAKFQWNLGQ8"
+    ],
+    "award_dollars": 20386683.0
+   },
+   {
+    "group": "entity r0285",
+    "members": [
+     "r0285",
+     "r0286"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "H1J3ATER7Y46"
+    ],
+    "award_dollars": 10397600.97
+   },
+   {
+    "group": "entity r0317",
+    "members": [
+     "r0317",
+     "r0318"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "ZSTBMNLHZ5P9"
+    ],
+    "award_dollars": 57231.0
+   },
+   {
+    "group": "entity r0486",
+    "members": [
+     "r0486",
+     "r0487"
+    ],
+    "backup_inside": [],
+    "ueis": [],
+    "award_dollars": -0.0
+   },
+   {
+    "group": "entity r0488",
+    "members": [
+     "r0488",
+     "r0489"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "MC2QEKLCQXA8"
+    ],
+    "award_dollars": 727133.4
+   },
+   {
+    "group": "entity r0539",
+    "members": [
+     "r0539",
+     "r0540"
+    ],
+    "backup_inside": [],
+    "ueis": [],
+    "award_dollars": -0.0
+   },
+   {
+    "group": "entity r0718",
+    "members": [
+     "r0718",
+     "r0874"
+    ],
+    "backup_inside": [],
+    "ueis": [
+     "YH8ZEYH9KDE7"
+    ],
+    "award_dollars": 1247994.39
+   }
+  ],
+  "seeds": 1000,
+  "baskets": {
+   "feasible_k1": 11256,
+   "feasible_with_owner_scenarios": 10619
+  },
+  "breaks": {
+   "Goodman Food Products": 637
+  }
+ },
+ "awards": {
+  "source": "USAspending.gov API v2: search/spending_by_award (awarding subtier Agricultural Marketing Service, award types A-D, three fiscal-year windows FY2024-FY2026) and recipient profiles",
+  "retrieved_utc": "2026-10-25T19:54:57Z",
+  "awards": 13798,
+  "link_rule": "QBL supplier -> UEI when the name core (qbl::core) equals a recipient name's core and the supplier's ZIP5 is the recipient's ZIP5 or an award place-of-performance ZIP5",
+  "amount_scope": "Full Award Amount per distinct candidate recipient UEI; no allocation to QBL suppliers or plants, no unit prices or capacity",
+  "suppliers": 981,
+  "linked": 341,
+  "ueis": 330,
+  "dollars": 13011216165.06
+ },
+ "provenance": {
+  "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+  "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+  "software_version": "0.4.0",
+  "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d",
+  "code_rev": "b7a5492ebab118d4dab03cf1fa3ff1ae60cac4be",
+  "code_sha256": "c3c440df35a5ee81f69c5adea6f1d8df6f47928b6911051ea2f532c353036062",
+  "inputs_sha256": {
+   "manifest.json": "b3f5a6f53fd3400042fcdb06d30d423952d45a54b880ce7c1f1281d5fcbd0b1b",
+   "catalog/mappings.csv": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+   "catalog/identities.csv": "20a62ebf8360a6738389067e86cc8781c4e2e4792887f6e49cd36593d46a07a4",
+   "catalog/owners.csv": "2c31a7b1bc71e8e7190e09d75d15bd80ea6bcdb6b0ef94aa733e722e905e31a3",
+   "catalog/usaspending.json": "1418de8397c95ff186ac1105358a2c967e0d2c303fd4556d2209f585c1740252",
+   "raw/QBL-2025-06-20.xlsx": "8ab793d0c6430aa1d93a36bd229da7953b49b2054aa9f5ad27621b383a7e433f",
+   "raw/QBL-2025-11-22.xlsx": "112b7960507ee81d4b28a1bf64091f4c79a6f692fe13709c2d6f34bf8f90676b",
+   "raw/QBL.xlsx": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822"
+  }
+ }
+}

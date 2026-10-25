@@ -35,9 +35,9 @@ The 0.4 work is recorded in the [findings and review log](findings/2026-10-25-op
    and facility capacity before adding monetary objectives or capacity constraints.
    `python analysis/check_evidence.py` checks the available contextual evidence.
 3. **Programme-class count.** Thirty products with two suppliers have a minimum resilient
-   panel of 31; their number of panels remains unestablished. A new run can use
-   `srl count results/whole-classes-v0.4/program-min2.json --timeout 60`; retain it
-   separately from the 10-second observation.
+   panel of 31; their number of panels remains unestablished. A separate 60-second
+   follow-up also timed out (`results/program-min2-count60-v0.4.json`). Improve the
+   signature-count search before another campaign; retain the censored observations.
 4. **Independent entity verification.** Audit candidate UEI joins and reported parents
    against authoritative facility records. Date ownership changes separately from
    workbook observations. No outage probabilities are available.

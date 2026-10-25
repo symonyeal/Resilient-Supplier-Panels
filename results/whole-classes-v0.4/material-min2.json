@@ -1,0 +1,139 @@
+{
+ "schema_version": "1.0",
+ "kind": "instance",
+ "V": [
+  "r0033",
+  "r0039",
+  "r0116",
+  "r0157",
+  "r0204",
+  "r0249",
+  "r0250",
+  "r0434",
+  "r0465",
+  "r0476",
+  "r0508",
+  "r0577",
+  "r0677",
+  "r0697",
+  "r0741",
+  "r0795",
+  "r0796",
+  "r0798",
+  "r0799",
+  "r0804",
+  "r0931",
+  "r0938"
+ ],
+ "P": [
+  "100127 - beef can-24/24 oz",
+  "100139 - pork can-24/24 oz",
+  "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+  "100144 - pork crumbles, fully cooked, with spp, lightly seasoned, \u00bc\u201d dice",
+  "100145 - pork patties with spp, 2.7 oz. home-style, fully cooked, iqf",
+  "100146 - pork patties with spp, 1.2 oz., fully cooked, iqf",
+  "100193 - pork shoulder, picnics, bulk, boneless, frozen",
+  "100526 - beef stew can-24/24 oz",
+  "110380 - pork chops bnls frz",
+  "110730 - pulled pork, fully cooked",
+  "110900 - mini pit ham",
+  "110940 - chicken can - 24/15 oz"
+ ],
+ "E": [
+  [
+   "r0039",
+   "r0204",
+   "r0508",
+   "r0804",
+   "r0931"
+  ],
+  [
+   "r0039",
+   "r0204",
+   "r0508",
+   "r0931"
+  ],
+  [
+   "r0249",
+   "r0250"
+  ],
+  [
+   "r0249",
+   "r0250",
+   "r0697"
+  ],
+  [
+   "r0249",
+   "r0250",
+   "r0697"
+  ],
+  [
+   "r0249",
+   "r0250",
+   "r0697"
+  ],
+  [
+   "r0465",
+   "r0795",
+   "r0796",
+   "r0798",
+   "r0799"
+  ],
+  [
+   "r0677",
+   "r0804",
+   "r0931",
+   "r0938"
+  ],
+  [
+   "r0033",
+   "r0116",
+   "r0157"
+  ],
+  [
+   "r0577",
+   "r0697"
+  ],
+  [
+   "r0476",
+   "r0741"
+  ],
+  [
+   "r0204",
+   "r0434",
+   "r0804",
+   "r0931"
+  ]
+ ],
+ "k": 1,
+ "F": [],
+ "variant": "strict",
+ "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+ "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+ "software_version": "0.4.0",
+ "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d",
+ "names": {
+  "r0033": "American Custom Meats",
+  "r0039": "AmeriQual Group LLC",
+  "r0116": "Calumet Diversified Meats",
+  "r0157": "Chicago Meat Authority",
+  "r0204": "Crider Foods Inc",
+  "r0249": "Don Lee Farms/Goodman Food Products",
+  "r0250": "Don Lee Farms/Goodman Food Products",
+  "r0434": "Hormel Foods Corp",
+  "r0465": "JBS Swift & Company",
+  "r0476": "John Hofmeister & Son Inc",
+  "r0508": "Lakeside Food",
+  "r0577": "Mistica Foods",
+  "r0677": "Pinnacle Foods",
+  "r0697": "ProPortion Foods, LLC",
+  "r0741": "Rose Packing Company Inc",
+  "r0795": "Smithfield Foods",
+  "r0796": "Smithfield Foods",
+  "r0798": "Smithfield Foods",
+  "r0799": "Smithfield Foods",
+  "r0804": "Sopakco Inc.",
+  "r0931": "Vanee Foods Company",
+  "r0938": "Vietti Acquisition"
+ }
+}

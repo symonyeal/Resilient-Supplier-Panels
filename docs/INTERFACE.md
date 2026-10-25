@@ -1,6 +1,6 @@
 # Command line and exchange interface
 
-Version 0.3.0 is one program, `srl`, written in Rust. The frozen QBL, manifest, mappings
+Version 0.4.0 is one program, `srl`, written in Rust. The frozen QBLs, manifest, catalogs
 and JSON schema are compiled into it, so commands work outside the checkout. Build it with
 `cargo install --locked --path .`, or use a release binary. From a checkout,
 `cargo run --release -- <command>` is equivalent.
@@ -17,6 +17,20 @@ and JSON schema are compiled into it, so commands work outside the checkout. Bui
 | `srl report FILE [-o FILE]` | findings tables from a saved campaign |
 | `srl site [--results FILE] [--root DIR]` | public case data in `DIR/site` |
 | `srl acquire` | download the sources to `data/fetched` (needs curl and network) |
+| `srl change [--seed N] [-o FILE]` | observed qualification changes across three frozen workbooks |
+| `srl gaps [--seeds N] [--k N] [-o FILE]` | ranked blockers, exact uniform shares, greedy approvals |
+| `srl entities [--seeds N] [-o FILE]` | identity sensitivities, entity outage exposure, candidate recipient totals |
+
+`--snapshot NAME` selects `QBL-2025-06-20.xlsx`, `QBL-2025-11-22.xlsx` or the default
+`QBL.xlsx`. `change` always uses all three; `entities` requires the default because its
+catalogs use that workbook's row IDs. `--data-dir PATH` overrides embedded data with a
+directory containing the same layout. The analysis commands record source and input
+hashes; source-file hashes can be null when a distributed binary has no source checkout.
+Seeds count repeated draws, not unique baskets or a demand population.
+
+`srl build --class material --min-suppliers 2 --k 1 -o class.json` selects every strict
+material product with at least two suppliers. Product arguments, `--basket`, and `--class`
+are alternative selectors. `--min-suppliers` requires `--class`.
 
 ## Files
 
