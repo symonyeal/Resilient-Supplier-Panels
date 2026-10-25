@@ -337,27 +337,6 @@ fn provenance(L: &bench::Limits, seed: u64) -> Result<Value, String> {
               "cpus": std::thread::available_parallelism().map_or(0, |n| n.get()), "memory": "not measured"}))
 }
 
-/// SHA-256 over the crate sources (path, then LF-normalised bytes) in path order.
-pub fn code_sha256(root: &Path) -> Result<String, String> {
-    let mut files = vec![PathBuf::from("Cargo.toml"), PathBuf::from("Cargo.lock"), PathBuf::from("build.rs")];
-    let mut stack = vec![PathBuf::from("src")];
-    while let Some(d) = stack.pop() {
-        for e in std::fs::read_dir(root.join(&d)).map_err(|e| e.to_string())? {
-            let p = d.join(e.map_err(|e| e.to_string())?.file_name());
-            if root.join(&p).is_dir() { stack.push(p) } else if p.extension().is_some_and(|x| x == "rs") { files.push(p) }
-        }
-    }
-    let name = |p: &PathBuf| p.to_string_lossy().replace('\\', "/");
-    files.sort_by_key(name);
-    let mut buf = Vec::new();
-    for p in &files {
-        buf.extend(name(p).as_bytes());
-        let b = std::fs::read(root.join(p)).map_err(|e| format!("{}: {e}", p.display()))?;
-        buf.extend(String::from_utf8_lossy(&b).replace("\r\n", "\n").as_bytes());
-    }
-    Ok(data::sha256(&buf))
-}
-
 /// Writes the public case data only after their certificates pass.
 fn site(a: &Args) -> Result<(), Fail> {
     let root = PathBuf::from(a.get("--root").unwrap_or("."));
@@ -368,7 +347,7 @@ fn site(a: &Args) -> Result<(), Fail> {
     let manifest = json::loads(&data::bytes("manifest.json")?)?;
     let mut prov = contracts::provenance()?;
     prov.insert("code_rev".into(), json!(git(&root, &["rev-parse", "HEAD"])));
-    prov.insert("code_sha256".into(), json!(code_sha256(&root)?));
+    prov.insert("code_sha256".into(), json!(portfolio::code_sha256(&root)?));
     prov.insert("dirty".into(), json!(!git(&root, &["status", "--porcelain", "--", "src", "Cargo.toml", "Cargo.lock", "build.rs"]).is_empty()));
     prov.insert("identity_candidates".into(), json!(portfolio::identity_candidates(&s)));
     prov.insert("snapshot".into(), manifest["QBL.xlsx"].clone());

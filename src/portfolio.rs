@@ -1,6 +1,7 @@
 //! Certified public cases. The browser selects recorded results and runs no solver.
 
 use std::collections::BTreeMap;
+use std::path::{Path, PathBuf};
 
 use crate::audit::{self, round, Matrix};
 use crate::bench::{self, essential_json, infeasibility_json, LIMITS};
@@ -265,6 +266,27 @@ pub fn identity_candidates(s: &audit::Snapshot) -> usize {
 /// Every public case; fails when a certificate does not pass.
 pub fn cases(M: &Matrix, names: &BTreeMap<String, String>) -> Result<Vec<Value>, String> {
     CASES.iter().map(|(id, t, n, P)| case(M, names, id, t, n, P)).collect()
+}
+
+/// SHA-256 over the crate sources (path, then LF-normalised bytes) in path order.
+pub fn code_sha256(root: &Path) -> Result<String, String> {
+    let mut files: Vec<PathBuf> = ["Cargo.toml", "Cargo.lock", "build.rs"].map(PathBuf::from).to_vec();
+    let mut stack = vec![PathBuf::from("src")];
+    while let Some(d) = stack.pop() {
+        for e in std::fs::read_dir(root.join(&d)).map_err(|e| e.to_string())? {
+            let p = d.join(e.map_err(|e| e.to_string())?.file_name());
+            if root.join(&p).is_dir() { stack.push(p) } else if p.extension().is_some_and(|x| x == "rs") { files.push(p) }
+        }
+    }
+    let name = |p: &PathBuf| p.to_string_lossy().replace('\\', "/");
+    files.sort_by_key(name);
+    let mut buf = Vec::new();
+    for p in &files {
+        buf.extend(name(p).as_bytes());
+        let b = std::fs::read(root.join(p)).map_err(|e| format!("{}: {e}", p.display()))?;
+        buf.extend(String::from_utf8_lossy(&b).replace("\r\n", "\n").as_bytes());
+    }
+    Ok(crate::data::sha256(&buf))
 }
 
 #[cfg(test)]

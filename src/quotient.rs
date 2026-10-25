@@ -38,7 +38,8 @@ pub struct Count {
     pub reduced: usize,
 }
 
-fn binom(n: usize, r: usize) -> u128 {
+/// C(n, r), exact: a product of r consecutive integers is divisible by r!.
+pub fn binom(n: usize, r: usize) -> u128 {
     (0..r).fold(1u128, |a, i| a * (n - i) as u128 / (i + 1) as u128)
 }
 

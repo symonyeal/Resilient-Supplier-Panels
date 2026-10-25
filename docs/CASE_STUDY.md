@@ -59,29 +59,30 @@ in the browser.
 The qualification matrix defines feasibility. For uniform k-failure resilience, each
 product must have at least k + 1 members of the panel qualified for it.
 
-1. HiGHS solves the minimum-cardinality MILP.
+1. An exact branch and bound solves the minimum-cardinality problem.
 2. Berge enumerates inclusion-minimal transversals of the scenario hypergraph.
 3. Direct matrix checks certify every returned panel and give a removal witness for each
    member. This tests the hypergraph transformation independently.
-4. A separately encoded MILP excludes every listed panel and searches for an omitted one.
-   Infeasibility establishes exhaustion at the solver assurance level, not formal proof.
+4. A separately written exhaustive search excludes every listed panel and looks for an
+   omitted one. Finding none proves the family complete (MODEL, Theorem 3.3).
 5. The optimum size must agree with the smallest member of the certified complete family.
 
 The build stops if these checks fail or a case cannot be completely stored within its
 limit. Input and mapping hashes, the thesis pin, software version, Git revision and a
-source fingerprint accompany the results. The fingerprint uses LF-normalized Python
+source fingerprint accompany the results. The fingerprint uses LF-normalized Rust
 source so Windows and hosted CI check the same content.
 
 ## Engineering judgment
 
-The original 88-instance experiment is retained at its original revision and limits.
-Berge completed 84 runs; FK-B and MILP enumeration each completed 76. The single MILP
-minimum took a median of 0.8 ms in that experiment. These are historical measurements,
-not timings of the current website or a new benchmark campaign.
+The 88-instance experiment was rerun in release 0.3 on the same instances and limits.
+Berge completed all 88 runs, the slowest in 12 ms; MMCS and the cut route completed 83,
+FK-B 79. Every family now has an exact count, and a counting theorem gives the same
+numbers without listing the panels. The minimum took a median of 2 µs. The 0.2 Python
+measurements (Berge 84 of 88, a 0.8 ms median minimum) are kept beside them.
 
 The measured result guides the interface: show the minimum and its explanation first;
 offer enumeration when alternatives matter. Retain the thesis algorithms as a checked
-research comparison. See [findings](findings/2026-10-15-supplier-resilience.md) and
+research comparison. See [findings](findings/2026-10-25-rust-campaign.md) and
 [benchmark protocol](BENCHMARKS.md).
 
 ## Limits
@@ -93,5 +94,5 @@ labelled interpretation choices. There is one qualification snapshot, no histori
 backtest and no disruption probabilities. This is a transparent research case study for
 screening coverage questions, not a purchasing recommendation.
 
-Rebuild the cases with `python analysis/build_site.py`; verify their matrix certificates
-with `python -m pytest tests/test_portfolio.py -q`.
+Rebuild the cases with `cargo run --release -- site`; verify their matrix certificates
+with `cargo test --release --test site`.

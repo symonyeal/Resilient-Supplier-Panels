@@ -62,4 +62,6 @@ Rung 1 is tested by H5 and rung 2 by K7. Rungs 3 and 4 are stated limits and are
 ## Evidence log
 
 Scored in [2026-10-15-supplier-resilience.md](2026-10-15-supplier-resilience.md) from
-`results/suite-seed1.json` by `srl/verdicts.py`.
+`results/suite-seed1.json` by `srl/verdicts.py` (release 0.2), and in
+[2026-10-25-rust-campaign.md](2026-10-25-rust-campaign.md) from
+`results/suite-seed1-v0.3.json` by `src/verdicts.rs` (release 0.3).

@@ -1,69 +1,115 @@
 # Validation
 
-## Common-owner case, 20 October 2026
-
-The frozen-qualification study in COMMON_OWNER_CASE.md was checked by direct exhaustive
-enumeration, matrix feasibility/minimality checks and a separate MILP completeness search
-for each of its four cases. All returned complete. The one-supplier and combined
-one-supplier/common-owner families were compared as sets and agreed exactly. The existing
-suite returned 84 passed; Ruff and dependency checks passed. The pinned thesis revision
-was used. These are conditional coverage checks, not an empirical outage or capacity test.
-
 This file lists what must be checked, how, and what has been checked. A check is a
 certificate (feasibility, a witness, agreement of independent routes, a completeness
-search), never an output snapshot.
+search), never an output snapshot; the one exception, agreement with the thesis code's
+recorded outputs, is labelled T.
 
 Assurance levels:
 - **D**: direct certificate from the matrix.
-- **X**: exhaustive agreement.
+- **X**: exhaustive: agreement with exhaustive search over subsets, or the exhaustive
+  completeness search (MODEL, Theorem 3.3).
 - **A**: agreement of independent routes.
-- **S**: solver result (HiGHS), not a formal proof.
-- **F**: FK-A duality decision (thesis code).
+- **Q**: the class count of MODEL, Theorem 4.
+- **F**: FK-A duality decision (thesis algorithm).
+- **T**: agreement with recorded outputs of the thesis code (`fka`/`fkb` at `1bb9de4`).
+- **S**: solver result (HiGHS), not a formal proof. Release 0.2 only.
 
-## Mathematics (tests, every commit)
+## Release 0.3 (Rust), 25 October 2026
 
-| Claim | Check | Level | Status |
-| --- | --- | --- | --- |
-| Tr on a hand-worked instance: {ac, bc, bd}; k = 1 forces abcd | `test_panels.py` | hand | pass |
-| Empty basket → {∅}; empty edge → infeasible with witness | `test_routes.py` | D | pass |
-| Single-supplier product is essential and blocks k = 1 | `test_routes.py` | D, X | pass |
-| Duplicate and superset edges removed; Tr unchanged; provenance kept | `test_routes.py` | X | pass |
-| Identical signatures: interchangeable at k = 0, both needed at k = 1 | `test_routes.py` | X | pass |
-| Correlated scenario F = {a, b} | `test_routes.py` | X | pass |
-| Berge = FK-B stream = MILP enumeration = exhaustive on 60 random instances, k ∈ {0, 1, 2} | `test_routes.py` | X, A | pass |
-| Every panel is minimal by matrix witness; essential set = intersection of Tr; MILP min = min size | `test_routes.py` | D, X | pass |
-| Completeness search accepts Tr and returns the panel removed from it | `test_routes.py` | S | pass |
-| Permutation invariance (suppliers and products reordered) | `test_routes.py` | X | pass |
-| FK-B stream = thesis `dualise` | `test_routes.py` | A | pass |
-| Timeout yields partial output, all certified; cap stops streams; Berge counts exactly | `test_bench.py` (slow) | D | pass |
-| Report never prints a partial count as exact | `test_bench.py` | — | pass |
+**Baseline.** The Python package at `99cd50c` passed its gate (84 tests, ruff, pip check).
+Its outputs were captured on the thesis code checked out at the pin `1bb9de4` (the local
+installation was an editable checkout at a later thesis commit, whose split-variable
+refactor gives the same choices). The capture is kept outside the repository; the
+compact part every commit checks is `tests/reference/`.
 
-## Data (tests, every commit)
+**Port parity** (`tests/parity.rs` with the capture, `tests/thesis.rs` with the compact
+reference). Two-way comparison on every key; the comparator is itself tested on planted
+differences, and a planted change of FK-A's tie-break is detected.
 
-| Claim | Check | Status |
+| Output | Compared on | Result |
 | --- | --- | --- |
-| Frozen snapshot hash = manifest | `test_qbl.py` | pass |
-| Reader matches an independent reader (openpyxl literals) on row 2 | `test_qbl.py` | pass |
-| Multiline cells split; repeated rows merge; name collisions stay distinct | `test_qbl.py` | pass |
-| Missing names or products reported, not dropped silently | `test_qbl.py` | pass |
-| Stale-snapshot flag (> 90 days) | `test_qbl.py` | pass |
-| Every snapshot token has a dictionary entry and one merged image | `test_catalog.py` | pass |
+| workbook rows, supplier records, issues, catalog, merged images, audit | all 983 rows, 715 tokens | equal |
+| strict and merged matrices | 710 strict products and the merged ones | equal |
+| Python Mersenne Twister draws; basket lists | seeds 0, 1, 2, 12345, 2^40 + 7; baskets for seeds 0–5 | equal |
+| hypergraph with provenance, stats, classes, infeasibility and essential witnesses, minimum size and status | 88 seed-1 instances and both sensitivity variants of each | equal |
+| Berge family, member witnesses, orbits, first 300 FK-B panels in order | 88 seed-1 instances | equal |
+| FK-A tree and DAG nodes; with one panel removed, tree and DAG nodes and the conflicting assignment | 46 families of at most 2,000 (40 with two or more panels) | equal |
+| all of the above, FK-B node counts per dualisation pass (130 instances), exhaustive family | 300 random instances, k ∈ {0, 1, 2}, a quarter with explicit scenarios | equal |
+| pre-registered scores; site evidence of the 0.2 campaign | `results/suite-seed1.json` | equal |
+| site cases (families, certificates, outages, shortlists) | 3 cases × 2 failure budgets | equal with the 0.2 optimum as the shortlist's first panel; see DECISIONS for the deterministic choice |
+| `results-seed1.md` rebuilt from the saved 0.2 campaign | whole file | equal except the line naming the command |
+| common-owner instances and complete families | 4 cases | equal: 32, 168, 21 and 168 panels |
 
-## Empirical results (per suite run)
+**New routes.** MMCS and the class count agree with Berge on every family of both parity
+sets; the cut route and the completeness search do on every family of at most 2,000.
+
+## Tests (every commit)
+
+`cargo test --release`; `cargo clippy --release --all-targets -- -D warnings` is clean.
+
+| Claim | Check | Level |
+| --- | --- | --- |
+| Tr on a hand-worked instance: {ac, bc, bd}; k = 1 forces abcd | `tests/routes.rs` | hand |
+| Empty basket → {∅}; empty edge → infeasible with witness | `tests/routes.rs` | D |
+| Single-supplier product is essential and blocks k = 1 | `tests/routes.rs` | D, X |
+| Duplicate and superset edges removed; Tr unchanged; provenance kept | `tests/routes.rs`, `src/instance.rs` | X |
+| Identical signatures: interchangeable at k = 0, both needed at k = 1 | `tests/routes.rs` | X |
+| Correlated scenario F = {a, b} | `tests/routes.rs` | X |
+| Berge = FK-B = cuts = MMCS = exhaustive = class count on 350 random instances, k ∈ {0, 1, 2}, with and without scenarios | `tests/routes.rs` | X, A, Q |
+| Every panel minimal by matrix witness; essential set = intersection of Tr; minimum = least size; completeness accepts Tr and returns the panel removed from it | `tests/routes.rs` | D, X |
+| Permutation invariance (suppliers and products reordered) | `tests/routes.rs` | X |
+| Timeout yields partial output, all certified; cap stops streams; Berge counts exactly; working-set limit reported as `memory`; a failed route is `error` | `tests/routes.rs` | D |
+| Class count of 435³ panels on three disjoint 30-supplier products at k = 1 | `tests/routes.rs` | Q |
+| Agreement with the thesis code on 300 random and 88 seed-1 instances | `tests/thesis.rs` | T |
+| Saved minima, witnesses and essential sets of both campaigns recomputed; both reports rebuild byte for byte | `tests/site.rs` | D |
+| Published cases: certificates, exhaustion, outage coverage, data and source hashes, evidence = campaign | `tests/site.rs` | D, X |
+| Report never prints a partial count as exact | `src/report.rs` | — |
+| Snapshot hash = manifest; reader = independent reader (openpyxl literals) on row 2; multiline cells, merged rows, name collisions, missing fields, ZIP padding, staleness | `tests/data.rs` | — |
+| Every token has an entry and one merged image; no token holds two codes unsplit | `tests/data.rs` | — |
+| CLI: versioned pipeline (1,284 panels on the example by every route and by `count`), legacy and UTF-16 input, input errors exit 2, failed verification exits 1, data override, schema, campaigns never overwritten | `tests/cli.rs` | — |
+
+## Empirical results (per campaign)
 
 Every instance record in `results/suite-seed*.json` carries:
 - the minimum panel and a minimality witness for each member (D);
-- either an infeasibility witness, agreeing with HiGHS, or the essential suppliers with
-  their witnesses (D);
+- either an infeasibility witness, agreeing with the solver, or the essential suppliers
+  with their witnesses (D);
 - for each route, every returned panel certified minimal (D);
-- for complete families:
+- for complete, fully stored families:
   - agreement between routes (A);
-  - MILP exhaustion (S);
+  - the completeness search (X in 0.3; MILP exhaustion, S, in 0.2);
   - exhaustive agreement where the support is at most 18 (X);
   - an FK-A duality decision within 200,000 nodes (F);
-  - the essential set equal to the intersection of the family (D, A).
+  - the essential set equal to the intersection of the family (D, A);
+- in 0.3, the class count and its agreement with the enumerated count (Q).
 
-### Seed 1 (code `09cb123`, clean; data hash = manifest; 88 instances)
+### Seed 1, release 0.3 (code `55e8e4a`, clean; data hash = manifest; 88 instances)
+
+| Check | Level | Passed |
+| --- | --- | --- |
+| minimum panel certified minimal (or infeasible) | D | 88 / 88 |
+| solver infeasibility ⇔ matrix witness | D | 88 / 88 |
+| every panel returned by every route certified minimal (partial runs included) | D | 352 / 352 runs |
+| complete routes agree on the family | A | 83 / 83 with a fully stored family |
+| completeness search finds no missing panel | X | 83 / 83 |
+| exhaustive search agrees (support ≤ 18) | X | 46 / 46 |
+| essential set = intersection of the complete family | D, A | 50 / 50 |
+| FK-A decides C = Tr(H); `fk_a_memo` agrees | F | 46 / 46 (families ≤ 2,000) |
+| class count = enumerated count | Q, A | 88 / 88 |
+| class count and class vectors = stored complete family | Q, X | 83 / 83 |
+| minimum, statuses, witnesses, sensitivity verdicts, orbits, FK-A counts = 0.2 campaign | — | 88 / 88 |
+
+Not checked: the five families above the 10,000-panel cap are counted (Berge counts beyond
+storage, and the class count agrees) but not stored, so neither the completeness search
+nor FK-A ran on them; any check under the sensitivity variants beyond feasibility and the
+minimum.
+
+Agreement of Berge with FK-B and MMCS tests the shared scenario hypergraph against itself.
+The independent test of that transformation is the agreement of exhaustive search and the
+completeness search, both of which read the matrix.
+
+### Seed 1, release 0.2 (code `09cb123`, clean; data hash = manifest; 88 instances)
 
 | Check | Level | Passed |
 | --- | --- | --- |
@@ -84,6 +130,18 @@ Not checked:
 Agreement of Berge with FK-B tests the shared scenario hypergraph against itself. The
 independent test of that transformation is the agreement of exhaustive search and MILP
 exhaustion, both of which read the matrix.
+
+## Common-owner case, 20 October 2026
+
+The frozen-qualification study in COMMON_OWNER_CASE.md was checked by direct exhaustive
+enumeration, matrix feasibility/minimality checks and a separate MILP completeness search
+for each of its four cases. All returned complete. The one-supplier and combined
+one-supplier/common-owner families were compared as sets and agreed exactly. The existing
+suite returned 84 passed; Ruff and dependency checks passed. The pinned thesis revision
+was used. These are conditional coverage checks, not an empirical outage or capacity test.
+
+In release 0.3 the four cases were rebuilt and enumerated with `srl`: instances, names,
+hashes and complete families equal the committed documents.
 
 ## Maintenance assessment (2026-10-15)
 
