@@ -103,14 +103,14 @@
     </section>
 
     <section class="wrap method-section" id="method"><div class="section-heading"><div><p class="eyebrow">04 / Method</p><h2>Every panel is verified independently of the solver that found it.</h2></div></div>
-      <ol class="method-steps"><li><span class="step-number">01</span><h3>Freeze</h3><p>Hashed workbook and product mappings.</p></li><li><span class="step-number">02</span><h3>Solve</h3><p>MILP for the minimum; Berge and FK-B for the alternatives.</p></li><li><span class="step-number">03</span><h3>Verify</h3><p>Matrix witnesses prove minimality; a second MILP checks completeness.</p></li></ol>
+      <ol class="method-steps"><li><span class="step-number">01</span><h3>Freeze</h3><p>Hashed workbook and product mappings.</p></li><li><span class="step-number">02</span><h3>Solve</h3><p>Exact branch and bound for the minimum; Berge, FK-B and MMCS for the alternatives.</p></li><li><span class="step-number">03</span><h3>Verify</h3><p>Matrix witnesses prove minimality; a separate exhaustive search checks completeness.</p></li></ol>
       <div class="assumptions"><div><h3>Shown</h3><p>Each product keeps a qualified supplier under the modelled failures. Minimal: no supplier removable. Minimum: fewest suppliers.</p></div><div><h3>Not shown</h3><p>Capacity, cost, willingness to bid, delivery, shared plants, common ownership. Not a purchasing recommendation.</p></div></div>
       <details class="provenance"><summary>Provenance</summary><dl id="provenance"></dl><p><a href="cases.json" download>All cases (JSON)</a> · <a href="document-1.0.json" download>Schema 1.0</a> · <a href="https://github.com/symonyeal/Resilient-Supplier-Panels/blob/main/docs/MODEL.md">Model and proofs</a></p></details>
     </section>
-      <section class="reproduce"><div class="wrap reproduce-inner"><div><p class="eyebrow">05 / Reproduce</p><h2>Four commands reproduce the lead case.</h2><p>Or replace the CSV with your own basket.</p></div><div><pre><code>python -m pip install "setuptools&gt;=77" wheel
-python -m pip install --no-build-isolation .
+      <section class="reproduce"><div class="wrap reproduce-inner"><div><p class="eyebrow">05 / Reproduce</p><h2>Four commands reproduce the lead case.</h2><p>Or replace the CSV with your own basket.</p></div><div><pre><code>cargo install --locked --path .
 srl build --basket examples/canned.csv --k 1 -o basket.json
-srl solve basket.json -o solution.json</code></pre><a class="text-link" href="https://github.com/symonyeal/Resilient-Supplier-Panels#reproduce">Installation <span aria-hidden="true">↗</span></a></div></div></section>
+srl solve basket.json -o solution.json
+srl enum basket.json -o family.json</code></pre><a class="text-link" href="https://github.com/symonyeal/Resilient-Supplier-Panels#reproduce">Installation <span aria-hidden="true">↗</span></a></div></div></section>
   </main>
   <footer class="wrap"><p>Resilient Supplier Panels <span>·</span> Saimon Y. Islam</p><p>USDA public data · <a href="https://github.com/symonyeal/Hypergraph-Dualization">MSc thesis algorithms</a> · <a href="https://github.com/symonyeal/Resilient-Supplier-Panels">Source ↗</a></p></footer>
   <noscript><p class="wrap">Requires JavaScript. Without it: <a href="cases.json">case data</a>, <a href="https://github.com/symonyeal/Resilient-Supplier-Panels/blob/main/docs/CASE_STUDY.md">case study</a>.</p></noscript>
