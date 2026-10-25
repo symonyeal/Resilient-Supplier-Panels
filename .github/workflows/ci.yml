@@ -35,6 +35,9 @@ jobs:
           ./srl enum basket.json -o family.json
           ./srl verify family.json | tee verify.json
           grep -q '"panels": 1284' verify.json && grep -q '"exhaustion": "complete"' verify.json
+          ./srl --snapshot QBL-2025-06-20.xlsx audit > prior.json
+          ./srl entities --seeds 1 > entities.json
+          ./srl gaps --seeds 1 > gaps.json
       - uses: actions/upload-artifact@v4
         with:
           name: srl-${{ matrix.os }}

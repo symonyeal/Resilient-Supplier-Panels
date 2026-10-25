@@ -1,0 +1,18 @@
+{
+ "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+ "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+ "software_version": "0.4.0",
+ "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d",
+ "code_rev": "b7a5492ebab118d4dab03cf1fa3ff1ae60cac4be",
+ "code_sha256": "c3c440df35a5ee81f69c5adea6f1d8df6f47928b6911051ea2f532c353036062",
+ "inputs_sha256": {
+  "manifest.json": "b3f5a6f53fd3400042fcdb06d30d423952d45a54b880ce7c1f1281d5fcbd0b1b",
+  "catalog/mappings.csv": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+  "catalog/identities.csv": "20a62ebf8360a6738389067e86cc8781c4e2e4792887f6e49cd36593d46a07a4",
+  "catalog/owners.csv": "2c31a7b1bc71e8e7190e09d75d15bd80ea6bcdb6b0ef94aa733e722e905e31a3",
+  "catalog/usaspending.json": "1418de8397c95ff186ac1105358a2c967e0d2c303fd4556d2209f585c1740252",
+  "raw/QBL-2025-06-20.xlsx": "8ab793d0c6430aa1d93a36bd229da7953b49b2054aa9f5ad27621b383a7e433f",
+  "raw/QBL-2025-11-22.xlsx": "112b7960507ee81d4b28a1bf64091f4c79a6f692fe13709c2d6f34bf8f90676b",
+  "raw/QBL.xlsx": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822"
+ }
+}

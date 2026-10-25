@@ -1,0 +1,271 @@
+{
+ "seed": 1,
+ "k": 1,
+ "snapshots": [
+  {
+   "name": "QBL-2025-06-20.xlsx",
+   "date": "2025-06-20",
+   "suppliers": 780,
+   "precise_products": 469,
+   "single": 221,
+   "campaign_baskets": {
+    "baskets": 40,
+    "absent": 4,
+    "feasible": 8
+   },
+   "own_baskets": {
+    "baskets": 40,
+    "absent": 0,
+    "feasible": 11
+   }
+  },
+  {
+   "name": "QBL-2025-11-22.xlsx",
+   "date": "2025-11-22",
+   "suppliers": 941,
+   "precise_products": 471,
+   "single": 220,
+   "campaign_baskets": {
+    "baskets": 40,
+    "absent": 2,
+    "feasible": 10
+   },
+   "own_baskets": {
+    "baskets": 40,
+    "absent": 0,
+    "feasible": 11
+   }
+  },
+  {
+   "name": "QBL.xlsx",
+   "date": "2026-10-15",
+   "suppliers": 981,
+   "precise_products": 451,
+   "single": 217,
+   "campaign_baskets": {
+    "baskets": 40,
+    "absent": 0,
+    "feasible": 10
+   },
+   "own_baskets": {
+    "baskets": 40,
+    "absent": 0,
+    "feasible": 10
+   }
+  }
+ ],
+ "steps": [
+  {
+   "suppliers": {
+    "before": 780,
+    "after": 941,
+    "kept": 778,
+    "entered": 163,
+    "left": 2
+   },
+   "products": {
+    "before": 469,
+    "after": 471,
+    "kept": 468,
+    "entered": 3,
+    "left": 1
+   },
+   "single": {
+    "before": 221,
+    "after": 220
+   },
+   "gained": [
+    "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+    "beef spp pty 85/15 frz 2.0 mma ctn-40 lb",
+    "turkey, bulk"
+   ],
+   "lost": [
+    "soup crm of chicken rdu sod ctn"
+   ],
+   "approvals": {
+    "added": 9,
+    "removed": 7
+   },
+   "from": "QBL-2025-06-20.xlsx",
+   "to": "QBL-2025-11-22.xlsx"
+  },
+  {
+   "suppliers": {
+    "before": 941,
+    "after": 981,
+    "kept": 928,
+    "entered": 53,
+    "left": 13
+   },
+   "products": {
+    "before": 471,
+    "after": 451,
+    "kept": 445,
+    "entered": 6,
+    "left": 26
+   },
+   "single": {
+    "before": 220,
+    "after": 217
+   },
+   "gained": [],
+   "lost": [
+    "chicken boned can-12/50 oz",
+    "orange juice single ctn",
+    "turkey taco filling ctn-30 lb"
+   ],
+   "approvals": {
+    "added": 3,
+    "removed": 26
+   },
+   "from": "QBL-2025-11-22.xlsx",
+   "to": "QBL.xlsx"
+  }
+ ],
+ "campaign_baskets_changed": [
+  {
+   "P": [
+    "beef 100% pty 85/15 frz 2.0 mma ctn-40 lb",
+    "beef 100% pty 90/10 frz 2.0 mma ctn-40 lb",
+    "beef bnls special trm frz ctn-60 lb",
+    "beef coarse ground frz ctn-60 lb",
+    "beef course ground frz ctn-60 lb",
+    "beef diced frz ctn-60 lb",
+    "beef fine ground frz ctn-40 lb",
+    "beef fine ground frz pkg-40/1 lb",
+    "beef fresh bnls combo-20/2000 lb",
+    "beef roast round frz ctn-38-42 lb",
+    "beef spp pty 85/15 frz 2.0 mma ctn-40 lb",
+    "chicken f ajit a strips ctn-30 lb"
+   ],
+   "status": [
+    "absent",
+    "infeasible",
+    "infeasible"
+   ]
+  },
+  {
+   "P": [
+    "apples gala fresh ctn",
+    "apples slices can",
+    "beans great northern can",
+    "beans pinto can",
+    "beans small red can",
+    "beef crumbles w/spp pkg-4/10 lb",
+    "bison ground lean frz pkg-40/1 lb",
+    "chicken drumsticks frz pkg-8/5 lb",
+    "chicken, bulk",
+    "corn cream style can",
+    "eggs whole liq bulk-tank",
+    "fruit and nut mix dried pkg",
+    "frz potatoes russet fresh ctn",
+    "grape variety fresh 19 lb",
+    "peaches cling slices ex lt can",
+    "pistachio roasted in shell pkg 12/2 lb",
+    "potatoes russet fresh ctn",
+    "turkey breast deli frz ctn-40 lb",
+    "turkey chilled-bulk",
+    "turkey taco filling ctn-30 lb"
+   ],
+   "status": [
+    "absent",
+    "infeasible",
+    "infeasible"
+   ]
+  },
+  {
+   "P": [
+    "dched - cheddar",
+    "dppc - pasteurized process cheese",
+    "em - evaporated milk",
+    "en - egg noodles",
+    "ifd - infant formula",
+    "mc - macaroni and cheese (dry)",
+    "pan - pancakeswholewheat fz",
+    "rp - rice products (domestic)",
+    "rsp - raw shelled peanuts",
+    "ssb1 - sunflower seed butter",
+    "wf - wheat flour products",
+    "wr - wild rice"
+   ],
+   "status": [
+    "absent",
+    "absent",
+    "infeasible"
+   ]
+  },
+  {
+   "P": [
+    "bfm - bakery flour mix",
+    "cr - crackers (saltine)",
+    "dched - cheddar",
+    "dppc - pasteurized process cheese",
+    "dyo - high protein yogurt",
+    "em - evaporated milk",
+    "pa - pasta",
+    "pa - pasta - pasta product",
+    "pan - pancakeswholewheat fz",
+    "pan1 - pancakes whole wheat fz",
+    "pp - peanut products",
+    "ro - rolled oats",
+    "rp - rice products",
+    "rp - rice products (domestic)",
+    "rsp - raw shelled peanuts",
+    "ssb1 - sunflower seed butter",
+    "vp - vegetable oil products",
+    "vp - vegetable oil products (salad dressing)",
+    "wf - wheat flour",
+    "wf - wheat flour products"
+   ],
+   "status": [
+    "absent",
+    "absent",
+    "infeasible"
+   ]
+  },
+  {
+   "P": [
+    "100127 - beef can-24/24 oz",
+    "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+    "110730 - pulled pork, fully cooked"
+   ],
+   "status": [
+    "infeasible",
+    "feasible",
+    "feasible"
+   ]
+  },
+  {
+   "P": [
+    "100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+    "100144 - pork crumbles, fully cooked, with spp, lightly seasoned, \u00bc\u201d dice",
+    "100145 - pork patties with spp, 2.7 oz. home-style, fully cooked, iqf",
+    "100146 - pork patties with spp, 1.2 oz., fully cooked, iqf",
+    "110730 - pulled pork, fully cooked"
+   ],
+   "status": [
+    "infeasible",
+    "feasible",
+    "feasible"
+   ]
+  }
+ ],
+ "provenance": {
+  "data_sha256": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822",
+  "mappings_sha256": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+  "software_version": "0.4.0",
+  "thesis_rev": "1bb9de48ab91629a7ae9d97488c2181b4098806d",
+  "code_rev": "b7a5492ebab118d4dab03cf1fa3ff1ae60cac4be",
+  "code_sha256": "c3c440df35a5ee81f69c5adea6f1d8df6f47928b6911051ea2f532c353036062",
+  "inputs_sha256": {
+   "manifest.json": "b3f5a6f53fd3400042fcdb06d30d423952d45a54b880ce7c1f1281d5fcbd0b1b",
+   "catalog/mappings.csv": "2ac7d1e3f8cb90a334bf5fa4f411af84cb2f4988fb74159b47790e316f455f05",
+   "catalog/identities.csv": "20a62ebf8360a6738389067e86cc8781c4e2e4792887f6e49cd36593d46a07a4",
+   "catalog/owners.csv": "2c31a7b1bc71e8e7190e09d75d15bd80ea6bcdb6b0ef94aa733e722e905e31a3",
+   "catalog/usaspending.json": "1418de8397c95ff186ac1105358a2c967e0d2c303fd4556d2209f585c1740252",
+   "raw/QBL-2025-06-20.xlsx": "8ab793d0c6430aa1d93a36bd229da7953b49b2054aa9f5ad27621b383a7e433f",
+   "raw/QBL-2025-11-22.xlsx": "112b7960507ee81d4b28a1bf64091f4c79a6f692fe13709c2d6f34bf8f90676b",
+   "raw/QBL.xlsx": "b7b8414a821ab02b3a272d3f1c6173c0bcbbf55ac8a4c7d458114e5218b28822"
+  }
+ }
+}
