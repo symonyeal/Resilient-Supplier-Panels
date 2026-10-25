@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.4.0 — 2026-10-25
+
+- Two archived USDA workbooks embedded alongside the original; `--snapshot` selects one,
+  and `srl change` measures observed qualification changes under the same catalog.
+- `srl gaps` ranks second-approval opportunities over seeded baskets and reports exact
+  uniform shares plus a greedy approval sequence.
+- `srl entities` reports identity sensitivities, explicit entity outages and candidate
+  recipient award totals. Six duplicate pairs supported, 13 distinct-row entity
+  scenarios, 12 unresolved; strict supplier identities are unchanged.
+- Frozen evidence for 13,798 distinct AMS awards and 341 candidate supplier-to-UEI matches.
+  Published amounts reconcile to raw records. No unit-price or capacity claim.
+- Whole-class baskets via `build --class` and `--min-suppliers`: up to 75,180,897,792
+  minimal panels counted exactly. One programme-class count times out at 10 seconds.
+- [Findings and review log](docs/findings/2026-10-25-open-work.md) record the remaining
+  evidence requirements. The original campaign is unchanged.
+
 ## 0.3.0 — 2026-10-25
 
 - Rewritten in Rust: one `srl` binary with the frozen data compiled in; Windows and Linux

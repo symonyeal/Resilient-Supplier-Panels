@@ -20,6 +20,13 @@ and shows which suppliers to rely on.
 
 ## The question
 
+Release 0.4 adds [three dated observations, ranked qualification gaps, entity scenarios
+and whole-class baskets](docs/findings/2026-10-25-open-work.md). Across 40,000 seeded
+draws, 11,256 have one-supplier backup. Counts reach 75,180,897,792 minimal panels on a
+whole-class basket. The original 40-basket headline above remains the October seed-1
+campaign. [Remaining evidence requirements](docs/OPEN.md) include 12 unresolved identity
+pairs and comparable price/capacity data.
+
 The USDA's Agricultural Marketing Service approves vendors for specific products before they
 may bid on its food purchases. The approved vendors and their products appear on the
 [Qualified Bidders List](https://www.ams.usda.gov/selling-food/solicitations).
@@ -61,9 +68,12 @@ and common-owner protection using the existing model and frozen data.
 suppliers are irreplaceable, and which product is the bottleneck.
 
 **Does not:** capacity, price, delivery record, or whether a supplier will bid. It also does
-not show whether two suppliers share a plant or an owner. A listed vendor need not be the
-producer, and a billing address is not a plant. The data is one snapshot (retrieved
-2026-10-15), not a history. This is research, not a purchasing recommendation.
+not establish shared plants or failure probabilities. A listed vendor need not be the
+producer, and a billing address is not a plant. The main campaign uses the snapshot
+retrieved 2026-10-15; the separate change analysis compares it with two archived
+observations. Entity scenarios use sourced relationships and explicit joint-outage
+assumptions. Award totals provide context, without unit prices or capacity. This is
+research, not a purchasing recommendation.
 
 ## How the results are checked
 

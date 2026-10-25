@@ -6,7 +6,7 @@
 
 use std::collections::{BTreeSet, HashMap};
 
-use srl::{audit, catalog, data, json, qbl};
+use srl::{audit, catalog, change, data, gaps, json, qbl};
 
 fn row(n: usize, name: &str, addr: &str, zip: &str, product: &str) -> qbl::Row {
     let f: HashMap<String, String> = [("Vendor Name", name), ("Billing Address", addr), ("City", "X"), ("State", "WA"),
@@ -22,6 +22,36 @@ fn mappings() -> String {
 fn snapshot_hash_matches_manifest() {
     let m = json::loads(&data::bytes("manifest.json").unwrap()).unwrap();
     assert_eq!(data::sha256(&data::bytes("raw/QBL.xlsx").unwrap()), m["QBL.xlsx"]["sha256"].as_str().unwrap());
+}
+
+#[test]
+fn every_snapshot_matches_its_manifest_entry() {
+    let m = json::loads(&data::bytes("manifest.json").unwrap()).unwrap();
+    for w in data::SNAPSHOTS {
+        assert_eq!(data::sha256(&data::bytes(&format!("raw/{w}")).unwrap()), m[w]["sha256"].as_str().unwrap(), "{w}");
+    }
+}
+
+/// Supplier counts read off the three workbooks with openpyxl (2026-10-25): the rows of each
+/// product, by vendor name and ZIP code.
+#[test]
+fn change_reads_backups_gained_and_lost() {
+    let W: Vec<(String, String, audit::Snapshot)> = data::SNAPSHOTS.iter().map(|w| {
+        let rows = qbl::read(&data::bytes(&format!("raw/{w}")).unwrap()).unwrap();
+        (w.to_string(), String::new(), audit::snapshot(&rows, &mappings()))
+    }).collect();
+    let d = change::series(&W, 1);
+    let single: Vec<u64> = (0..3).map(|i| d["snapshots"][i]["single"].as_u64().unwrap()).collect();
+    assert_eq!(single, [221, 220, 217]);
+    let list = |i: usize, k: &str| -> Vec<String> {
+        d["steps"][i][k].as_array().unwrap().iter().map(|x| x.as_str().unwrap().to_string()).collect()
+    };
+    assert_eq!(list(0, "gained"), ["100143 - pork patty links with spp, 1.0 oz. skinless, fully cooked, iqf",
+                                   "beef spp pty 85/15 frz 2.0 mma ctn-40 lb", "turkey, bulk"]);
+    assert_eq!(list(0, "lost"), ["soup crm of chicken rdu sod ctn"]);
+    assert!(list(1, "gained").is_empty());
+    assert_eq!(list(1, "lost"), ["chicken boned can-12/50 oz", "orange juice single ctn", "turkey taco filling ctn-30 lb"]);
+    assert_eq!(d["snapshots"][2]["campaign_baskets"]["feasible"], 10);
 }
 
 #[test]
@@ -139,4 +169,21 @@ fn no_snapshot_token_holds_two_codes_unsplit() {
                       ("ab - x abcdef - e", false), ("100127 - 110477 - x", false), ("ab - x tor1 - x", true)] {
         assert_eq!(two_codes(t), want, "{t}");
     }
+}
+
+/// One seed is the campaign population: 30 of its 40 primary baskets are infeasible at k = 1
+/// (results/suite-seed1-v0.3.json), and the class blockers are the audit's one-supplier counts.
+#[test]
+fn gaps_on_the_campaign_seed() {
+    let rows = qbl::read(&data::bytes("raw/QBL.xlsx").unwrap()).unwrap();
+    let M = audit::matrix(&audit::snapshot(&rows, &mappings()), "strict");
+    let g = gaps::gaps(&M, 1, 1);
+    assert_eq!((g["population"]["baskets"].as_u64(), g["population"]["resilient"].as_u64()), (Some(40), Some(10)));
+    let last = g["greedy"].as_array().unwrap().last().unwrap();
+    assert_eq!((last["resilient"].as_u64(), last["share"].as_f64()), (Some(40), Some(1.0)));
+    let blockers: Vec<u64> = g["uniform"].as_array().unwrap().iter().map(|u| u["blockers"].as_u64().unwrap()).collect();
+    assert_eq!(blockers, [184, 13, 8, 12]);
+    assert!(g["products"].as_array().unwrap().iter().all(|p| p["suppliers"] == 1 && p["approvals"] == 1));
+    // C(12, 3) / C(24, 3) resilient uniform material baskets of size 3
+    assert_eq!(g["uniform"][3]["share"]["3"].as_f64(), Some(audit::round(220.0 / 2024.0, 6)));
 }

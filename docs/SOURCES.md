@@ -17,6 +17,27 @@ Status:
 
 ## Methods
 
+Additional data inspected on 2026-10-25:
+
+- Internet Archive captures of the USDA QBL at
+  [2025-06-20](https://web.archive.org/web/20250620030139id_/https://www.ams.usda.gov/sites/default/files/media/QBL.xlsx)
+  and [2025-11-22](https://web.archive.org/web/20251122035200id_/https://www.ams.usda.gov/sites/default/files/media/QBL.xlsx).
+  Workbook contents are retained; SHA-256 and capture metadata are in the manifest.
+- [USAspending API endpoints](https://api.usaspending.gov/docs/endpoints),
+  `search/spending_by_award`, `recipient/` and `recipient/<id>/` responses. Inspected
+  fields: award identifier, recipient name/UEI/address, performance ZIP, Award Amount,
+  parent name/UEI. Frozen collection: AMS awarding subtier, contract types A-D, three
+  FY2024-FY2026 activity windows. All raw awards and extracted profiles are retained
+  in `data/evidence`; hashes and reconciliation are checked by `analysis/check_evidence.py`.
+  Name-core/ZIP linkage is an inference. No comparable unit price or capacity was found.
+- [National Beef, Our Businesses](https://www.nationalbeef.com/about-us/we-know-beef/our-businesses/),
+  inspected 2026-10-25: Liberal and Dodge City facilities. Used for a scenario;
+  no outage probability inferred.
+- Additional named-facility and Smithfield filing URLs are recorded member by member
+  in `catalog/owners.csv`. They are cited evidence from the collection, not an independent
+  verification of each billing address as an operating plant. The review log in
+  [0.4 findings](findings/2026-10-25-open-work.md) records the limits of those identifications.
+
 | Source | Used for | Status |
 | --- | --- | --- |
 | S. Y. Islam, *Tracing the Effects of Symmetry in Hypergraphs on the Fredman–Khachiyan Algorithm*, MSc thesis, Simon Fraser University, 2024; code `fka` 2.0.0 at `1bb9de48ab91629a7ae9d97488c2181b4098806d`, GPL-3.0-or-later | Berge oracle, FK-A, `fk_a_memo`, FK-B and its dualisation; ported to Rust in 0.3 (`src/thesis/`) | **inspected** 2026-10-15: `docs/architecture.md`, `src/fka/{hypergraph,transversal,algorithm,memo}.py`, `src/fkb/{algorithm,dualize}.py`, `docs/application-alternatives.md`; 2026-10-25, at `1bb9de4`, line by line for the port: `src/fka/{hypergraph,irredundant,transversal,algorithm,memo}.py`, `src/fkb/{algorithm,dualize}.py` |

@@ -1,0 +1,8150 @@
+{
+ "source": "USAspending.gov API v2: search/spending_by_award (awarding subtier Agricultural Marketing Service, award types A-D, three fiscal-year windows FY2024-FY2026) and recipient profiles",
+ "retrieved_utc": "2026-10-25T19:54:57Z",
+ "awards": 13798,
+ "link_rule": "QBL supplier -> UEI when the name core (qbl::core) equals a recipient name's core and the supplier's ZIP5 is the recipient's ZIP5 or an award place-of-performance ZIP5",
+ "links": {
+  "r0008": [
+   "F8NTAWHMWB27"
+  ],
+  "r0012": [
+   "DYFEM7BB4PR8"
+  ],
+  "r0013": [
+   "SW85KK7GSZ54"
+  ],
+  "r0016": [
+   "FDL9QRWMZJ97"
+  ],
+  "r0017": [
+   "GCCKELUAJLS5"
+  ],
+  "r0018": [
+   "L9X4FUZMLLM3"
+  ],
+  "r0020": [
+   "RGETL5GVBJB5"
+  ],
+  "r0024": [
+   "ZCHGVXL6VFS9"
+  ],
+  "r0025": [
+   "GGSPGL1NMJL3"
+  ],
+  "r0029": [
+   "Y2THY566B4P6"
+  ],
+  "r0030": [
+   "WZDAAWDZDEK5"
+  ],
+  "r0032": [
+   "MZA3EV7LZJ65"
+  ],
+  "r0033": [
+   "NZL6QLKFKRX7"
+  ],
+  "r0035": [
+   "QU8MKFDVKBL8"
+  ],
+  "r0037": [
+   "M1LPHSRJ3YM3"
+  ],
+  "r0039": [
+   "YD3CCBHPHCG5"
+  ],
+  "r0042": [
+   "GK39F1M2PF61"
+  ],
+  "r0044": [
+   "DHKPKNRSBHT6"
+  ],
+  "r0046": [
+   "EPMTCUQM7MN8"
+  ],
+  "r0048": [
+   "TNLXCH1J6168"
+  ],
+  "r0059": [
+   "HSY2YML3VMQ7"
+  ],
+  "r0072": [
+   "RD6AA8SN2FA5"
+  ],
+  "r0079": [
+   "H8JMRF3FPNQ6"
+  ],
+  "r0083": [
+   "NWE2Q9Z21BZ6"
+  ],
+  "r0084": [
+   "EUAAMTBGNDP3"
+  ],
+  "r0087": [
+   "DBARNZTM3A15"
+  ],
+  "r0089": [
+   "TTB1W4DXY7L5"
+  ],
+  "r0096": [
+   "QQVLRSXM1CA6"
+  ],
+  "r0099": [
+   "RRCXH5E2NRQ8"
+  ],
+  "r0102": [
+   "HGYKUM989XF9"
+  ],
+  "r0103": [
+   "QMF3VF5S7DJ8"
+  ],
+  "r0104": [
+   "SAL9VQ58UMN8"
+  ],
+  "r0106": [
+   "KAT4TFP3R6G7"
+  ],
+  "r0108": [
+   "GRF6C3NN2TY6"
+  ],
+  "r0109": [
+   "CQK9W45PE7D3"
+  ],
+  "r0110": [
+   "X5EWBTQXFCA5"
+  ],
+  "r0112": [
+   "NAMADQJ1VJJ9"
+  ],
+  "r0114": [
+   "QKK9MD43KPG4"
+  ],
+  "r0115": [
+   "H8FDWRMSL785"
+  ],
+  "r0116": [
+   "SQSMZJV1U7H7"
+  ],
+  "r0118": [
+   "FJD5VZFNJZE9"
+  ],
+  "r0122": [
+   "UCF5DP81ZFG3"
+  ],
+  "r0123": [
+   "YNWNKJJN8NF1"
+  ],
+  "r0125": [
+   "EXH5XTYLLLT6"
+  ],
+  "r0127": [
+   "KABLXJENEQ33"
+  ],
+  "r0130": [
+   "JSL3MKHL21M6"
+  ],
+  "r0132": [
+   "GGD7Q8FEFFP2"
+  ],
+  "r0133": [
+   "VH17E95FKAV5"
+  ],
+  "r0134": [
+   "JZYDRHUKN5V8"
+  ],
+  "r0139": [
+   "ZBP1YZNJZ6N1"
+  ],
+  "r0140": [
+   "ZTRGQGUJXFJ8"
+  ],
+  "r0143": [
+   "C1GNTLUF9UA3"
+  ],
+  "r0145": [
+   "HZFUY8FJAT34"
+  ],
+  "r0151": [
+   "DE6GE5DKR135"
+  ],
+  "r0153": [
+   "HJZEDT4S8LT5"
+  ],
+  "r0155": [
+   "T5RKJN9P5WZ4"
+  ],
+  "r0156": [
+   "VKTSH6PAV4N4"
+  ],
+  "r0157": [
+   "YK7HNM8D2D35"
+  ],
+  "r0161": [
+   "CK77USNUCNZ3"
+  ],
+  "r0164": [
+   "UEUMKYNF64N5"
+  ],
+  "r0171": [
+   "T653S13JS8V7"
+  ],
+  "r0174": [
+   "K1H8ZCUTDJ33"
+  ],
+  "r0178": [
+   "KPX3DU8ND9C8"
+  ],
+  "r0181": [
+   "LL6NJJEMRF29"
+  ],
+  "r0188": [
+   "METNZYWWNHA4"
+  ],
+  "r0195": [
+   "TT7ZMSXMHCJ7"
+  ],
+  "r0200": [
+   "MDPMWK3K4S38"
+  ],
+  "r0201": [
+   "CKLJG19DNKB7"
+  ],
+  "r0205": [
+   "VKK6BGN5BDH3"
+  ],
+  "r0207": [
+   "QG3DJWJ7R4J3"
+  ],
+  "r0212": [
+   "FFHGP4NMFK21"
+  ],
+  "r0217": [
+   "M7AYLMG1JWB6"
+  ],
+  "r0219": [
+   "WK7MBZM5HR55"
+  ],
+  "r0221": [
+   "W3EFR9PB86W7"
+  ],
+  "r0224": [
+   "DPXKAA4LNKE4"
+  ],
+  "r0226": [
+   "F9NLJURPZKU4"
+  ],
+  "r0227": [
+   "WDCVJGELGBB5"
+  ],
+  "r0238": [
+   "FE3KXCMXWPY9"
+  ],
+  "r0239": [
+   "UWH3KKSHCQJ9"
+  ],
+  "r0240": [
+   "EM9JSV6EBFU5"
+  ],
+  "r0241": [
+   "PMMLSCW867W6"
+  ],
+  "r0245": [
+   "ZGG2UXESA635"
+  ],
+  "r0246": [
+   "C1N5QNN31Y59"
+  ],
+  "r0247": [
+   "M4PAP86MN629"
+  ],
+  "r0248": [
+   "ZEJMSMY4DVS3"
+  ],
+  "r0252": [
+   "ELVGUBB3SPQ9"
+  ],
+  "r0254": [
+   "YPY8WHABW2U1"
+  ],
+  "r0256": [
+   "K5JVALD3MH36"
+  ],
+  "r0260": [
+   "P21HK4L7XLU5"
+  ],
+  "r0262": [
+   "HK8TEFKGKZM6"
+  ],
+  "r0263": [
+   "HK8TEFKGKZM6"
+  ],
+  "r0267": [
+   "LYHJE2WJSJM7"
+  ],
+  "r0271": [
+   "CHHZHEBN27M3"
+  ],
+  "r0273": [
+   "SJHHVRKGPW65"
+  ],
+  "r0279": [
+   "W2P7ZQN4XKW3"
+  ],
+  "r0282": [
+   "P7HNMF2NDJY8"
+  ],
+  "r0285": [
+   "H1J3ATER7Y46"
+  ],
+  "r0286": [
+   "H1J3ATER7Y46"
+  ],
+  "r0289": [
+   "WCWGJXKWEZ91"
+  ],
+  "r0293": [
+   "CJN6K9473LJ5"
+  ],
+  "r0294": [
+   "DJ3ZPKBJFEH2"
+  ],
+  "r0299": [
+   "UQS2DM4GD6A7"
+  ],
+  "r0302": [
+   "QZQ5UWKR7HH5"
+  ],
+  "r0310": [
+   "M4Q7G4FTDE22"
+  ],
+  "r0313": [
+   "CL1RMJMFRLL7"
+  ],
+  "r0317": [
+   "ZSTBMNLHZ5P9"
+  ],
+  "r0318": [
+   "ZSTBMNLHZ5P9"
+  ],
+  "r0320": [
+   "C19NBLMCFZ75"
+  ],
+  "r0324": [
+   "TSMQL8Z8HM43"
+  ],
+  "r0326": [
+   "V9KLGAY5A8C1"
+  ],
+  "r0330": [
+   "LDUXMM3MZU46"
+  ],
+  "r0331": [
+   "V65GHBNAPNE1"
+  ],
+  "r0334": [
+   "WHNKYQ2XZDF3"
+  ],
+  "r0336": [
+   "VYBFFH8ZHJ11"
+  ],
+  "r0345": [
+   "ED3HFQGBYKE9"
+  ],
+  "r0356": [
+   "C4CPJBDB66D6"
+  ],
+  "r0357": [
+   "EDKSAZJCM8D9"
+  ],
+  "r0361": [
+   "NP7VB8WH54K5"
+  ],
+  "r0368": [
+   "QWKQJHDDMVN7"
+  ],
+  "r0369": [
+   "HWV2FDQEQAX1"
+  ],
+  "r0370": [
+   "HK4MFDV4JQP9"
+  ],
+  "r0373": [
+   "VJ8AHZLGURU8"
+  ],
+  "r0374": [
+   "PC29BNFCZ2F4"
+  ],
+  "r0378": [
+   "GY1QGNZLW5D9"
+  ],
+  "r0382": [
+   "G796XXB7PDL1"
+  ],
+  "r0385": [
+   "GYUTHG3XR5X3"
+  ],
+  "r0388": [
+   "K14JJL8VAP93"
+  ],
+  "r0389": [
+   "G5B1S57ZKTS8"
+  ],
+  "r0391": [
+   "VN21AR4KBJQ3"
+  ],
+  "r0393": [
+   "LFQPMBTSFRN4"
+  ],
+  "r0394": [
+   "VKFLRTJNBBZ3"
+  ],
+  "r0399": [
+   "FEY8MGA9ARX7"
+  ],
+  "r0402": [
+   "KMGFS7GNRK53"
+  ],
+  "r0404": [
+   "GQAUJ9B6N923"
+  ],
+  "r0405": [
+   "H81TTVKZL3A7"
+  ],
+  "r0406": [
+   "F1NJHS3W98F8"
+  ],
+  "r0411": [
+   "LKWWBL2FK148"
+  ],
+  "r0412": [
+   "JBB5Q6BD46T1"
+  ],
+  "r0417": [
+   "XKS2EB8AFA59"
+  ],
+  "r0422": [
+   "MGFAEHK1JKQ3"
+  ],
+  "r0423": [
+   "KM8HN5U3TRE8"
+  ],
+  "r0427": [
+   "MURVN1YJCLA3"
+  ],
+  "r0428": [
+   "VBBDFMAHLJV6"
+  ],
+  "r0430": [
+   "GWL1X3K9LC65"
+  ],
+  "r0433": [
+   "KKUMBGM4CJG1"
+  ],
+  "r0436": [
+   "FJGZMMAF2U81"
+  ],
+  "r0442": [
+   "GX6WLMYJM5L9"
+  ],
+  "r0443": [
+   "CSRFGBYGE7N5"
+  ],
+  "r0444": [
+   "J1BXR53MH5H3"
+  ],
+  "r0446": [
+   "F1DLCM6EGD31"
+  ],
+  "r0452": [
+   "J7M9TBLLE1B5"
+  ],
+  "r0453": [
+   "CNCHJ7W7NN33"
+  ],
+  "r0461": [
+   "QRJ8DK4MKNG6"
+  ],
+  "r0462": [
+   "SA2GW9VG4LU7"
+  ],
+  "r0469": [
+   "HJPUVE6F31D3"
+  ],
+  "r0470": [
+   "T29CJ8K1MDY9"
+  ],
+  "r0473": [
+   "U9EUJ8LZJL23"
+  ],
+  "r0474": [
+   "NY3AL2SKD176"
+  ],
+  "r0476": [
+   "HZ12JBYN3KM9"
+  ],
+  "r0477": [
+   "GBNZMFE3SY59"
+  ],
+  "r0480": [
+   "PLL6A6KHDZE8"
+  ],
+  "r0483": [
+   "NEMNTEQER8N1"
+  ],
+  "r0488": [
+   "MC2QEKLCQXA8"
+  ],
+  "r0489": [
+   "MC2QEKLCQXA8"
+  ],
+  "r0493": [
+   "Y3JYG9219563"
+  ],
+  "r0494": [
+   "UVLRNHPJD5K3"
+  ],
+  "r0495": [
+   "SF39YGZ13R14"
+  ],
+  "r0507": [
+   "MQLUFZX43218"
+  ],
+  "r0513": [
+   "HCJNHBM9M1R5"
+  ],
+  "r0518": [
+   "MBENDSK69AN5"
+  ],
+  "r0519": [
+   "YJY7G5AS3YS3"
+  ],
+  "r0522": [
+   "F3RKHMA8KLG1"
+  ],
+  "r0523": [
+   "F3RKHMA8KLG1"
+  ],
+  "r0524": [
+   "D4MJSVZ7TNL8"
+  ],
+  "r0526": [
+   "DNCTG2FNGBX8"
+  ],
+  "r0527": [
+   "WEYDJHKFLR63"
+  ],
+  "r0537": [
+   "K7BDMP96CCB4"
+  ],
+  "r0538": [
+   "HBJ6ZU3NTL73"
+  ],
+  "r0541": [
+   "QBPWBWJSZLT1"
+  ],
+  "r0549": [
+   "H8SKX8TH1X96"
+  ],
+  "r0550": [
+   "C681M4VGSMT9"
+  ],
+  "r0552": [
+   "TPCGF7HEWUL1"
+  ],
+  "r0553": [
+   "KYKSJCN78W43"
+  ],
+  "r0561": [
+   "HNKYRJ2KR9A5"
+  ],
+  "r0562": [
+   "DHTAWQX4XBE1"
+  ],
+  "r0565": [
+   "ZPYQXJNTMZX3"
+  ],
+  "r0566": [
+   "V499BTDMMAJ8"
+  ],
+  "r0567": [
+   "LKH2T7W17UN5"
+  ],
+  "r0568": [
+   "QAMJD15FE1K9"
+  ],
+  "r0573": [
+   "HCE9J9Z9MM53"
+  ],
+  "r0577": [
+   "ZLNUVJKVV3L9"
+  ],
+  "r0583": [
+   "FHDYELTD78G1"
+  ],
+  "r0584": [
+   "S7X6RFGJXDA1"
+  ],
+  "r0585": [
+   "D6NCKJHNHL11"
+  ],
+  "r0588": [
+   "S8YMCM81U5R9"
+  ],
+  "r0597": [
+   "WHVUUDLK51Y5"
+  ],
+  "r0604": [
+   "N24FW7FN8JW3"
+  ],
+  "r0605": [
+   "N24FW7FN8JW3"
+  ],
+  "r0609": [
+   "KY2PNK5M5DM3"
+  ],
+  "r0611": [
+   "D7Q7N93MJQL9"
+  ],
+  "r0613": [
+   "XUJKK26CW477"
+  ],
+  "r0614": [
+   "S896DLKHSBL8"
+  ],
+  "r0617": [
+   "C5J1N31L8E17"
+  ],
+  "r0618": [
+   "S6H8QNZLGC77"
+  ],
+  "r0623": [
+   "GU9AMKZFRPC6"
+  ],
+  "r0624": [
+   "EJ26KM98KYL3"
+  ],
+  "r0625": [
+   "XLX1KERVEWX5"
+  ],
+  "r0627": [
+   "Q6JSYMK3FMJ7"
+  ],
+  "r0631": [
+   "FG3MZTYAQMC5"
+  ],
+  "r0632": [
+   "UH24AD61RJT9"
+  ],
+  "r0634": [
+   "SW7AJGU47YN8"
+  ],
+  "r0636": [
+   "MBACQDXPCMA5"
+  ],
+  "r0644": [
+   "U4N2UW7ZT999"
+  ],
+  "r0647": [
+   "PNCLHNKB8K37"
+  ],
+  "r0652": [
+   "KR4JG2AGG7X7"
+  ],
+  "r0657": [
+   "F482ND6Z1945"
+  ],
+  "r0658": [
+   "WR45V43LENF7"
+  ],
+  "r0659": [
+   "YW9MLRLNFC13"
+  ],
+  "r0661": [
+   "TVMLDPURUQG8"
+  ],
+  "r0667": [
+   "KQ8HZA6XKZ48"
+  ],
+  "r0670": [
+   "MH49EA53SKX7"
+  ],
+  "r0672": [
+   "MK7BCN12P1P7"
+  ],
+  "r0674": [
+   "HFWATMQBHKA9"
+  ],
+  "r0675": [
+   "JGHQRWR86ZN5"
+  ],
+  "r0676": [
+   "SQNWTNLT4KL1"
+  ],
+  "r0681": [
+   "LDAQN7DPDLD7"
+  ],
+  "r0682": [
+   "EVDYKG5KSWD1"
+  ],
+  "r0684": [
+   "DVQVRL68MXR5"
+  ],
+  "r0685": [
+   "DLP2YDPHLQT7"
+  ],
+  "r0686": [
+   "S7H4LSKMHNF5"
+  ],
+  "r0691": [
+   "Y3S6K42X8EL8"
+  ],
+  "r0696": [
+   "CUJGPUZGPPD1"
+  ],
+  "r0697": [
+   "ZK5SWMVP86X7"
+  ],
+  "r0698": [
+   "GRANSL2AQGG9"
+  ],
+  "r0702": [
+   "Q7ASEN8HXSJ3"
+  ],
+  "r0703": [
+   "ECK8G3CCJR59"
+  ],
+  "r0706": [
+   "XCNLGN954K35"
+  ],
+  "r0707": [
+   "JA8NPLWD57F4"
+  ],
+  "r0714": [
+   "Q55LLZLNY5W3"
+  ],
+  "r0716": [
+   "C9MFYNNKATP5"
+  ],
+  "r0718": [
+   "YH8ZEYH9KDE7"
+  ],
+  "r0721": [
+   "LC33YCEA2MB9"
+  ],
+  "r0722": [
+   "JZRADBRJUJG8"
+  ],
+  "r0723": [
+   "NQJRL18JWAB7"
+  ],
+  "r0725": [
+   "MNWUDJAXMNR7"
+  ],
+  "r0730": [
+   "FSE4WDZ7BRE8"
+  ],
+  "r0737": [
+   "C11GXLCB8VK3"
+  ],
+  "r0739": [
+   "KCG5GJCRUAQ5"
+  ],
+  "r0740": [
+   "EFZYLJH3WXM6"
+  ],
+  "r0741": [
+   "CTAFMRZ13HV5"
+  ],
+  "r0742": [
+   "GAJRNKK4CLN9"
+  ],
+  "r0745": [
+   "MSB6KVJ9E3S7"
+  ],
+  "r0747": [
+   "KK9WDXLDGEM5"
+  ],
+  "r0749": [
+   "LVWBLWN8VKG3"
+  ],
+  "r0751": [
+   "ZJ8CLBUWRBG5"
+  ],
+  "r0756": [
+   "MTB2U9K5GXF1"
+  ],
+  "r0759": [
+   "LC9SN44LUZT5"
+  ],
+  "r0760": [
+   "NLH9CXATE617"
+  ],
+  "r0762": [
+   "XGMXFUBQCV24"
+  ],
+  "r0764": [
+   "CMVJAG7WANM7"
+  ],
+  "r0767": [
+   "L348PUAZ3MG9"
+  ],
+  "r0768": [
+   "N5MFNSCSNK71"
+  ],
+  "r0770": [
+   "SDMUJHNKGEN3"
+  ],
+  "r0771": [
+   "GUK9UXV4KHA4"
+  ],
+  "r0777": [
+   "ZR2YR7PNLTT6"
+  ],
+  "r0780": [
+   "LF8YWNHLKY99"
+  ],
+  "r0781": [
+   "CKH1YKS92TN3"
+  ],
+  "r0783": [
+   "FPXWN8CJJJ59"
+  ],
+  "r0784": [
+   "K3XNLHMBUK78"
+  ],
+  "r0785": [
+   "YZB9L2M4N6J6"
+  ],
+  "r0788": [
+   "GEJ1CLDT7LU6"
+  ],
+  "r0789": [
+   "G94VHE8LS6Q7"
+  ],
+  "r0794": [
+   "VXE8XNK8MP97"
+  ],
+  "r0800": [
+   "WMMQQM7JK4C8"
+  ],
+  "r0801": [
+   "XKXACQAWZEN8"
+  ],
+  "r0802": [
+   "MDVBNYU1RYJ1"
+  ],
+  "r0803": [
+   "UWGMRHDJB1N8"
+  ],
+  "r0807": [
+   "N5FLZNJBZKC5"
+  ],
+  "r0815": [
+   "E2ZPSCH67RB9"
+  ],
+  "r0824": [
+   "DSDXMUZAP1L5"
+  ],
+  "r0825": [
+   "DSDXMUZAP1L5"
+  ],
+  "r0826": [
+   "LQ6WU15EKEN1"
+  ],
+  "r0831": [
+   "X4TEC6VHLXK6"
+  ],
+  "r0834": [
+   "PCJ6GTJWS266"
+  ],
+  "r0837": [
+   "QC9CZLW37MA8"
+  ],
+  "r0842": [
+   "T714TCCF8B33"
+  ],
+  "r0845": [
+   "TX42Z8DVL515"
+  ],
+  "r0848": [
+   "HLV6MALWCU73"
+  ],
+  "r0850": [
+   "PNRZEBLPE5F4"
+  ],
+  "r0852": [
+   "HMN6LBNFE4L3"
+  ],
+  "r0853": [
+   "NELHRV2LMSQ5"
+  ],
+  "r0859": [
+   "NWAANGNZW453"
+  ],
+  "r0863": [
+   "M77SN5TH6ET6"
+  ],
+  "r0864": [
+   "M77SN5TH6ET6"
+  ],
+  "r0865": [
+   "JB9MHVXSEHU7"
+  ],
+  "r0867": [
+   "YTNMKWFEUUL5"
+  ],
+  "r0871": [
+   "WE9HDS5BCNM7"
+  ],
+  "r0874": [
+   "YH8ZEYH9KDE7"
+  ],
+  "r0878": [
+   "Y2R7GKN8RD78"
+  ],
+  "r0879": [
+   "TPCDY3183C68"
+  ],
+  "r0880": [
+   "S8EFN8ACMK27"
+  ],
+  "r0882": [
+   "E1YDN392N1R4"
+  ],
+  "r0885": [
+   "PKFGRFQBLMZ8"
+  ],
+  "r0887": [
+   "G6MKMVGV5MC5"
+  ],
+  "r0889": [
+   "JNFEEF1VXNM6"
+  ],
+  "r0893": [
+   "QSE9V2GD1QK3"
+  ],
+  "r0894": [
+   "G851LL13WDD6"
+  ],
+  "r0895": [
+   "G851LL13WDD6"
+  ],
+  "r0897": [
+   "LQCEL5NKVJX6"
+  ],
+  "r0898": [
+   "JHKVRHTL49A1"
+  ],
+  "r0901": [
+   "VXPMHU6K6QV4"
+  ],
+  "r0903": [
+   "J4LHQG68LNU6"
+  ],
+  "r0905": [
+   "MHF4P4LW2DK3"
+  ],
+  "r0907": [
+   "YCBAHJDKB2Q5"
+  ],
+  "r0908": [
+   "YCBAHJDKB2Q5"
+  ],
+  "r0912": [
+   "MNAKFQWNLGQ8"
+  ],
+  "r0916": [
+   "DWQ5SMPC8XC6"
+  ],
+  "r0918": [
+   "E5PVST43J4X7"
+  ],
+  "r0919": [
+   "C1MMZTC7QQK7"
+  ],
+  "r0921": [
+   "FMVDY5MUMNQ4"
+  ],
+  "r0922": [
+   "NC9QQPYGD435"
+  ],
+  "r0924": [
+   "SK6NPMLLWE38"
+  ],
+  "r0926": [
+   "ZQB7KMJHDGS5"
+  ],
+  "r0928": [
+   "M1BHY69CWGB9"
+  ],
+  "r0929": [
+   "MS6PEXJBYW51"
+  ],
+  "r0931": [
+   "LSAEQFEM92N1"
+  ],
+  "r0937": [
+   "GGS5ULJW6LG6"
+  ],
+  "r0938": [
+   "K9GDLFBPJ952"
+  ],
+  "r0948": [
+   "PFT4L4C1M387"
+  ],
+  "r0950": [
+   "ECQ7F8NMKTL4"
+  ],
+  "r0951": [
+   "Y8GVCV52MWA9"
+  ],
+  "r0952": [
+   "TPYLK64PBBH3"
+  ],
+  "r0953": [
+   "G8AUWAWJQEH3"
+  ],
+  "r0954": [
+   "WXVNUBZQVKT5"
+  ],
+  "r0958": [
+   "VFEMUQGDKAJ9"
+  ],
+  "r0963": [
+   "JMGKQS49MUQ9"
+  ],
+  "r0964": [
+   "D4R1W7BNNLS4"
+  ],
+  "r0968": [
+   "XC2QB2C3KJZ9"
+  ],
+  "r0969": [
+   "GZZ3J1BKHMA1"
+  ],
+  "r0972": [
+   "GGXULRMFRUE3"
+  ],
+  "r0982": [
+   "KA77LFNKY8R9"
+  ]
+ },
+ "recipients": {
+  "C11GXLCB8VK3": {
+   "names": [
+    "ROCKY MOUNTAIN NATURAL MEATS LLC"
+   ],
+   "address": [
+    "9757 ALTON WAY",
+    "HENDERSON",
+    "CO",
+    "80640"
+   ],
+   "awards": 1,
+   "amount": 2493422.6,
+   "places": {
+    "80640": 1
+   },
+   "parent": [
+    "ROCKY MOUNTAIN NATURAL MEATS LLC",
+    "C11GXLCB8VK3"
+   ]
+  },
+  "C19NBLMCFZ75": {
+   "names": [
+    "FRED L. GLAIZE, L.C."
+   ],
+   "address": [
+    "112 E PICCADILLY ST",
+    "WINCHESTER",
+    "VA",
+    "22601"
+   ],
+   "awards": 5,
+   "amount": 1606437.28,
+   "places": {
+    "22601": 5
+   },
+   "parent": [
+    "FRED L. GLAIZE, L.C.",
+    "C19NBLMCFZ75"
+   ]
+  },
+  "C1GNTLUF9UA3": {
+   "names": [
+    "CENTRAL VALLEY BEAN COOPERATIVE"
+   ],
+   "address": [
+    "401 BROADWAY",
+    "BUXTON",
+    "ND",
+    "58218"
+   ],
+   "awards": 2,
+   "amount": 1436886.0,
+   "places": {
+    "58218": 2
+   },
+   "parent": [
+    "CENTRAL VALLEY BEAN COOPERATIVE",
+    "C1GNTLUF9UA3"
+   ]
+  },
+  "C1MMZTC7QQK7": {
+   "names": [
+    "UNITED DAIRY INC"
+   ],
+   "address": [
+    "508 ROANE ST",
+    "CHARLESTON",
+    "WV",
+    "25302"
+   ],
+   "awards": 22,
+   "amount": 6709887.26,
+   "places": {
+    "15401": 22
+   },
+   "parent": [
+    "UNITED DAIRY, INC.",
+    "KKLDMBA92ZT6"
+   ]
+  },
+  "C1N5QNN31Y59": {
+   "names": [
+    "DLF PACKING LLC"
+   ],
+   "address": [
+    "150 N GRAVES RD",
+    "FORT PIERCE",
+    "FL",
+    "34945"
+   ],
+   "awards": 17,
+   "amount": 38286408.14,
+   "places": {
+    "34945": 17
+   },
+   "parent": [
+    "DLF PACKING LLC",
+    "C1N5QNN31Y59"
+   ]
+  },
+  "C4CPJBDB66D6": {
+   "names": [
+    "GIUMARRA VINEYARDS CORP"
+   ],
+   "address": [
+    "11220 EDISON HWY",
+    "BAKERSFIELD",
+    "CA",
+    "93307"
+   ],
+   "awards": 1,
+   "amount": 4206370.53,
+   "places": {
+    "93307": 1
+   },
+   "parent": [
+    "GIUMARRA VINEYARDS CORP",
+    "C4CPJBDB66D6"
+   ]
+  },
+  "C5J1N31L8E17": {
+   "names": [
+    "NORTH AMERICAN BISON COOPERATIVE"
+   ],
+   "address": [
+    "1502 1ST AVE N STE 2",
+    "FARGO",
+    "ND",
+    "58102"
+   ],
+   "awards": 1,
+   "amount": 1465600.0,
+   "places": {
+    "58356": 1
+   },
+   "parent": [
+    "NORTH AMERICAN BISON COOPERATIVE",
+    "C5J1N31L8E17"
+   ]
+  },
+  "C681M4VGSMT9": {
+   "names": [
+    "MARIANI PACKING CO., INC."
+   ],
+   "address": [
+    "500 CROCKER DR",
+    "VACAVILLE",
+    "CA",
+    "95688"
+   ],
+   "awards": 6,
+   "amount": 5196825.0,
+   "places": {
+    "95688": 6
+   },
+   "parent": [
+    "MARIANI PACKING CO., INC.",
+    "C681M4VGSMT9"
+   ]
+  },
+  "C9MFYNNKATP5": {
+   "names": [
+    "RED RIVER COMMODITIES, INC."
+   ],
+   "address": [
+    "501 42ND ST N",
+    "FARGO",
+    "ND",
+    "58102"
+   ],
+   "awards": 10,
+   "amount": 2718860.87,
+   "places": {
+    "58102": 10
+   },
+   "parent": [
+    "BRUYNZEEL HOME PRODUCTS B.V.",
+    "XV8RU88MQPZ7"
+   ]
+  },
+  "CHHZHEBN27M3": {
+   "names": [
+    "EMIGH WOLF INVESTMENTS LLC"
+   ],
+   "address": [
+    "418 EMERALD CIR",
+    "HENDERSON",
+    "NV",
+    "89002"
+   ],
+   "awards": 7,
+   "amount": 19834610.61,
+   "places": {
+    "92201": 7
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "CJN6K9473LJ5": {
+   "names": [
+    "FIG GARDEN PACKING, INC."
+   ],
+   "address": [
+    "5545 W DAKOTA AVE",
+    "FRESNO",
+    "CA",
+    "93722"
+   ],
+   "awards": 2,
+   "amount": 1750491.58,
+   "places": {
+    "93794": 2
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "CK77USNUCNZ3": {
+   "names": [
+    "CHOBANI LLC"
+   ],
+   "address": [
+    "147 STATE HWY 320",
+    "NORWICH",
+    "NY",
+    "13815"
+   ],
+   "awards": 28,
+   "amount": 24390914.04,
+   "places": {
+    "13411": 28
+   },
+   "parent": [
+    "CHOBANI LLC",
+    "J26BCUEXXHT8"
+   ]
+  },
+  "CKH1YKS92TN3": {
+   "names": [
+    "SHAMROCK FOODS COMPANY"
+   ],
+   "address": [
+    "3900 E CAMELBACK RD STE 300",
+    "PHOENIX",
+    "AZ",
+    "85018"
+   ],
+   "awards": 39,
+   "amount": 5116425.47,
+   "places": {
+    "85009": 39
+   },
+   "parent": [
+    "SHAMROCK FOODS COMPANY",
+    "CKH1YKS92TN3"
+   ]
+  },
+  "CKLJG19DNKB7": {
+   "names": [
+    "CREAM-O-LAND DAIRY, INC"
+   ],
+   "address": [
+    "529 CEDAR LN",
+    "FLORENCE",
+    "NJ",
+    "08518"
+   ],
+   "awards": 32,
+   "amount": 5709864.85,
+   "places": {
+    "19605": 32
+   },
+   "parent": [
+    "CREAM-O-LAND DAIRY, INC",
+    "CKLJG19DNKB7"
+   ]
+  },
+  "CL1RMJMFRLL7": {
+   "names": [
+    "FOUR STAR SALES, INC."
+   ],
+   "address": [
+    "2800 RD 136",
+    "DELANO",
+    "CA",
+    "93215"
+   ],
+   "awards": 10,
+   "amount": 42987482.8,
+   "places": {
+    "93215": 10
+   },
+   "parent": [
+    "FOUR STAR SALES, INC.",
+    "CL1RMJMFRLL7"
+   ]
+  },
+  "CLPBJ56ANU37": {
+   "names": [
+    "CARGILL MEAT SOLUTIONS CORPORATION"
+   ],
+   "address": [
+    "151 N MAIN ST",
+    "WICHITA",
+    "KS",
+    "67202"
+   ],
+   "awards": 57,
+   "amount": 99594798.14,
+   "places": {
+    "22853": 7,
+    "57350": 1,
+    "65018": 1,
+    "68410": 8,
+    "68601": 14,
+    "72764": 7,
+    "76102": 1,
+    "76111": 4,
+    "76705": 5,
+    "93706": 9
+   },
+   "parent": null
+  },
+  "CMVJAG7WANM7": {
+   "names": [
+    "SAPUTO CHEESE USA INC"
+   ],
+   "address": [
+    "1 OVERLOOK PT STE 300",
+    "LINCOLNSHIRE",
+    "IL",
+    "60069"
+   ],
+   "awards": 115,
+   "amount": 89253114.4,
+   "places": {
+    "29129": 1,
+    "88007": 14,
+    "93274": 47,
+    "95360": 53
+   },
+   "parent": [
+    "SAPUTO CHEESE USA INC.",
+    "KXJFUXT4YWQ8"
+   ]
+  },
+  "CNCHJ7W7NN33": {
+   "names": [
+    "J. R. SIMPLOT COMPANY"
+   ],
+   "address": [
+    "1099 W FRONT ST",
+    "BOISE",
+    "ID",
+    "83702"
+   ],
+   "awards": 1,
+   "amount": 53097.72,
+   "places": {
+    "98837": 1
+   },
+   "parent": [
+    "J. R. SIMPLOT COMPANY",
+    "NYJAUYKPXWL4"
+   ]
+  },
+  "CQK9W45PE7D3": {
+   "names": [
+    "C.H.K. MANUFACTURING, INC."
+   ],
+   "address": [
+    "960 98TH AVE",
+    "OAKLAND",
+    "CA",
+    "94603"
+   ],
+   "awards": 2,
+   "amount": 327832.0,
+   "places": {
+    "94603": 2
+   },
+   "parent": [
+    "C.H.K. MANUFACTURING, INC.",
+    "CQK9W45PE7D3"
+   ]
+  },
+  "CSRFGBYGE7N5": {
+   "names": [
+    "INCOBRASA INDUSTRIES LTD"
+   ],
+   "address": [
+    "540 E US HIGHWAY 24",
+    "GILMAN",
+    "IL",
+    "60938"
+   ],
+   "awards": 90,
+   "amount": 131161186.29,
+   "places": {
+    "60938": 90
+   },
+   "parent": [
+    "INCOBRASA INDUSTRIES LTD",
+    "CSRFGBYGE7N5"
+   ]
+  },
+  "CTAFMRZ13HV5": {
+   "names": [
+    "ROSE PACKING COMPANY, INC."
+   ],
+   "address": [
+    "65 S BARRINGTON RD",
+    "BARRINGTON",
+    "IL",
+    "60010"
+   ],
+   "awards": 12,
+   "amount": 19827415.45,
+   "places": {
+    "60638": 12
+   },
+   "parent": [
+    "ROSE PACKING COMPANY, INC.",
+    "CTAFMRZ13HV5"
+   ]
+  },
+  "CUJGPUZGPPD1": {
+   "names": [
+    "PROFFER WHOLESALE PRODUCE INC"
+   ],
+   "address": [
+    "920 5TH ST",
+    "PARK HILLS",
+    "MO",
+    "63601"
+   ],
+   "awards": 15,
+   "amount": 5891204.23,
+   "places": {
+    "63601": 15
+   },
+   "parent": [
+    "PROFFER WHOLESALE PRODUCE INC",
+    "CUJGPUZGPPD1"
+   ]
+  },
+  "D4MJSVZ7TNL8": {
+   "names": [
+    "LEPRINO FOODS DAIRY PRODUCTS COMPANY"
+   ],
+   "address": [
+    "1830 W 38TH AVE STE 600",
+    "DENVER",
+    "CO",
+    "80211"
+   ],
+   "awards": 79,
+   "amount": 267243721.43,
+   "places": {
+    "88203": 72,
+    "95076": 7
+   },
+   "parent": [
+    "LEPRINO FOODS DAIRY PRODUCTS COMPANY",
+    "G27DCPKEJXM9"
+   ]
+  },
+  "D4R1W7BNNLS4": {
+   "names": [
+    "WILBUR PACKING COMPANY, INC."
+   ],
+   "address": [
+    "1500 EAGER RD",
+    "LIVE OAK",
+    "CA",
+    "95953"
+   ],
+   "awards": 5,
+   "amount": 6556972.2,
+   "places": {
+    "95953": 4,
+    "95992": 1
+   },
+   "parent": [
+    "WILBUR PACKING COMPANY, INC.",
+    "D4R1W7BNNLS4"
+   ]
+  },
+  "D6NCKJHNHL11": {
+   "names": [
+    "MORNING STAR PACKING COMPANY, L.P., THE"
+   ],
+   "address": [
+    "13448 VOLTA RD",
+    "LOS BANOS",
+    "CA",
+    "93635"
+   ],
+   "awards": 6,
+   "amount": 5284352.01,
+   "places": {
+    "93635": 6
+   },
+   "parent": [
+    "MORNING STAR PACKING COMPANY, L.P., THE",
+    "D6NCKJHNHL11"
+   ]
+  },
+  "D6PKJLBC92B3": {
+   "names": [
+    "SMITHFIELD PACKAGED MEATS SALES CORP."
+   ],
+   "address": [
+    "200 COMMERCE ST",
+    "SMITHFIELD",
+    "VA",
+    "23430"
+   ],
+   "awards": 33,
+   "amount": 24769381.79,
+   "places": {
+    "28392": 5,
+    "51401": 6,
+    "57103": 4,
+    "67213": 13,
+    "68333": 3,
+    "90058": 2
+   },
+   "parent": [
+    "WH GROUP LIMITED",
+    "KAM7VPH1ETK7"
+   ]
+  },
+  "D7Q7N93MJQL9": {
+   "names": [
+    "NEWBURG EGG CORP"
+   ],
+   "address": [
+    "17 NOVOGRODSKY RD",
+    "WOODRIDGE",
+    "NY",
+    "12789"
+   ],
+   "awards": 18,
+   "amount": 5812381.59,
+   "places": {
+    "12789": 18
+   },
+   "parent": [
+    "NEWBURG EGG CORP",
+    "D7Q7N93MJQL9"
+   ]
+  },
+  "DBARNZTM3A15": {
+   "names": [
+    "BLUE HARVEST FOODS LLC"
+   ],
+   "address": [
+    "40 HERMAN MELVILLE BLVD",
+    "NEW BEDFORD",
+    "MA",
+    "02742"
+   ],
+   "awards": 2,
+   "amount": 20496925.07,
+   "places": {
+    "02740": 2
+   },
+   "parent": [
+    "BLUE HARVEST FISHERIES  LLC",
+    "GKVRKA44M363"
+   ]
+  },
+  "DE6GE5DKR135": {
+   "names": [
+    "CHALLENGE DAIRY PRODUCTS, INC."
+   ],
+   "address": [
+    "6701 DONLON WAY",
+    "DUBLIN",
+    "CA",
+    "94568"
+   ],
+   "awards": 11,
+   "amount": 11976024.55,
+   "places": {
+    "93291": 9,
+    "95380": 2
+   },
+   "parent": [
+    "CALIFORNIA DAIRIES INC",
+    "NAMADQJ1VJJ9"
+   ]
+  },
+  "DHKPKNRSBHT6": {
+   "names": [
+    "ANDERSON ERICKSON DAIRY CO."
+   ],
+   "address": [
+    "2420 E UNIVERSITY AVE",
+    "DES MOINES",
+    "IA",
+    "50317"
+   ],
+   "awards": 9,
+   "amount": 411487.05,
+   "places": {
+    "50317": 9
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "DHTAWQX4XBE1": {
+   "names": [
+    "MCCALL FARMS INC"
+   ],
+   "address": [
+    "6615 S IRBY ST",
+    "EFFINGHAM",
+    "SC",
+    "29541"
+   ],
+   "awards": 72,
+   "amount": 150865799.03,
+   "places": {
+    "29541": 72
+   },
+   "parent": [
+    "MCCALL FARMS INC",
+    "DHTAWQX4XBE1"
+   ]
+  },
+  "DJ3ZPKBJFEH2": {
+   "names": [
+    "FIRST CUT PRODUCE INC"
+   ],
+   "address": [
+    "1515 SHERMAN AVE",
+    "EVANSTON",
+    "IL",
+    "60201"
+   ],
+   "awards": 17,
+   "amount": 2540303.5,
+   "places": {
+    "27569": 1,
+    "49315": 6,
+    "83607": 6,
+    "93657": 3,
+    "98951": 1
+   },
+   "parent": [
+    "FIRST CUT PRODUCE INC",
+    "DJ3ZPKBJFEH2"
+   ]
+  },
+  "DLP2YDPHLQT7": {
+   "names": [
+    "PRAIRIE FARMS DAIRY INC"
+   ],
+   "address": [
+    "3744 STAUNTON RD",
+    "EDWARDSVILLE",
+    "IL",
+    "62025"
+   ],
+   "awards": 34,
+   "amount": 22560533.33,
+   "places": {
+    "39090": 1,
+    "62025": 15,
+    "62626": 15,
+    "63110": 3
+   },
+   "parent": [
+    "PRAIRIE FARMS DAIRY INC",
+    "DLP2YDPHLQT7"
+   ]
+  },
+  "DNCTG2FNGBX8": {
+   "names": [
+    "LIFELINE FOODS LLC"
+   ],
+   "address": [
+    "2811 S 11TH STREET RD",
+    "SAINT JOSEPH",
+    "MO",
+    "64503"
+   ],
+   "awards": 8,
+   "amount": 4512529.26,
+   "places": {
+    "64503": 8
+   },
+   "parent": [
+    "LIFELINE FOODS LLC",
+    "DNCTG2FNGBX8"
+   ]
+  },
+  "DPXKAA4LNKE4": {
+   "names": [
+    "DAYBREAK FOODS INC"
+   ],
+   "address": [
+    "533 E TYRANENA PARK RD",
+    "LAKE MILLS",
+    "WI",
+    "53551"
+   ],
+   "awards": 3,
+   "amount": 1587021.56,
+   "places": {
+    "56347": 3
+   },
+   "parent": [
+    "DAYBREAK FOODS INC",
+    "DPXKAA4LNKE4"
+   ]
+  },
+  "DSDXMUZAP1L5": {
+   "names": [
+    "STRATAS FOODS LLC"
+   ],
+   "address": [
+    "7000 GOODLETT FARMS PKWY",
+    "CORDOVA",
+    "TN",
+    "38016"
+   ],
+   "awards": 71,
+   "amount": 97575019.92,
+   "places": {
+    "62526": 5,
+    "75212": 3,
+    "77020": 63
+   },
+   "parent": [
+    "STRATAS FOODS LLC",
+    "DSDXMUZAP1L5"
+   ]
+  },
+  "DVQVRL68MXR5": {
+   "names": [
+    "POTATO SERVICES OF MICHIGAN INC"
+   ],
+   "address": [
+    "121 E CHARLES ST",
+    "GREENVILLE",
+    "MI",
+    "48838"
+   ],
+   "awards": 2,
+   "amount": 60920.0,
+   "places": {
+    "43567": 2
+   },
+   "parent": [
+    "POTATO SERVICES OF MICHIGAN INC",
+    "DVQVRL68MXR5"
+   ]
+  },
+  "DWQ5SMPC8XC6": {
+   "names": [
+    "UNIPAK FOODS INC"
+   ],
+   "address": [
+    "2410 IORIO CT",
+    "UNION",
+    "NJ",
+    "07083"
+   ],
+   "awards": 11,
+   "amount": 6000617.63,
+   "places": {
+    "07083": 11
+   },
+   "parent": [
+    "UNIPAK FOODS INC",
+    "DWQ5SMPC8XC6"
+   ]
+  },
+  "DX7AU4JMLPC7": {
+   "names": [
+    "TYSON FOODS INC."
+   ],
+   "address": [
+    "2200 W DON TYSON PKWY",
+    "SPRINGDALE",
+    "AR",
+    "72762"
+   ],
+   "awards": 181,
+   "amount": 983862674.93,
+   "places": {
+    "17557": 74,
+    "23059": 4,
+    "28697": 7,
+    "30040": 11,
+    "35906": 20,
+    "39051": 5,
+    "42452": 2,
+    "46947": 1,
+    "49464": 4,
+    "50588": 1,
+    "50703": 1,
+    "51501": 2,
+    "54961": 1,
+    "63841": 2,
+    "64020": 6,
+    "72764": 5,
+    "72830": 1,
+    "72958": 13,
+    "74728": 18,
+    "77029": 3
+   },
+   "parent": [
+    "TYSON FOODS INC.",
+    "DX7AU4JMLPC7"
+   ]
+  },
+  "DYFEM7BB4PR8": {
+   "names": [
+    "AG PROCESSING INC., A COOPERATIVE"
+   ],
+   "address": [
+    "12700 W DODGE RD",
+    "OMAHA",
+    "NE",
+    "68154"
+   ],
+   "awards": 3,
+   "amount": 47472839.42,
+   "places": {
+    "68103": 1,
+    "68154": 1,
+    "98520": 1
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "E1YDN392N1R4": {
+   "names": [
+    "TOP TIER INGREDIENTS, LLC"
+   ],
+   "address": [
+    "907 3RD AVE",
+    "HANCOCK",
+    "WI",
+    "54943"
+   ],
+   "awards": 3,
+   "amount": 1060460.51,
+   "places": {
+    "54943": 3
+   },
+   "parent": [
+    "TOP TIER INGREDIENTS, LLC",
+    "E1YDN392N1R4"
+   ]
+  },
+  "E2ZPSCH67RB9": {
+   "names": [
+    "STAFFORD COUNTY FLOUR MILLS DISTRIBUTION INC"
+   ],
+   "address": [
+    "245 CENTURY CIR STE 102",
+    "LOUISVILLE",
+    "CO",
+    "80027"
+   ],
+   "awards": 22,
+   "amount": 15257295.68,
+   "places": {
+    "67545": 22
+   },
+   "parent": [
+    "STAFFORD COUNTY FLOUR MILLS DISTRIBUTION INC",
+    "E2ZPSCH67RB9"
+   ]
+  },
+  "E5PVST43J4X7": {
+   "names": [
+    "UNITED APPLE SALES, LLC"
+   ],
+   "address": [
+    "99 WEST AVE",
+    "LYNDONVILLE",
+    "NY",
+    "14098"
+   ],
+   "awards": 8,
+   "amount": 1198908.51,
+   "places": {
+    "14098": 7,
+    "49238": 1
+   },
+   "parent": [
+    "UNITED APPLE SALES, LLC",
+    "E5PVST43J4X7"
+   ]
+  },
+  "ECK8G3CCJR59": {
+   "names": [
+    "QLP FOODS LLC"
+   ],
+   "address": [
+    "4 ERIE ST",
+    "PATERSON",
+    "NJ",
+    "07524"
+   ],
+   "awards": 15,
+   "amount": 18604772.73,
+   "places": {
+    "07524": 15
+   },
+   "parent": [
+    "QLP FOODS LLC",
+    "ECK8G3CCJR59"
+   ]
+  },
+  "ECQ7F8NMKTL4": {
+   "names": [
+    "WELCH FOODS INC., A COOPERATIVE"
+   ],
+   "address": [
+    "1601 TRAPELO RD STE 100 & 200",
+    "WALTHAM",
+    "MA",
+    "02451"
+   ],
+   "awards": 12,
+   "amount": 29765861.7,
+   "places": {
+    "16428": 12
+   },
+   "parent": [
+    "WELCH FOODS INC., A COOPERATIVE",
+    "ECQ7F8NMKTL4"
+   ]
+  },
+  "ED3HFQGBYKE9": {
+   "names": [
+    "GEORGE'S, INC."
+   ],
+   "address": [
+    "402 W ROBINSON AVE",
+    "SPRINGDALE",
+    "AR",
+    "72764"
+   ],
+   "awards": 20,
+   "amount": 37259458.38,
+   "places": {
+    "22802": 2,
+    "22824": 4,
+    "65625": 9,
+    "72501": 4,
+    "72764": 1
+   },
+   "parent": [
+    "GEORGE'S, INC.",
+    "ED3HFQGBYKE9"
+   ]
+  },
+  "EDKSAZJCM8D9": {
+   "names": [
+    "GLOBAL HARVEST PRODUCE LLC"
+   ],
+   "address": [
+    "50 MORTON ST",
+    "EAST RUTHERFORD",
+    "NJ",
+    "07073"
+   ],
+   "awards": 6,
+   "amount": 1968967.91,
+   "places": {
+    "07073": 6
+   },
+   "parent": [
+    "GLOBAL HARVEST PRODUCE LLC",
+    "EDKSAZJCM8D9"
+   ]
+  },
+  "EFZYLJH3WXM6": {
+   "names": [
+    "ROSE ACRE FARMS INC"
+   ],
+   "address": [
+    "1657 W TIPTON ST",
+    "SEYMOUR",
+    "IN",
+    "47274"
+   ],
+   "awards": 1,
+   "amount": 243000.0,
+   "places": {
+    "50115": 1
+   },
+   "parent": [
+    "ROSE ACRE FARMS INC",
+    "EFZYLJH3WXM6"
+   ]
+  },
+  "EJ26KM98KYL3": {
+   "names": [
+    "NORTHEAST TOMATO COMPANY"
+   ],
+   "address": [
+    "4-22 ERIE ST",
+    "PATERSON",
+    "NJ",
+    "07524"
+   ],
+   "awards": 8,
+   "amount": 11588399.52,
+   "places": {
+    "07524": 8
+   },
+   "parent": [
+    "NORTHEAST TOMATO COMPANY",
+    "EJ26KM98KYL3"
+   ]
+  },
+  "ELVGUBB3SPQ9": {
+   "names": [
+    "DUTCH FARMS INC"
+   ],
+   "address": [
+    "700 E 107TH ST",
+    "CHICAGO",
+    "IL",
+    "60628"
+   ],
+   "awards": 14,
+   "amount": 4527679.59,
+   "places": {
+    "43055": 8,
+    "44706": 5,
+    "46322": 1
+   },
+   "parent": [
+    "DUTCH FARMS INC",
+    "ELVGUBB3SPQ9"
+   ]
+  },
+  "EM8KVXUEYDK8": {
+   "names": [
+    "JBS USA FOOD COMPANY"
+   ],
+   "address": [
+    "1770 PROMONTORY CIR",
+    "GREELEY",
+    "CO",
+    "80634"
+   ],
+   "awards": 94,
+   "amount": 201148797.65,
+   "places": {
+    "40206": 1,
+    "50158": 19,
+    "51501": 3,
+    "52501": 5,
+    "56164": 4,
+    "56187": 56,
+    "62618": 5,
+    "92518": 1
+   },
+   "parent": [
+    "JBS S/A",
+    "NNWFRKMMZSG5"
+   ]
+  },
+  "EM9JSV6EBFU5": {
+   "names": [
+    "DIDION, INC."
+   ],
+   "address": [
+    "121 S BRISTOL ST",
+    "SUN PRAIRIE",
+    "WI",
+    "53590"
+   ],
+   "awards": 70,
+   "amount": 155493267.25,
+   "places": {
+    "53923": 57,
+    "53946": 13
+   },
+   "parent": [
+    "DIDION MILLING INC",
+    "SW2XY1B9XDH3"
+   ]
+  },
+  "EPMTCUQM7MN8": {
+   "names": [
+    "ANDERSONS INC"
+   ],
+   "address": [
+    "1947 BRIARFIELD BLVD",
+    "MAUMEE",
+    "OH",
+    "43537"
+   ],
+   "awards": 8,
+   "amount": 90462909.91,
+   "places": {
+    "77547": 8
+   },
+   "parent": [
+    "ANDERSONS INC",
+    "EPMTCUQM7MN8"
+   ]
+  },
+  "EUAAMTBGNDP3": {
+   "names": [
+    "BIRDSBORO KOSHER FARMS CORP."
+   ],
+   "address": [
+    "1100 LINCOLN RD",
+    "BIRDSBORO",
+    "PA",
+    "19508"
+   ],
+   "awards": 2,
+   "amount": 252200.0,
+   "places": {
+    "19508": 2
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "EVDYKG5KSWD1": {
+   "names": [
+    "POST CONSUMER BRANDS, LLC"
+   ],
+   "address": [
+    "20802 KENSINGTON BLVD",
+    "LAKEVILLE",
+    "MN",
+    "55044"
+   ],
+   "awards": 59,
+   "amount": 59252236.64,
+   "places": {
+    "27203": 7,
+    "43130": 5,
+    "49014": 8,
+    "49017": 1,
+    "55057": 34,
+    "84337": 4
+   },
+   "parent": [
+    "POST CONSUMER BRANDS, LLC",
+    "EVDYKG5KSWD1"
+   ]
+  },
+  "EXH5XTYLLLT6": {
+   "names": [
+    "CARIBBEAN PRODUCE EXCHANGE LLC"
+   ],
+   "address": [
+    "CARR 869 KM 2 8 INTERIOR",
+    "CATANO",
+    "PR",
+    "00962"
+   ],
+   "awards": 3,
+   "amount": 299700.0,
+   "places": {
+    "00936": 3
+   },
+   "parent": [
+    "CARIBBEAN PRODUCE EXCHANGE LLC",
+    "EXH5XTYLLLT6"
+   ]
+  },
+  "F1DLCM6EGD31": {
+   "names": [
+    "INN FOODS, INC."
+   ],
+   "address": [
+    "310 WALKER ST",
+    "WATSONVILLE",
+    "CA",
+    "95076"
+   ],
+   "awards": 348,
+   "amount": 298057174.67,
+   "places": {
+    "14420": 42,
+    "28372": 2,
+    "28425": 1,
+    "48849": 32,
+    "49420": 10,
+    "49459": 30,
+    "53931": 22,
+    "83448": 4,
+    "83619": 3,
+    "93033": 9,
+    "93307": 17,
+    "93454": 9,
+    "93458": 29,
+    "93901": 8,
+    "95076": 3,
+    "95360": 8,
+    "97301": 8,
+    "97305": 27,
+    "97322": 1,
+    "97383": 1,
+    "97818": 16,
+    "97886": 10,
+    "98848": 31,
+    "98926": 14,
+    "99301": 11
+   },
+   "parent": [
+    "THE VPS COMPANIES INC",
+    "RLHHVT2BPYC7"
+   ]
+  },
+  "F1NJHS3W98F8": {
+   "names": [
+    "HARRISBURG DAIRIES INC"
+   ],
+   "address": [
+    "2001 HERR ST",
+    "HARRISBURG",
+    "PA",
+    "17103"
+   ],
+   "awards": 1,
+   "amount": 48468.54,
+   "places": {
+    "17103": 1
+   },
+   "parent": [
+    "HARRISBURG DAIRIES INC",
+    "F1NJHS3W98F8"
+   ]
+  },
+  "F3RKHMA8KLG1": {
+   "names": [
+    "LEGUME MATRIX LLC"
+   ],
+   "address": [
+    "901 14TH AVE SE",
+    "JAMESTOWN",
+    "ND",
+    "58401"
+   ],
+   "awards": 43,
+   "amount": 36624586.85,
+   "places": {
+    "58401": 43
+   },
+   "parent": [
+    "LEGUME MATRIX LLC",
+    "F3RKHMA8KLG1"
+   ]
+  },
+  "F482ND6Z1945": {
+   "names": [
+    "PASSAMAQUODDY WILD BLUEBERRY CO"
+   ],
+   "address": [
+    "1292 US HIGHWAY 1",
+    "COLUMBIA FALLS",
+    "ME",
+    "04623"
+   ],
+   "awards": 6,
+   "amount": 658580.0,
+   "places": {
+    "04622": 3,
+    "04640": 3
+   },
+   "parent": [
+    "PASSAMAQUODDY WILD BLUEBERRY CO",
+    "F482ND6Z1945"
+   ]
+  },
+  "F8NTAWHMWB27": {
+   "names": [
+    "ACC-GWG, LLC"
+   ],
+   "address": [
+    "6133 ABEL RD",
+    "WILLIAMS",
+    "CA",
+    "95987"
+   ],
+   "awards": 6,
+   "amount": 422437.08,
+   "places": {
+    "95987": 6
+   },
+   "parent": [
+    "ACC-GWG, LLC",
+    "F8NTAWHMWB27"
+   ]
+  },
+  "F9NLJURPZKU4": {
+   "names": [
+    "DAYLIGHT FOODS, LLC"
+   ],
+   "address": [
+    "30200 WHIPPLE RD",
+    "UNION CITY",
+    "CA",
+    "94587"
+   ],
+   "awards": 1,
+   "amount": 1960435.7,
+   "places": {
+    "94587": 1
+   },
+   "parent": [
+    "DAYLIGHT FOODS, LLC",
+    "F9NLJURPZKU4"
+   ]
+  },
+  "FDL9QRWMZJ97": {
+   "names": [
+    "AGRIBAG, INC."
+   ],
+   "address": [
+    "3925 ALAMEDA AVE",
+    "OAKLAND",
+    "CA",
+    "94601"
+   ],
+   "awards": 9,
+   "amount": 1604472.16,
+   "places": {
+    "77029": 9
+   },
+   "parent": [
+    "AGRIBAG, INC.",
+    "FDL9QRWMZJ97"
+   ]
+  },
+  "FE3KXCMXWPY9": {
+   "names": [
+    "DFA DAIRY BRANDS FLUID, LLC"
+   ],
+   "address": [
+    "1405 N 98TH ST",
+    "KANSAS CITY",
+    "KS",
+    "66111"
+   ],
+   "awards": 21,
+   "amount": 15762858.54,
+   "places": {
+    "27263": 21
+   },
+   "parent": [
+    "DFA DAIRY BRANDS FLUID, LLC",
+    "FE3KXCMXWPY9"
+   ]
+  },
+  "FEY8MGA9ARX7": {
+   "names": [
+    "HAM PRODUCE & SEAFOOD INC"
+   ],
+   "address": [
+    "918 BANNISTER ST",
+    "HONOLULU",
+    "HI",
+    "96819"
+   ],
+   "awards": 6,
+   "amount": 815971.66,
+   "places": {
+    "96819": 6
+   },
+   "parent": [
+    "HAM PRODUCE & SEAFOOD INC",
+    "FEY8MGA9ARX7"
+   ]
+  },
+  "FFHGP4NMFK21": {
+   "names": [
+    "CUSTOM PRODUCE SALES"
+   ],
+   "address": [
+    "13475 E PROGRESS DR",
+    "PARLIER",
+    "CA",
+    "93648"
+   ],
+   "awards": 2,
+   "amount": 1723233.64,
+   "places": {
+    "93215": 1,
+    "93631": 1
+   },
+   "parent": [
+    "CUSTOM PRODUCE SALES",
+    "FFHGP4NMFK21"
+   ]
+  },
+  "FG3MZTYAQMC5": {
+   "names": [
+    "O-AT-KA MILK PRODUCTS COOPERATIVE INC"
+   ],
+   "address": [
+    "368 PLEASANT VIEW DR",
+    "LANCASTER",
+    "NY",
+    "14086"
+   ],
+   "awards": 16,
+   "amount": 2406554.44,
+   "places": {
+    "14021": 16
+   },
+   "parent": [
+    "O-AT-KA MILK PRODUCTS COOPERATIVE INC",
+    "FG3MZTYAQMC5"
+   ]
+  },
+  "FHDYELTD78G1": {
+   "names": [
+    "MOONLIGHT SALES CORPORATION"
+   ],
+   "address": [
+    "17719 E HUNTSMAN AVE",
+    "REEDLEY",
+    "CA",
+    "93654"
+   ],
+   "awards": 7,
+   "amount": 21013762.2,
+   "places": {
+    "93654": 7
+   },
+   "parent": [
+    "MOONLIGHT SALES CORPORATION",
+    "FHDYELTD78G1"
+   ]
+  },
+  "FJD5VZFNJZE9": {
+   "names": [
+    "CAPITAL CITY FRUIT CO."
+   ],
+   "address": [
+    "1850 COLONIAL PKWY",
+    "NORWALK",
+    "IA",
+    "50211"
+   ],
+   "awards": 3,
+   "amount": 111103.02,
+   "places": {
+    "50211": 3
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "FJGZMMAF2U81": {
+   "names": [
+    "HP HOOD LLC"
+   ],
+   "address": [
+    "6 KIMBALL LN",
+    "LYNNFIELD",
+    "MA",
+    "01940"
+   ],
+   "awards": 20,
+   "amount": 1043697.8,
+   "places": {
+    "01001": 20
+   },
+   "parent": [
+    "HP HOOD LLC",
+    "FJGZMMAF2U81"
+   ]
+  },
+  "FMVDY5MUMNQ4": {
+   "names": [
+    "UNITED OIL PACKERS INCORPORATED"
+   ],
+   "address": [
+    "3200 NW 125TH ST",
+    "MIAMI",
+    "FL",
+    "33167"
+   ],
+   "awards": 43,
+   "amount": 66499081.84,
+   "places": {
+    "33167": 43
+   },
+   "parent": [
+    "HAMERSMITH  INC.",
+    "GUTBJZ7M82A6"
+   ]
+  },
+  "FPXWN8CJJJ59": {
+   "names": [
+    "SHAWNEE MILLING COMPANY"
+   ],
+   "address": [
+    "201 S BROADWAY AVE",
+    "SHAWNEE",
+    "OK",
+    "74801"
+   ],
+   "awards": 26,
+   "amount": 4177686.58,
+   "places": {
+    "73763": 12,
+    "74802": 14
+   },
+   "parent": [
+    "SHAWNEE MILLING COMPANY",
+    "FPXWN8CJJJ59"
+   ]
+  },
+  "FSE4WDZ7BRE8": {
+   "names": [
+    "RJB PRODUCE, INC."
+   ],
+   "address": [
+    "5421 W DELAWARE AVE",
+    "VISALIA",
+    "CA",
+    "93291"
+   ],
+   "awards": 53,
+   "amount": 44158515.28,
+   "places": {
+    "29129": 1,
+    "83262": 4,
+    "92504": 1,
+    "92507": 1,
+    "93030": 1,
+    "93215": 1,
+    "93291": 19,
+    "93646": 4,
+    "93654": 7,
+    "97501": 1,
+    "98674": 10,
+    "98801": 1,
+    "99348": 2
+   },
+   "parent": [
+    "RJB PRODUCE, INC.",
+    "FSE4WDZ7BRE8"
+   ]
+  },
+  "G5B1S57ZKTS8": {
+   "names": [
+    "GROWER DIRECT NUT COMPANY, INC."
+   ],
+   "address": [
+    "2288 GEER RD",
+    "HUGHSON",
+    "CA",
+    "95326"
+   ],
+   "awards": 5,
+   "amount": 40359779.96,
+   "places": {
+    "95326": 5
+   },
+   "parent": [
+    "GROWER DIRECT NUT COMPANY, INC.",
+    "G5B1S57ZKTS8"
+   ]
+  },
+  "G6MKMVGV5MC5": {
+   "names": [
+    "TRANSYLVANIA VOCATIONAL SERVICES, INC"
+   ],
+   "address": [
+    "11 MOUNTAIN INDUSTRIAL DR",
+    "BREVARD",
+    "NC",
+    "28712"
+   ],
+   "awards": 25,
+   "amount": 169908272.45,
+   "places": {
+    "28712": 21,
+    "29650": 3,
+    "53946": 1
+   },
+   "parent": [
+    "TRANSYLVANIA VOCATIONAL SERVICES  INC.",
+    "C3CPBKR45EX3"
+   ]
+  },
+  "G796XXB7PDL1": {
+   "names": [
+    "GREEN MEADOW FARMS INC"
+   ],
+   "address": [
+    "24 MORRISON ST",
+    "CHAPMAN",
+    "ME",
+    "04757"
+   ],
+   "awards": 1,
+   "amount": 100400.0,
+   "places": {
+    "04757": 1
+   },
+   "parent": [
+    "GREEN MEADOW FARMS INC",
+    "G796XXB7PDL1"
+   ]
+  },
+  "G851LL13WDD6": {
+   "names": [
+    "TRINIDAD/BENHAM CORP."
+   ],
+   "address": [
+    "3650 S YOSEMITE ST STE 300",
+    "DENVER",
+    "CO",
+    "80237"
+   ],
+   "awards": 25,
+   "amount": 23134194.9,
+   "places": {
+    "37086": 8,
+    "75236": 3,
+    "75773": 4,
+    "80751": 6,
+    "91744": 4
+   },
+   "parent": [
+    "TRINIDAD/BENHAM CORP.",
+    "SFWCK1ZDMSQ1"
+   ]
+  },
+  "G8AUWAWJQEH3": {
+   "names": [
+    "WEST LIBERTY FOODS, LLC"
+   ],
+   "address": [
+    "228 W 2ND ST",
+    "WEST LIBERTY",
+    "IA",
+    "52776"
+   ],
+   "awards": 4,
+   "amount": 7635153.6,
+   "places": {
+    "52776": 4
+   },
+   "parent": [
+    "WEST LIBERTY FOODS, LLC",
+    "G8AUWAWJQEH3"
+   ]
+  },
+  "G94VHE8LS6Q7": {
+   "names": [
+    "SIMMONS PREPARED FOODS, INC."
+   ],
+   "address": [
+    "601 N HICO ST",
+    "SILOAM SPRINGS",
+    "AR",
+    "72761"
+   ],
+   "awards": 5,
+   "amount": 7817729.4,
+   "places": {
+    "72734": 3,
+    "72761": 1,
+    "72956": 1
+   },
+   "parent": [
+    "SIMMONS PREPARED FOODS, INC.",
+    "G94VHE8LS6Q7"
+   ]
+  },
+  "GAJRNKK4CLN9": {
+   "names": [
+    "ROVIRA BISCUIT CORP"
+   ],
+   "address": [
+    "619 AVE LA CEIBA",
+    "PONCE",
+    "PR",
+    "00717"
+   ],
+   "awards": 6,
+   "amount": 1789655.4,
+   "places": {
+    "00717": 6
+   },
+   "parent": [
+    "ROVIRA BISCUIT CORP",
+    "GAJRNKK4CLN9"
+   ]
+  },
+  "GBNZMFE3SY59": {
+   "names": [
+    "JOHNPAC, LLC"
+   ],
+   "address": [
+    "208 AMERICAN LEGION DR",
+    "CROWLEY",
+    "LA",
+    "70526"
+   ],
+   "awards": 9,
+   "amount": 1279806.0,
+   "places": {
+    "70526": 9
+   },
+   "parent": [
+    "JOHNPAC, LLC",
+    "GBNZMFE3SY59"
+   ]
+  },
+  "GCCKELUAJLS5": {
+   "names": [
+    "AGRICOR INC"
+   ],
+   "address": [
+    "1626 S JOAQUIN DR",
+    "MARION",
+    "IN",
+    "46953"
+   ],
+   "awards": 5,
+   "amount": 1066880.0,
+   "places": {
+    "46952": 5
+   },
+   "parent": [
+    "GRAIN MILLERS, INC.",
+    "PC29BNFCZ2F4"
+   ]
+  },
+  "GEJ1CLDT7LU6": {
+   "names": [
+    "SIMMONS FARM RAISED CATFISH INC"
+   ],
+   "address": [
+    "2628 ERICKSON RD",
+    "YAZOO CITY",
+    "MS",
+    "39194"
+   ],
+   "awards": 9,
+   "amount": 10605380.0,
+   "places": {
+    "39194": 9
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "GGD7Q8FEFFP2": {
+   "names": [
+    "CASTLE CANNING LLC"
+   ],
+   "address": [
+    "517 VINE AVE",
+    "SHARON",
+    "PA",
+    "16146"
+   ],
+   "awards": 6,
+   "amount": 1693808.76,
+   "places": {
+    "16146": 6
+   },
+   "parent": [
+    "CASTLE CANNING LLC",
+    "GGD7Q8FEFFP2"
+   ]
+  },
+  "GGS5ULJW6LG6": {
+   "names": [
+    "VICTOR PACKING, INC."
+   ],
+   "address": [
+    "11687 ROAD 27 1/2",
+    "MADERA",
+    "CA",
+    "93637"
+   ],
+   "awards": 20,
+   "amount": 66951254.07,
+   "places": {
+    "93637": 20
+   },
+   "parent": [
+    "VICTOR PACKING, INC.",
+    "GGS5ULJW6LG6"
+   ]
+  },
+  "GGSPGL1NMJL3": {
+   "names": [
+    "ALL-AMERICAN FARMS INC"
+   ],
+   "address": [
+    "2400 HIGH RIDGE RD STE 100",
+    "BOYNTON BEACH",
+    "FL",
+    "33426"
+   ],
+   "awards": 56,
+   "amount": 45798727.94,
+   "places": {
+    "00693": 5,
+    "00725": 2,
+    "00982": 8,
+    "33426": 2,
+    "33487": 39
+   },
+   "parent": [
+    "ALL-AMERICAN FARMS INC",
+    "GGSPGL1NMJL3"
+   ]
+  },
+  "GGXULRMFRUE3": {
+   "names": [
+    "WISOMAN FOODS, INC."
+   ],
+   "address": [
+    "30782 HUNTWOOD AVE",
+    "HAYWARD",
+    "CA",
+    "94544"
+   ],
+   "awards": 16,
+   "amount": 4615172.91,
+   "places": {
+    "94544": 16
+   },
+   "parent": [
+    "WISOMAN FOODS  INC.",
+    "EBZCGYHLKJY7"
+   ]
+  },
+  "GK39F1M2PF61": {
+   "names": [
+    "ANDERSEN & SONS SHELLING INC"
+   ],
+   "address": [
+    "4530 ROWLES RD",
+    "VINA",
+    "CA",
+    "96092"
+   ],
+   "awards": 2,
+   "amount": 5450141.3,
+   "places": {
+    "96092": 2
+   },
+   "parent": [
+    "ANDERSEN & SONS SHELLING INC",
+    "GK39F1M2PF61"
+   ]
+  },
+  "GQAUJ9B6N923": {
+   "names": [
+    "HAPCO FARMS LLC"
+   ],
+   "address": [
+    "215 ROGERS WAY UNIT K",
+    "WESTHAMPTON BEACH",
+    "NY",
+    "11978"
+   ],
+   "awards": 6,
+   "amount": 209163.87,
+   "places": {
+    "12085": 2,
+    "28147": 2,
+    "30046": 2
+   },
+   "parent": [
+    "HAPCO FARMS LLC",
+    "GQAUJ9B6N923"
+   ]
+  },
+  "GRANSL2AQGG9": {
+   "names": [
+    "PROVIEW FOODS, LLC"
+   ],
+   "address": [
+    "100 JERICHO QUADRANGLE STE 140",
+    "JERICHO",
+    "NY",
+    "11753"
+   ],
+   "awards": 9,
+   "amount": 11419725.6,
+   "places": {
+    "28464": 9
+   },
+   "parent": [
+    "PROVIEW FOODS, LLC",
+    "GRANSL2AQGG9"
+   ]
+  },
+  "GRF6C3NN2TY6": {
+   "names": [
+    "C. F. GOLLOTT AND SON SEAFOOD, INC."
+   ],
+   "address": [
+    "9357 CENTRAL AVE",
+    "DIBERVILLE",
+    "MS",
+    "39540"
+   ],
+   "awards": 3,
+   "amount": 1383000.0,
+   "places": {
+    "39540": 3
+   },
+   "parent": [
+    "C. F. GOLLOTT AND SON SEAFOOD, INC.",
+    "GRF6C3NN2TY6"
+   ]
+  },
+  "GU9AMKZFRPC6": {
+   "names": [
+    "NORTH LILY FOODS INC"
+   ],
+   "address": [
+    "61 HARVEST MILL LN",
+    "CLAYTON",
+    "NC",
+    "27520"
+   ],
+   "awards": 1,
+   "amount": 29200.0,
+   "places": {
+    "27520": 1
+   },
+   "parent": [
+    "NORTH LILY FOODS INC",
+    "GU9AMKZFRPC6"
+   ]
+  },
+  "GUK9UXV4KHA4": {
+   "names": [
+    "SEABOARD FOODS LLC"
+   ],
+   "address": [
+    "9000 W 67TH ST STE 200",
+    "SHAWNEE MISSION",
+    "KS",
+    "66202"
+   ],
+   "awards": 4,
+   "amount": 446102.94,
+   "places": {
+    "51111": 4
+   },
+   "parent": [
+    "SEABOARD CORPORATION",
+    "PAGELZMD3C25"
+   ]
+  },
+  "GWL1X3K9LC65": {
+   "names": [
+    "HONEY BEAR TREE FRUIT CO LLC"
+   ],
+   "address": [
+    "2710 EUCLID AVE",
+    "WENATCHEE",
+    "WA",
+    "98801"
+   ],
+   "awards": 1,
+   "amount": 229075.0,
+   "places": {
+    "98802": 1
+   },
+   "parent": [
+    "HONEY BEAR TREE FRUIT CO LLC",
+    "GWL1X3K9LC65"
+   ]
+  },
+  "GX6WLMYJM5L9": {
+   "names": [
+    "IMG CITRUS INC"
+   ],
+   "address": [
+    "2600 45TH ST",
+    "VERO BEACH",
+    "FL",
+    "32967"
+   ],
+   "awards": 1,
+   "amount": 210137.0,
+   "places": {
+    "32967": 1
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "GY1QGNZLW5D9": {
+   "names": [
+    "GREAT LAKES CHEESE CO INC"
+   ],
+   "address": [
+    "17825 GREAT LAKES PKWY",
+    "HIRAM",
+    "OH",
+    "44234"
+   ],
+   "awards": 65,
+   "amount": 87084950.41,
+   "places": {
+    "37355": 6,
+    "44234": 5,
+    "53073": 8,
+    "54603": 30,
+    "79602": 5,
+    "84631": 6,
+    "95240": 5
+   },
+   "parent": [
+    "GREAT LAKES CHEESE CO INC",
+    "GY1QGNZLW5D9"
+   ]
+  },
+  "GYUTHG3XR5X3": {
+   "names": [
+    "GREENRIDGE FRUIT, INC."
+   ],
+   "address": [
+    "5154 PEACH RIDGE AVE NW",
+    "GRAND RAPIDS",
+    "MI",
+    "49544"
+   ],
+   "awards": 2,
+   "amount": 172418.4,
+   "places": {
+    "47932": 1,
+    "49544": 1
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "GZZ3J1BKHMA1": {
+   "names": [
+    "WINONA FOODS INC."
+   ],
+   "address": [
+    "1521 BROOKFIELD AVE",
+    "GREEN BAY",
+    "WI",
+    "54313"
+   ],
+   "awards": 25,
+   "amount": 21349732.03,
+   "places": {
+    "54313": 25
+   },
+   "parent": [
+    "WINONA FOODS INC.",
+    "GZZ3J1BKHMA1"
+   ]
+  },
+  "H1J3ATER7Y46": {
+   "names": [
+    "FARMER BEAN & SEED, LLC"
+   ],
+   "address": [
+    "30 A ST NW",
+    "QUINCY",
+    "WA",
+    "98848"
+   ],
+   "awards": 27,
+   "amount": 10397600.97,
+   "places": {
+    "80759": 8,
+    "98848": 19
+   },
+   "parent": [
+    "FARMER BEAN & SEED, LLC",
+    "H1J3ATER7Y46"
+   ]
+  },
+  "H81TTVKZL3A7": {
+   "names": [
+    "HARRIS RANCH BEEF COMPANY"
+   ],
+   "address": [
+    "16277 S MCCALL AVE",
+    "SELMA",
+    "CA",
+    "93662"
+   ],
+   "awards": 11,
+   "amount": 11805875.36,
+   "places": {
+    "93662": 11
+   },
+   "parent": [
+    "CENTRAL VALLEY MEAT CO., INC.",
+    "HZFUY8FJAT34"
+   ]
+  },
+  "H8FDWRMSL785": {
+   "names": [
+    "CAL-MAINE FOODS, INC"
+   ],
+   "address": [
+    "1052 HIGHLAND COLONY PKWY STE 200",
+    "RIDGELAND",
+    "MS",
+    "39157"
+   ],
+   "awards": 97,
+   "amount": 9631073.71,
+   "places": {
+    "31085": 3,
+    "33513": 2,
+    "39066": 6,
+    "39209": 9,
+    "42234": 24,
+    "45362": 10,
+    "45390": 1,
+    "67524": 2,
+    "70453": 4,
+    "72638": 6,
+    "72761": 4,
+    "77420": 2,
+    "78124": 1,
+    "78648": 7,
+    "78941": 4,
+    "78959": 5,
+    "84624": 7
+   },
+   "parent": [
+    "CAL-MAINE FOODS, INC",
+    "H8FDWRMSL785"
+   ]
+  },
+  "H8JMRF3FPNQ6": {
+   "names": [
+    "BELLEHARVEST SALES, INC"
+   ],
+   "address": [
+    "11900 FISK RD",
+    "BELDING",
+    "MI",
+    "48809"
+   ],
+   "awards": 4,
+   "amount": 824215.28,
+   "places": {
+    "48809": 4
+   },
+   "parent": [
+    "BELLEHARVEST SALES, INC",
+    "H8JMRF3FPNQ6"
+   ]
+  },
+  "H8SKX8TH1X96": {
+   "names": [
+    "MARBURGER FARM DAIRY INC"
+   ],
+   "address": [
+    "1506 MARS EVANS CITY RD",
+    "EVANS CITY",
+    "PA",
+    "16033"
+   ],
+   "awards": 2,
+   "amount": 80049.84,
+   "places": {
+    "16033": 2
+   },
+   "parent": [
+    "MARBURGER FARM DAIRY INC",
+    "H8SKX8TH1X96"
+   ]
+  },
+  "HBJ6ZU3NTL73": {
+   "names": [
+    "LUNA ENTERPRISES INTERNATIONAL INC"
+   ],
+   "address": [
+    "25644 RED CHERRY DR",
+    "ALDIE",
+    "VA",
+    "20105"
+   ],
+   "awards": 82,
+   "amount": 37285214.82,
+   "places": {
+    "17857": 6,
+    "29129": 9,
+    "49065": 15,
+    "49431": 19,
+    "58401": 8,
+    "95076": 11,
+    "95240": 9,
+    "95965": 5
+   },
+   "parent": [
+    "LUNA ENTERPRISES INTERNATIONAL INC",
+    "HBJ6ZU3NTL73"
+   ]
+  },
+  "HCE9J9Z9MM53": {
+   "names": [
+    "MILLSTONE MILLS, INC."
+   ],
+   "address": [
+    "309 DETROIT ST",
+    "LA PORTE",
+    "IN",
+    "46350"
+   ],
+   "awards": 17,
+   "amount": 8284453.02,
+   "places": {
+    "46350": 17
+   },
+   "parent": [
+    "MILLSTONE MILLS, INC.",
+    "HCE9J9Z9MM53"
+   ]
+  },
+  "HCJNHBM9M1R5": {
+   "names": [
+    "LAND O LAKES INC"
+   ],
+   "address": [
+    "4001 LEXINGTON AVE N",
+    "ARDEN HILLS",
+    "MN",
+    "55112"
+   ],
+   "awards": 40,
+   "amount": 27522069.62,
+   "places": {
+    "53042": 10,
+    "55355": 5,
+    "56352": 19,
+    "93611": 2,
+    "95963": 4
+   },
+   "parent": [
+    "LAND O LAKES INC",
+    "HCJNHBM9M1R5"
+   ]
+  },
+  "HFWATMQBHKA9": {
+   "names": [
+    "PHILADELPHIA MACARONI COMPANY"
+   ],
+   "address": [
+    "760 S 11TH ST",
+    "PHILADELPHIA",
+    "PA",
+    "19147"
+   ],
+   "awards": 15,
+   "amount": 40590915.77,
+   "places": {
+    "58203": 10,
+    "64086": 2,
+    "99207": 3
+   },
+   "parent": [
+    "PHILADELPHIA MACARONI COMPANY",
+    "HFWATMQBHKA9"
+   ]
+  },
+  "HGYKUM989XF9": {
+   "names": [
+    "BURNETTE FOODS, INC."
+   ],
+   "address": [
+    "701 S US HIGHWAY 31",
+    "ELK RAPIDS",
+    "MI",
+    "49629"
+   ],
+   "awards": 166,
+   "amount": 154851598.14,
+   "places": {
+    "49057": 38,
+    "49446": 81,
+    "49629": 19,
+    "49727": 28
+   },
+   "parent": [
+    "BURNETTE FOODS, INC.",
+    "HGYKUM989XF9"
+   ]
+  },
+  "HJPUVE6F31D3": {
+   "names": [
+    "JELINEK CUSTOM CLEANING INC"
+   ],
+   "address": [
+    "2453 COUNTY ROAD 58",
+    "ALLIANCE",
+    "NE",
+    "69301"
+   ],
+   "awards": 2,
+   "amount": 1486308.78,
+   "places": {
+    "80751": 2
+   },
+   "parent": [
+    "JELINEK CUSTOM CLEANING INC",
+    "HJPUVE6F31D3"
+   ]
+  },
+  "HJZEDT4S8LT5": {
+   "names": [
+    "CHANNEL FISH PROCESSING CO., INC."
+   ],
+   "address": [
+    "200 COMMERCE DR",
+    "BRAINTREE",
+    "MA",
+    "02184"
+   ],
+   "awards": 31,
+   "amount": 196261620.08,
+   "places": {
+    "02184": 31
+   },
+   "parent": [
+    "CHANNEL FISH PROCESSING CO., INC.",
+    "HJZEDT4S8LT5"
+   ]
+  },
+  "HK4MFDV4JQP9": {
+   "names": [
+    "GOSSNER FOODS, INC"
+   ],
+   "address": [
+    "1051 N 1000 W",
+    "LOGAN",
+    "UT",
+    "84321"
+   ],
+   "awards": 29,
+   "amount": 86352732.65,
+   "places": {
+    "84321": 29
+   },
+   "parent": [
+    "GOSSNER FOODS, INC",
+    "HK4MFDV4JQP9"
+   ]
+  },
+  "HK8TEFKGKZM6": {
+   "names": [
+    "ECHO LAKE FOODS, LLC"
+   ],
+   "address": [
+    "316 GROVE ST",
+    "BURLINGTON",
+    "WI",
+    "53105"
+   ],
+   "awards": 13,
+   "amount": 8610816.01,
+   "places": {
+    "42301": 6,
+    "53105": 7
+   },
+   "parent": [
+    "ECHO LAKE FOODS, LLC",
+    "HK8TEFKGKZM6"
+   ]
+  },
+  "HLV6MALWCU73": {
+   "names": [
+    "SUNSWEET GROWERS INC"
+   ],
+   "address": [
+    "901 N WALTON AVE",
+    "YUBA CITY",
+    "CA",
+    "95993"
+   ],
+   "awards": 4,
+   "amount": 9418601.82,
+   "places": {
+    "95993": 4
+   },
+   "parent": [
+    "SUNSWEET GROWERS INC",
+    "HLV6MALWCU73"
+   ]
+  },
+  "HMN6LBNFE4L3": {
+   "names": [
+    "SUNWEST FRUIT CO., INC."
+   ],
+   "address": [
+    "755 E MANNING AVE",
+    "PARLIER",
+    "CA",
+    "93648"
+   ],
+   "awards": 1,
+   "amount": 1078265.4,
+   "places": {
+    "93619": 1
+   },
+   "parent": [
+    "D BRITZ TIC",
+    "EWTXHQBF1513"
+   ]
+  },
+  "HNKYRJ2KR9A5": {
+   "names": [
+    "MCCAIN FOODS USA, INC."
+   ],
+   "address": [
+    "1 TOWER LN FL 11",
+    "OAKBROOK TERRACE",
+    "IL",
+    "60181"
+   ],
+   "awards": 13,
+   "amount": 56755745.92,
+   "places": {
+    "04740": 10,
+    "54494": 2,
+    "60181": 1
+   },
+   "parent": [
+    "MCCAIN USA  INC.",
+    "RQVNJVXHYVP9"
+   ]
+  },
+  "HSY2YML3VMQ7": {
+   "names": [
+    "ASSOCIATED MILK PRODUCERS INC"
+   ],
+   "address": [
+    "315 N BROADWAY ST",
+    "NEW ULM",
+    "MN",
+    "56073"
+   ],
+   "awards": 136,
+   "amount": 407488079.79,
+   "places": {
+    "51248": 9,
+    "53901": 60,
+    "56073": 6,
+    "56362": 57,
+    "72904": 1,
+    "95357": 2,
+    "98902": 1
+   },
+   "parent": [
+    "ASSOCIATED MILK PRODUCERS INC",
+    "HSY2YML3VMQ7"
+   ]
+  },
+  "HWV2FDQEQAX1": {
+   "names": [
+    "GOODNESS INGREDIENTS, LLC"
+   ],
+   "address": [
+    "2288 GEER RD",
+    "HUGHSON",
+    "CA",
+    "95326"
+   ],
+   "awards": 2,
+   "amount": 979921.44,
+   "places": {
+    "95326": 2
+   },
+   "parent": [
+    "GOODNESS INGREDIENTS, LLC",
+    "HWV2FDQEQAX1"
+   ]
+  },
+  "HZ12JBYN3KM9": {
+   "names": [
+    "JOHN HOFMEISTER & SON INC"
+   ],
+   "address": [
+    "2386 S BLUE ISLAND AVE",
+    "CHICAGO",
+    "IL",
+    "60608"
+   ],
+   "awards": 70,
+   "amount": 118924812.63,
+   "places": {
+    "60608": 70
+   },
+   "parent": [
+    "JOHN HOFMEISTER & SON INC",
+    "HZ12JBYN3KM9"
+   ]
+  },
+  "HZFUY8FJAT34": {
+   "names": [
+    "CENTRAL VALLEY MEAT CO., INC."
+   ],
+   "address": [
+    "10431 8 3/4 AVE",
+    "HANFORD",
+    "CA",
+    "93230"
+   ],
+   "awards": 69,
+   "amount": 316204187.15,
+   "places": {
+    "93230": 69
+   },
+   "parent": [
+    "CENTRAL VALLEY MEAT CO., INC.",
+    "HZFUY8FJAT34"
+   ]
+  },
+  "J1BXR53MH5H3": {
+   "names": [
+    "INDUSTRIA LECHERA DE PUERTO RICO INC"
+   ],
+   "address": [
+    "198 AVE CARLOS CHARDON",
+    "SAN JUAN",
+    "PR",
+    "00918"
+   ],
+   "awards": 13,
+   "amount": 7946167.17,
+   "places": {
+    "00918": 13
+   },
+   "parent": [
+    "FONDO FOMENTO INDUSTRIA LECHERA",
+    "EMHFJKL5MJ31"
+   ]
+  },
+  "J4LHQG68LNU6": {
+   "names": [
+    "TURNER DAIRY FARMS INC"
+   ],
+   "address": [
+    "1049 JEFFERSON RD",
+    "PITTSBURGH",
+    "PA",
+    "15235"
+   ],
+   "awards": 7,
+   "amount": 272984.59,
+   "places": {
+    "15235": 7
+   },
+   "parent": [
+    "TURNER DAIRY FARMS INC",
+    "J4LHQG68LNU6"
+   ]
+  },
+  "J7M9TBLLE1B5": {
+   "names": [
+    "J. G. BOSWELL COMPANY"
+   ],
+   "address": [
+    "101 W WALNUT ST",
+    "PASADENA",
+    "CA",
+    "91103"
+   ],
+   "awards": 7,
+   "amount": 3546068.61,
+   "places": {
+    "93206": 5,
+    "93212": 2
+   },
+   "parent": [
+    "J. G. BOSWELL COMPANY",
+    "J7M9TBLLE1B5"
+   ]
+  },
+  "JA8NPLWD57F4": {
+   "names": [
+    "RACE WEST, INC."
+   ],
+   "address": [
+    "600 S STATE ST",
+    "CLARKS SUMMIT",
+    "PA",
+    "18411"
+   ],
+   "awards": 15,
+   "amount": 4875735.58,
+   "places": {
+    "81125": 8,
+    "98605": 1,
+    "98801": 1,
+    "98807": 3,
+    "98942": 2
+   },
+   "parent": [
+    "RACE WEST, INC.",
+    "JA8NPLWD57F4"
+   ]
+  },
+  "JB9MHVXSEHU7": {
+   "names": [
+    "TEDDY BEAR FRESH PRODUCE, LLC"
+   ],
+   "address": [
+    "28595 MARYS CT",
+    "EASTON",
+    "MD",
+    "21601"
+   ],
+   "awards": 1,
+   "amount": 171034.2,
+   "places": {
+    "21601": 1
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "JBB5Q6BD46T1": {
+   "names": [
+    "HEARTLAND GOODWILL ENTERPRISES"
+   ],
+   "address": [
+    "8200 6TH ST SW",
+    "CEDAR RAPIDS",
+    "IA",
+    "52404"
+   ],
+   "awards": 46,
+   "amount": 31970912.7,
+   "places": {
+    "52241": 46
+   },
+   "parent": [
+    "HEARTLAND GOODWILL ENTERPRISES",
+    "JBB5Q6BD46T1"
+   ]
+  },
+  "JGHQRWR86ZN5": {
+   "names": [
+    "PIER FISH CO INC"
+   ],
+   "address": [
+    "68 CONWAY ST",
+    "NEW BEDFORD",
+    "MA",
+    "02740"
+   ],
+   "awards": 5,
+   "amount": 22784969.0,
+   "places": {
+    "02740": 5
+   },
+   "parent": [
+    "PIER FISH CO INC",
+    "JGHQRWR86ZN5"
+   ]
+  },
+  "JHKVRHTL49A1": {
+   "names": [
+    "TRINITY PACKAGING LLC"
+   ],
+   "address": [
+    "416 S 5TH ST",
+    "FORT SMITH",
+    "AR",
+    "72901"
+   ],
+   "awards": 19,
+   "amount": 14358162.68,
+   "places": {
+    "58701": 10,
+    "72901": 9
+   },
+   "parent": [
+    "TRINITY PACKAGING LLC",
+    "JHKVRHTL49A1"
+   ]
+  },
+  "JMGKQS49MUQ9": {
+   "names": [
+    "WIERS FARM, INC"
+   ],
+   "address": [
+    "4465 STATE ROUTE 103 S",
+    "WILLARD",
+    "OH",
+    "44890"
+   ],
+   "awards": 3,
+   "amount": 2625605.81,
+   "places": {
+    "44890": 3
+   },
+   "parent": [
+    "WIERS FARM, INC",
+    "JMGKQS49MUQ9"
+   ]
+  },
+  "JNFEEF1VXNM6": {
+   "names": [
+    "TREE TOP, INC"
+   ],
+   "address": [
+    "220 E 2ND AVE",
+    "SELAH",
+    "WA",
+    "98942"
+   ],
+   "awards": 2,
+   "amount": 934841.0,
+   "places": {
+    "98942": 2
+   },
+   "parent": [
+    "TREE TOP, INC",
+    "JNFEEF1VXNM6"
+   ]
+  },
+  "JSL3MKHL21M6": {
+   "names": [
+    "CASE FARMS LLC"
+   ],
+   "address": [
+    "385 PILCH RD",
+    "TROUTMAN",
+    "NC",
+    "28166"
+   ],
+   "awards": 4,
+   "amount": 1013601.06,
+   "places": {
+    "28655": 2,
+    "44705": 2
+   },
+   "parent": [
+    "CASE FARMS, L.L.C.",
+    "PEYHUFY1CWB8"
+   ]
+  },
+  "JZRADBRJUJG8": {
+   "names": [
+    "RICELAND FOODS INC"
+   ],
+   "address": [
+    "2120 S PARK AVE",
+    "STUTTGART",
+    "AR",
+    "72160"
+   ],
+   "awards": 4,
+   "amount": 3783098.78,
+   "places": {
+    "72160": 4
+   },
+   "parent": [
+    "RICELAND FOODS INC",
+    "JZRADBRJUJG8"
+   ]
+  },
+  "JZYDRHUKN5V8": {
+   "names": [
+    "CATANIA-SPAGNA CORP"
+   ],
+   "address": [
+    "3 NEMCO WAY",
+    "AYER",
+    "MA",
+    "01432"
+   ],
+   "awards": 23,
+   "amount": 10780385.66,
+   "places": {
+    "01432": 22,
+    "55121": 1
+   },
+   "parent": [
+    "CATANIA-SPAGNA CORP",
+    "JZYDRHUKN5V8"
+   ]
+  },
+  "K14JJL8VAP93": {
+   "names": [
+    "GREGORY PACKAGING, INC."
+   ],
+   "address": [
+    "1125 EASTON RD",
+    "BETHLEHEM",
+    "PA",
+    "18015"
+   ],
+   "awards": 18,
+   "amount": 32340199.2,
+   "places": {
+    "07105": 1,
+    "18015": 6,
+    "30265": 5,
+    "85043": 6
+   },
+   "parent": [
+    "GREGORY PACKAGING, INC.",
+    "K14JJL8VAP93"
+   ]
+  },
+  "K1H8ZCUTDJ33": {
+   "names": [
+    "COAST CITRUS DISTRIBUTORS, LLC"
+   ],
+   "address": [
+    "7597 BRISTOW CT",
+    "SAN DIEGO",
+    "CA",
+    "92154"
+   ],
+   "awards": 4,
+   "amount": 973886.44,
+   "places": {
+    "94587": 4
+   },
+   "parent": [
+    "COAST CITRUS DISTRIBUTORS, LLC",
+    "K1H8ZCUTDJ33"
+   ]
+  },
+  "K3XNLHMBUK78": {
+   "names": [
+    "SHORELINE FRUIT LLC"
+   ],
+   "address": [
+    "10106 US HIGHWAY 31 N",
+    "WILLIAMSBURG",
+    "MI",
+    "49690"
+   ],
+   "awards": 5,
+   "amount": 25077403.53,
+   "places": {
+    "49684": 1,
+    "49690": 4
+   },
+   "parent": [
+    "SHORELINE FRUIT LLC",
+    "K3XNLHMBUK78"
+   ]
+  },
+  "K5JVALD3MH36": {
+   "names": [
+    "EAST BAKING COMPANY, INC."
+   ],
+   "address": [
+    "104 WHITING FARMS RD",
+    "HOLYOKE",
+    "MA",
+    "01040"
+   ],
+   "awards": 31,
+   "amount": 79591875.2,
+   "places": {
+    "62288": 3,
+    "63775": 14,
+    "79603": 13,
+    "93725": 1
+   },
+   "parent": [
+    "EAST BAKING COMPANY, INC.",
+    "K5JVALD3MH36"
+   ]
+  },
+  "K7BDMP96CCB4": {
+   "names": [
+    "LUDFORD'S, INC."
+   ],
+   "address": [
+    "3038 PLEASANT ST",
+    "RIVERSIDE",
+    "CA",
+    "92507"
+   ],
+   "awards": 44,
+   "amount": 96020346.93,
+   "places": {
+    "91730": 1,
+    "92507": 42,
+    "97031": 1
+   },
+   "parent": [
+    "LUDFORD'S, INC.",
+    "K7BDMP96CCB4"
+   ]
+  },
+  "K9GDLFBPJ952": {
+   "names": [
+    "VIETTI ACQUISITION LLC"
+   ],
+   "address": [
+    "636 SOUTHGATE AVE",
+    "NASHVILLE",
+    "TN",
+    "37203"
+   ],
+   "awards": 40,
+   "amount": 42319621.63,
+   "places": {
+    "37203": 40
+   },
+   "parent": [
+    "VIETTI ACQUISITION LLC",
+    "Z6VJACM7YQD8"
+   ]
+  },
+  "KA77LFNKY8R9": {
+   "names": [
+    "YOUNGSTOWN GRAPE DISTRIBUTORS, INC."
+   ],
+   "address": [
+    "1625 G ST",
+    "REEDLEY",
+    "CA",
+    "93654"
+   ],
+   "awards": 4,
+   "amount": 782509.0,
+   "places": {
+    "93654": 4
+   },
+   "parent": [
+    "YOUNGSTOWN GRAPE DISTRIBUTORS, INC.",
+    "KA77LFNKY8R9"
+   ]
+  },
+  "KABLXJENEQ33": {
+   "names": [
+    "CARUTHERS RAISIN PACKING CO., INC"
+   ],
+   "address": [
+    "12797 ELM AVE",
+    "CARUTHERS",
+    "CA",
+    "93609"
+   ],
+   "awards": 2,
+   "amount": 925133.94,
+   "places": {
+    "93609": 2
+   },
+   "parent": [
+    "CARUTHERS RAISIN PACKING CO., INC",
+    "KABLXJENEQ33"
+   ]
+  },
+  "KAT4TFP3R6G7": {
+   "names": [
+    "C & C PRODUCE, LLC."
+   ],
+   "address": [
+    "1100 ATLANTIC AVE",
+    "KANSAS CITY",
+    "MO",
+    "64116"
+   ],
+   "awards": 1,
+   "amount": 128000.0,
+   "places": {
+    "64116": 1
+   },
+   "parent": [
+    "C & C PRODUCE, LLC.",
+    "KAT4TFP3R6G7"
+   ]
+  },
+  "KCG5GJCRUAQ5": {
+   "names": [
+    "ROGERS ORCHARDS, INC."
+   ],
+   "address": [
+    "336 LONG BOTTOM RD",
+    "SOUTHINGTON",
+    "CT",
+    "06489"
+   ],
+   "awards": 4,
+   "amount": 532582.68,
+   "places": {
+    "06489": 4
+   },
+   "parent": [
+    "ROGERS ORCHARDS, INC.",
+    "KCG5GJCRUAQ5"
+   ]
+  },
+  "KK9WDXLDGEM5": {
+   "names": [
+    "ROYAL RIDGE FRUIT & COLD STORAGE, LLC"
+   ],
+   "address": [
+    "13215 RD F SW",
+    "ROYAL CITY",
+    "WA",
+    "99357"
+   ],
+   "awards": 1,
+   "amount": 517914.0,
+   "places": {
+    "99357": 1
+   },
+   "parent": [
+    "ROYAL RIDGE FRUIT & COLD STORAGE, LLC",
+    "KK9WDXLDGEM5"
+   ]
+  },
+  "KKUMBGM4CJG1": {
+   "names": [
+    "HORIZON MARKETING, INC."
+   ],
+   "address": [
+    "536 W VICTOR AVE",
+    "VISALIA",
+    "CA",
+    "93277"
+   ],
+   "awards": 43,
+   "amount": 59757824.06,
+   "places": {
+    "83350": 2,
+    "93277": 40,
+    "95322": 1
+   },
+   "parent": [
+    "HORIZON MARKETING, INC.",
+    "KKUMBGM4CJG1"
+   ]
+  },
+  "KM8HN5U3TRE8": {
+   "names": [
+    "HILAND DAIRY FOODS COMPANY, LLC"
+   ],
+   "address": [
+    "1133 E KEARNEY ST",
+    "SPRINGFIELD",
+    "MO",
+    "65803"
+   ],
+   "awards": 38,
+   "amount": 16882600.42,
+   "places": {
+    "65803": 38
+   },
+   "parent": [
+    "PRAIRIE FARMS DAIRY INC",
+    "DLP2YDPHLQT7"
+   ]
+  },
+  "KMGFS7GNRK53": {
+   "names": [
+    "HANOVER FOODS CORP"
+   ],
+   "address": [
+    "1486 YORK RD",
+    "HANOVER",
+    "PA",
+    "17331"
+   ],
+   "awards": 35,
+   "amount": 18291170.09,
+   "places": {
+    "17331": 35
+   },
+   "parent": [
+    "HANOVER FOODS CORPORATION",
+    "DRJ4X9C1PZB6"
+   ]
+  },
+  "KPX3DU8ND9C8": {
+   "names": [
+    "COLORADO COUNTY RICE MILL, INC."
+   ],
+   "address": [
+    "1006 MCCORMICK ROAD",
+    "EAGLE LAKE",
+    "TX",
+    "77434"
+   ],
+   "awards": 1,
+   "amount": 765507.5,
+   "places": {
+    "77434": 1
+   },
+   "parent": [
+    "COLORADO COUNTY RICE MILL, INC.",
+    "KPX3DU8ND9C8"
+   ]
+  },
+  "KQ8HZA6XKZ48": {
+   "names": [
+    "PERFECT PACT, LLC"
+   ],
+   "address": [
+    "3267 PEARL RD",
+    "MEDINA",
+    "OH",
+    "44256"
+   ],
+   "awards": 11,
+   "amount": 7647448.28,
+   "places": {
+    "16120": 1,
+    "31411": 10
+   },
+   "parent": [
+    "PERFECT PACT, LLC",
+    "KQ8HZA6XKZ48"
+   ]
+  },
+  "KR4JG2AGG7X7": {
+   "names": [
+    "PALMER FOODS, LLC"
+   ],
+   "address": [
+    "13790 TRAM AVE",
+    "BAYOU LA BATRE",
+    "AL",
+    "36509"
+   ],
+   "awards": 1,
+   "amount": 862500.0,
+   "places": {
+    "36509": 1
+   },
+   "parent": [
+    "PALMER FOODS, LLC",
+    "KR4JG2AGG7X7"
+   ]
+  },
+  "KY2PNK5M5DM3": {
+   "names": [
+    "NEW DAIRY OPCO, LLC"
+   ],
+   "address": [
+    "12400 COIT RD",
+    "DALLAS",
+    "TX",
+    "75251"
+   ],
+   "awards": 9,
+   "amount": 3471372.59,
+   "places": {
+    "40741": 8,
+    "44111": 1
+   },
+   "parent": [
+    "NEW DAIRY OPCO, LLC",
+    "KY2PNK5M5DM3"
+   ]
+  },
+  "KYKSJCN78W43": {
+   "names": [
+    "MASTERS GALLERY FOODS, INCORPORATED"
+   ],
+   "address": [
+    "328 COUNTY HWY PP",
+    "PLYMOUTH",
+    "WI",
+    "53073"
+   ],
+   "awards": 102,
+   "amount": 202501224.74,
+   "places": {
+    "17557": 1,
+    "53070": 42,
+    "53073": 16,
+    "74728": 1,
+    "79022": 12,
+    "79029": 28,
+    "83330": 2
+   },
+   "parent": [
+    "MASTERS GALLERY FOODS, INCORPORATED",
+    "KYKSJCN78W43"
+   ]
+  },
+  "L348PUAZ3MG9": {
+   "names": [
+    "SCHENK PACKING CO., INC."
+   ],
+   "address": [
+    "8204 288TH ST NW",
+    "STANWOOD",
+    "WA",
+    "98292"
+   ],
+   "awards": 24,
+   "amount": 87578943.88,
+   "places": {
+    "98292": 24
+   },
+   "parent": [
+    "SCHENK PACKING CO., INC.",
+    "L348PUAZ3MG9"
+   ]
+  },
+  "L9X4FUZMLLM3": {
+   "names": [
+    "AGRIFROST, LLC"
+   ],
+   "address": [
+    "4324 E VINEYARD AVE",
+    "OXNARD",
+    "CA",
+    "93036"
+   ],
+   "awards": 1,
+   "amount": 172260.0,
+   "places": {
+    "95012": 1
+   },
+   "parent": [
+    "AGRIFROST, LLC",
+    "L9X4FUZMLLM3"
+   ]
+  },
+  "LC33YCEA2MB9": {
+   "names": [
+    "RICE FRUIT CO"
+   ],
+   "address": [
+    "2760 CARLISLE RD",
+    "GARDNERS",
+    "PA",
+    "17324"
+   ],
+   "awards": 4,
+   "amount": 368786.6,
+   "places": {
+    "17324": 4
+   },
+   "parent": [
+    "RICE FRUIT CO",
+    "LC33YCEA2MB9"
+   ]
+  },
+  "LC55NELHATZ9": {
+   "names": [
+    "KELLEY BEAN CO INC"
+   ],
+   "address": [
+    "2407 CIRCLE DR",
+    "SCOTTSBLUFF",
+    "NE",
+    "69361"
+   ],
+   "awards": 48,
+   "amount": 30136656.19,
+   "places": {
+    "48615": 3,
+    "58220": 1,
+    "58257": 6,
+    "58474": 5,
+    "69341": 1,
+    "69356": 3,
+    "69357": 2,
+    "69358": 21,
+    "69361": 1,
+    "83328": 2,
+    "83350": 3
+   },
+   "parent": [
+    "KELLEY BEAN CO INC",
+    "LC55NELHATZ9"
+   ]
+  },
+  "LC9SN44LUZT5": {
+   "names": [
+    "SACRAMENTO PACKING INC"
+   ],
+   "address": [
+    "833 TUDOR RD",
+    "YUBA CITY",
+    "CA",
+    "95991"
+   ],
+   "awards": 6,
+   "amount": 2346810.0,
+   "places": {
+    "95992": 6
+   },
+   "parent": [
+    "SACRAMENTO PACKING INC",
+    "LC9SN44LUZT5"
+   ]
+  },
+  "LDAQN7DPDLD7": {
+   "names": [
+    "POLY SAC, INC."
+   ],
+   "address": [
+    "7920 WESTPARK DR",
+    "HOUSTON",
+    "TX",
+    "77063"
+   ],
+   "awards": 18,
+   "amount": 3295744.0,
+   "places": {
+    "77063": 18
+   },
+   "parent": [
+    "POLY SAC, INC.",
+    "LDAQN7DPDLD7"
+   ]
+  },
+  "LDUXMM3MZU46": {
+   "names": [
+    "FRUTA ROYAL, LLC"
+   ],
+   "address": [
+    "724 N ELKO ST",
+    "VISALIA",
+    "CA",
+    "93291"
+   ],
+   "awards": 41,
+   "amount": 99195953.0,
+   "places": {
+    "27569": 1,
+    "93247": 11,
+    "93291": 27,
+    "95326": 2
+   },
+   "parent": [
+    "FRUTA ROYAL, LLC",
+    "LDUXMM3MZU46"
+   ]
+  },
+  "LF8YWNHLKY99": {
+   "names": [
+    "SEVERN PEANUT CO INC"
+   ],
+   "address": [
+    "413 MAIN ST",
+    "SEVERN",
+    "NC",
+    "27877"
+   ],
+   "awards": 15,
+   "amount": 36894395.41,
+   "places": {
+    "23851": 5,
+    "27877": 2,
+    "79403": 8
+   },
+   "parent": [
+    "SEVERN PEANUT CO INC",
+    "YA38LZR4UY99"
+   ]
+  },
+  "LFQPMBTSFRN4": {
+   "names": [
+    "GULF PACIFIC RICE CO., LLC"
+   ],
+   "address": [
+    "12010 TAYLOR RD",
+    "HOUSTON",
+    "TX",
+    "77041"
+   ],
+   "awards": 33,
+   "amount": 52239041.91,
+   "places": {
+    "71654": 3,
+    "72479": 7,
+    "77041": 23
+   },
+   "parent": [
+    "GULF PACIFIC  INC.",
+    "UP25HPNDGS75"
+   ]
+  },
+  "LKH2T7W17UN5": {
+   "names": [
+    "MICHAEL FOODS, INC"
+   ],
+   "address": [
+    "301 CARLSON PKWY STE 400",
+    "MINNETONKA",
+    "MN",
+    "55305"
+   ],
+   "awards": 8,
+   "amount": 13045206.17,
+   "places": {
+    "55334": 6,
+    "68784": 1,
+    "85365": 1
+   },
+   "parent": [
+    "BELLRING BRANDS, LLC",
+    "DSLQFR4CX1G6"
+   ]
+  },
+  "LKWWBL2FK148": {
+   "names": [
+    "HEARTLAND CATFISH CO INC"
+   ],
+   "address": [
+    "55001 HIGHWAY 82 W",
+    "ITTA BENA",
+    "MS",
+    "38941"
+   ],
+   "awards": 17,
+   "amount": 63150516.0,
+   "places": {
+    "38941": 17
+   },
+   "parent": [
+    "HEARTLAND CATFISH CO INC",
+    "LKWWBL2FK148"
+   ]
+  },
+  "LL6NJJEMRF29": {
+   "names": [
+    "COMMERCIAL LYNKS, INC"
+   ],
+   "address": [
+    "2121 EISENHOWER AVE STE 403",
+    "ALEXANDRIA",
+    "VA",
+    "22314"
+   ],
+   "awards": 54,
+   "amount": 16008201.25,
+   "places": {
+    "27520": 2,
+    "33178": 4,
+    "56722": 1,
+    "58223": 2,
+    "58346": 1,
+    "67401": 3,
+    "77015": 5,
+    "77029": 8,
+    "77530": 19,
+    "92507": 1,
+    "93277": 7,
+    "93722": 1
+   },
+   "parent": [
+    "COMMERCIAL LYNKS, INC",
+    "LL6NJJEMRF29"
+   ]
+  },
+  "LQ6WU15EKEN1": {
+   "names": [
+    "STUTZ PACKING COMPANY"
+   ],
+   "address": [
+    "82689 AVENUE 45",
+    "INDIO",
+    "CA",
+    "92201"
+   ],
+   "awards": 79,
+   "amount": 330528727.97,
+   "places": {
+    "92201": 79
+   },
+   "parent": [
+    "STUTZ PACKING CO",
+    "QKB3YR4LLNE4"
+   ]
+  },
+  "LQCEL5NKVJX6": {
+   "names": [
+    "TRINITY FRUIT COMPANY, INC."
+   ],
+   "address": [
+    "7571 N REMINGTON AVE",
+    "FRESNO",
+    "CA",
+    "93711"
+   ],
+   "awards": 9,
+   "amount": 36897462.37,
+   "places": {
+    "93654": 9
+   },
+   "parent": [
+    "TRINITY FRUIT COMPANY  INC.",
+    "RSGYRYWN2H69"
+   ]
+  },
+  "LSAEQFEM92N1": {
+   "names": [
+    "VANEE FOODS COMPANY"
+   ],
+   "address": [
+    "5418 MCDERMOTT DR",
+    "BERKELEY",
+    "IL",
+    "60163"
+   ],
+   "awards": 2,
+   "amount": 413493.48,
+   "places": {
+    "60163": 2
+   },
+   "parent": [
+    "VANEE FOODS COMPANY",
+    "LSAEQFEM92N1"
+   ]
+  },
+  "LVWBLWN8VKG3": {
+   "names": [
+    "RPE, LLC"
+   ],
+   "address": [
+    "8550 CENTRAL SANDS RD",
+    "BANCROFT",
+    "WI",
+    "54921"
+   ],
+   "awards": 12,
+   "amount": 9117293.53,
+   "places": {
+    "53936": 2,
+    "54494": 1,
+    "54921": 6,
+    "81144": 2,
+    "83402": 1
+   },
+   "parent": [
+    "RPE, LLC",
+    "LVWBLWN8VKG3"
+   ]
+  },
+  "LYHJE2WJSJM7": {
+   "names": [
+    "EDESIA, INC."
+   ],
+   "address": [
+    "550 ROMANO VINEYARD WAY",
+    "NORTH KINGSTOWN",
+    "RI",
+    "02852"
+   ],
+   "awards": 8,
+   "amount": 19839599.4,
+   "places": {
+    "07201": 4,
+    "08810": 4
+   },
+   "parent": [
+    "EDESIA, INC.",
+    "LYHJE2WJSJM7"
+   ]
+  },
+  "M1BHY69CWGB9": {
+   "names": [
+    "VALLEY FRESH FOODS, INC."
+   ],
+   "address": [
+    "3600 E LINWOOD AVE",
+    "TURLOCK",
+    "CA",
+    "95380"
+   ],
+   "awards": 17,
+   "amount": 1609467.03,
+   "places": {
+    "57368": 5,
+    "95316": 2,
+    "97071": 4,
+    "98292": 1,
+    "98579": 2,
+    "99341": 3
+   },
+   "parent": [
+    "VALLEY FRESH FOODS, INC.",
+    "M1BHY69CWGB9"
+   ]
+  },
+  "M1LPHSRJ3YM3": {
+   "names": [
+    "AMERICAN SEAFOODS COMPANY LLC"
+   ],
+   "address": [
+    "2025 1ST AVE STE 900",
+    "SEATTLE",
+    "WA",
+    "98121"
+   ],
+   "awards": 1,
+   "amount": 274428.0,
+   "places": {
+    "98121": 1
+   },
+   "parent": [
+    "AMERICAN SEAFOODS COMPANY LLC",
+    "CCCJCKHLM818"
+   ]
+  },
+  "M4PAP86MN629": {
+   "names": [
+    "DNO INC"
+   ],
+   "address": [
+    "3650 E 5TH AVE",
+    "COLUMBUS",
+    "OH",
+    "43219"
+   ],
+   "awards": 1,
+   "amount": 5841.0,
+   "places": {
+    "43219": 1
+   },
+   "parent": [
+    "DNO INC",
+    "M4PAP86MN629"
+   ]
+  },
+  "M4Q7G4FTDE22": {
+   "names": [
+    "FOSTER POULTRY FARMS, LLC"
+   ],
+   "address": [
+    "1000 DAVIS ST",
+    "LIVINGSTON",
+    "CA",
+    "95334"
+   ],
+   "awards": 45,
+   "amount": 48565472.63,
+   "places": {
+    "71241": 4,
+    "93257": 2,
+    "93706": 2,
+    "95334": 37
+   },
+   "parent": [
+    "FOSTER POULTRY FARMS, LLC",
+    "M4Q7G4FTDE22"
+   ]
+  },
+  "M77SN5TH6ET6": {
+   "names": [
+    "TEASDALE FOODS, INC."
+   ],
+   "address": [
+    "2115 E BELT LINE RD",
+    "CARROLLTON",
+    "TX",
+    "75006"
+   ],
+   "awards": 35,
+   "amount": 12766754.63,
+   "places": {
+    "60942": 22,
+    "95301": 13
+   },
+   "parent": [
+    "TEASDALE FOODS, INC.",
+    "M77SN5TH6ET6"
+   ]
+  },
+  "M7AYLMG1JWB6": {
+   "names": [
+    "DAIRYLAND TRADING CO LLC"
+   ],
+   "address": [
+    "2200 DICKINSON RD",
+    "DE PERE",
+    "WI",
+    "54115"
+   ],
+   "awards": 17,
+   "amount": 26653285.44,
+   "places": {
+    "55355": 16,
+    "90620": 1
+   },
+   "parent": [
+    "DAIRYLAND TRADING CO LLC",
+    "M7AYLMG1JWB6"
+   ]
+  },
+  "MBACQDXPCMA5": {
+   "names": [
+    "OCEAN SPRAY CRANBERRIES INC"
+   ],
+   "address": [
+    "1 OCEAN SPRAY DR",
+    "MIDDLEBORO",
+    "MA",
+    "02349"
+   ],
+   "awards": 1,
+   "amount": 1117288.77,
+   "places": {
+    "60018": 1
+   },
+   "parent": [
+    "OCEAN SPRAY CRANBERRIES INC",
+    "MBACQDXPCMA5"
+   ]
+  },
+  "MBENDSK69AN5": {
+   "names": [
+    "LASSONDE PAPPAS & CO INC"
+   ],
+   "address": [
+    "1 COLLINS DR STE 200",
+    "CARNEYS POINT",
+    "NJ",
+    "08069"
+   ],
+   "awards": 31,
+   "amount": 19403326.69,
+   "places": {
+    "08302": 12,
+    "28758": 1,
+    "49345": 1,
+    "72764": 16,
+    "91761": 1
+   },
+   "parent": [
+    "CLEMENT PAPPAS AND COMPANY  INC.",
+    "KN83RA6LPAS8"
+   ]
+  },
+  "MC2QEKLCQXA8": {
+   "names": [
+    "KENNEDY RICE MILL, LLC"
+   ],
+   "address": [
+    "9175 LITTLE DEE RD",
+    "MER ROUGE",
+    "LA",
+    "71261"
+   ],
+   "awards": 1,
+   "amount": 727133.4,
+   "places": {
+    "71261": 1
+   },
+   "parent": [
+    "KENNEDY RICE MILL, LLC",
+    "MC2QEKLCQXA8"
+   ]
+  },
+  "MDPMWK3K4S38": {
+   "names": [
+    "CRAIN WALNUT SHELLING, INC."
+   ],
+   "address": [
+    "10695 DECKER AVE",
+    "LOS MOLINOS",
+    "CA",
+    "96055"
+   ],
+   "awards": 1,
+   "amount": 4647993.94,
+   "places": {
+    "96055": 1
+   },
+   "parent": [
+    "CRAIN WALNUT SHELLING, INC.",
+    "MDPMWK3K4S38"
+   ]
+  },
+  "MDVBNYU1RYJ1": {
+   "names": [
+    "SMP MARKETING, LLC"
+   ],
+   "address": [
+    "4949 NORTH BRANCH ROAD",
+    "BENTON HARBOR",
+    "MI",
+    "49022"
+   ],
+   "awards": 3,
+   "amount": 1031723.79,
+   "places": {
+    "49022": 3
+   },
+   "parent": [
+    "SMP MARKETING, LLC",
+    "MDVBNYU1RYJ1"
+   ]
+  },
+  "METNZYWWNHA4": {
+   "names": [
+    "COOPER FARMS INC"
+   ],
+   "address": [
+    "3310 STATE ROUTE 49",
+    "FORT RECOVERY",
+    "OH",
+    "45846"
+   ],
+   "awards": 3,
+   "amount": 3540899.42,
+   "places": {
+    "45363": 3
+   },
+   "parent": [
+    "COOPER FARMS INC",
+    "METNZYWWNHA4"
+   ]
+  },
+  "MGFAEHK1JKQ3": {
+   "names": [
+    "HIGH PLAINS BISON, LLC"
+   ],
+   "address": [
+    "1395 S PLATTE RIVER DR",
+    "DENVER",
+    "CO",
+    "80223"
+   ],
+   "awards": 5,
+   "amount": 5360666.8,
+   "places": {
+    "55009": 5
+   },
+   "parent": [
+    "HIGH PLAINS BISON, LLC",
+    "MGFAEHK1JKQ3"
+   ]
+  },
+  "MH49EA53SKX7": {
+   "names": [
+    "PETERSON BRANDS, LLC"
+   ],
+   "address": [
+    "3104 W BASELINE RD",
+    "SHELBY",
+    "MI",
+    "49455"
+   ],
+   "awards": 6,
+   "amount": 6533786.41,
+   "places": {
+    "06029": 2,
+    "32720": 2,
+    "44314": 2
+   },
+   "parent": [
+    "PETERSON FARMS INC",
+    "MK7BCN12P1P7"
+   ]
+  },
+  "MHF4P4LW2DK3": {
+   "names": [
+    "TUSCANY CHEESE LLC"
+   ],
+   "address": [
+    "6850 ARTESIA BLVD",
+    "BUENA PARK",
+    "CA",
+    "90620"
+   ],
+   "awards": 6,
+   "amount": 4234331.65,
+   "places": {
+    "90620": 6
+   },
+   "parent": [
+    "TUSCANY CHEESE LLC",
+    "MHF4P4LW2DK3"
+   ]
+  },
+  "MK7BCN12P1P7": {
+   "names": [
+    "PETERSON FARMS INC"
+   ],
+   "address": [
+    "3104 W BASELINE RD",
+    "SHELBY",
+    "MI",
+    "49455"
+   ],
+   "awards": 29,
+   "amount": 44361606.08,
+   "places": {
+    "49455": 29
+   },
+   "parent": [
+    "PETERSON FARMS INC",
+    "MK7BCN12P1P7"
+   ]
+  },
+  "MNAKFQWNLGQ8": {
+   "names": [
+    "TYSON FRESH MEATS INC"
+   ],
+   "address": [
+    "2200 W DON TYSON PKWY",
+    "SPRINGDALE",
+    "AR",
+    "72762"
+   ],
+   "awards": 16,
+   "amount": 20386683.0,
+   "places": {
+    "50588": 3,
+    "52738": 12,
+    "66801": 1
+   },
+   "parent": [
+    "TYSON FOODS INC.",
+    "DX7AU4JMLPC7"
+   ]
+  },
+  "MNWUDJAXMNR7": {
+   "names": [
+    "RIVERIDGE PRODUCE MARKETING INC"
+   ],
+   "address": [
+    "9000 FRUIT RIDGE AVE NW",
+    "SPARTA",
+    "MI",
+    "49345"
+   ],
+   "awards": 28,
+   "amount": 30377353.55,
+   "places": {
+    "49345": 28
+   },
+   "parent": [
+    "RIVERIDGE PRODUCE MARKETING INC",
+    "MNWUDJAXMNR7"
+   ]
+  },
+  "MQLUFZX43218": {
+   "names": [
+    "LAFITTE FROZEN FOODS CORPORATION"
+   ],
+   "address": [
+    "5165 CAROLINE ST",
+    "LAFITTE",
+    "LA",
+    "70067"
+   ],
+   "awards": 5,
+   "amount": 18512392.5,
+   "places": {
+    "70092": 5
+   },
+   "parent": [
+    "LAFITTE FROZEN FOODS CORPORATION",
+    "MQLUFZX43218"
+   ]
+  },
+  "MS6PEXJBYW51": {
+   "names": [
+    "VALLEY OASIS FOODS, LLC"
+   ],
+   "address": [
+    "25990 S AVE",
+    "CORNING",
+    "CA",
+    "96021"
+   ],
+   "awards": 1,
+   "amount": 3831289.85,
+   "places": {
+    "96055": 1
+   },
+   "parent": [
+    "VALLEY OASIS FOODS, LLC",
+    "MS6PEXJBYW51"
+   ]
+  },
+  "MSB6KVJ9E3S7": {
+   "names": [
+    "ROYAL CREST DAIRY, INC."
+   ],
+   "address": [
+    "350 S PEARL ST",
+    "DENVER",
+    "CO",
+    "80209"
+   ],
+   "awards": 36,
+   "amount": 1799268.72,
+   "places": {
+    "80501": 36
+   },
+   "parent": [
+    "ROYAL CREST DAIRY, INC.",
+    "MSB6KVJ9E3S7"
+   ]
+  },
+  "MTB2U9K5GXF1": {
+   "names": [
+    "S&N PACKAGING, LLC"
+   ],
+   "address": [
+    "222 14TH ST",
+    "CANDO",
+    "ND",
+    "58324"
+   ],
+   "awards": 1,
+   "amount": 232718.73,
+   "places": {
+    "56308": 1
+   },
+   "parent": [
+    "S&N PACKAGING, LLC",
+    "MTB2U9K5GXF1"
+   ]
+  },
+  "MURVN1YJCLA3": {
+   "names": [
+    "HIRZEL CANNING COMPANY"
+   ],
+   "address": [
+    "411 LEMOYNE RD",
+    "NORTHWOOD",
+    "OH",
+    "43619"
+   ],
+   "awards": 24,
+   "amount": 17813925.69,
+   "places": {
+    "29129": 1,
+    "43450": 16,
+    "43619": 7
+   },
+   "parent": [
+    "HIRZEL CANNING COMPANY",
+    "MURVN1YJCLA3"
+   ]
+  },
+  "MZA3EV7LZJ65": {
+   "names": [
+    "AMERICAN BLANCHING COMPANY, LLC"
+   ],
+   "address": [
+    "155 RIP WILEY RD",
+    "FITZGERALD",
+    "GA",
+    "31750"
+   ],
+   "awards": 26,
+   "amount": 65065223.03,
+   "places": {
+    "22603": 3,
+    "31750": 6,
+    "36079": 6,
+    "55427": 4,
+    "58421": 6,
+    "63042": 1
+   },
+   "parent": [
+    "BELLRING BRANDS, LLC",
+    "DSLQFR4CX1G6"
+   ]
+  },
+  "N24FW7FN8JW3": {
+   "names": [
+    "NEBRASKA BEAN, INC."
+   ],
+   "address": [
+    "85824 519TH AVE",
+    "CLEARWATER",
+    "NE",
+    "68726"
+   ],
+   "awards": 33,
+   "amount": 39413441.63,
+   "places": {
+    "68726": 33
+   },
+   "parent": [
+    "NEBRASKA BEAN, INC.",
+    "N24FW7FN8JW3"
+   ]
+  },
+  "N5FLZNJBZKC5": {
+   "names": [
+    "SOUTH GEORGIA PECAN COMPANY"
+   ],
+   "address": [
+    "2220 E HILL AVE",
+    "VALDOSTA",
+    "GA",
+    "31601"
+   ],
+   "awards": 2,
+   "amount": 21804244.21,
+   "places": {
+    "31601": 2
+   },
+   "parent": [
+    "SOUTH GEORGIA PECAN COMPANY INC",
+    "KG5WGHDJSKW3"
+   ]
+  },
+  "N5MFNSCSNK71": {
+   "names": [
+    "SCHNEIDER'S DAIRY, INC."
+   ],
+   "address": [
+    "726 FRANK ST",
+    "PITTSBURGH",
+    "PA",
+    "15227"
+   ],
+   "awards": 1,
+   "amount": 865334.6,
+   "places": {
+    "15227": 1
+   },
+   "parent": [
+    "SCHNEIDER'S DAIRY HOLDINGS",
+    "D5XYL3XXQC13"
+   ]
+  },
+  "NAMADQJ1VJJ9": {
+   "names": [
+    "CALIFORNIA DAIRIES INC"
+   ],
+   "address": [
+    "2000 N PLAZA DR",
+    "VISALIA",
+    "CA",
+    "93291"
+   ],
+   "awards": 4,
+   "amount": 73005933.1,
+   "places": {
+    "93313": 3,
+    "95380": 1
+   },
+   "parent": [
+    "CALIFORNIA DAIRIES INC",
+    "NAMADQJ1VJJ9"
+   ]
+  },
+  "NC9QQPYGD435": {
+   "names": [
+    "UNITED PULSE TRADING INC"
+   ],
+   "address": [
+    "1611 E CENTURY AVE STE 102",
+    "BISMARCK",
+    "ND",
+    "58503"
+   ],
+   "awards": 21,
+   "amount": 7394892.59,
+   "places": {
+    "58801": 19,
+    "77029": 2
+   },
+   "parent": [
+    "ALLIANCE GRAIN TRADERS INC",
+    "MQS3X7J2KG98"
+   ]
+  },
+  "NELHRV2LMSQ5": {
+   "names": [
+    "SUPREME RICE, LLC"
+   ],
+   "address": [
+    "4 S AVE D",
+    "CROWLEY",
+    "LA",
+    "70526"
+   ],
+   "awards": 65,
+   "amount": 157195166.26,
+   "places": {
+    "70526": 22,
+    "70556": 43
+   },
+   "parent": [
+    "SUPREME RICE, LLC",
+    "NELHRV2LMSQ5"
+   ]
+  },
+  "NEMNTEQER8N1": {
+   "names": [
+    "KANAWAY SEAFOODS, INC"
+   ],
+   "address": [
+    "6425 NE 175TH ST",
+    "BOTHELL",
+    "WA",
+    "98028"
+   ],
+   "awards": 1,
+   "amount": 143444.0,
+   "places": {
+    "99633": 1
+   },
+   "parent": [
+    "PATTISON, JIM GROUP INC",
+    "REPJEGEY1M83"
+   ]
+  },
+  "NLH9CXATE617": {
+   "names": [
+    "SACRAMENTO VALLEY WALNUT GROWERS LLC"
+   ],
+   "address": [
+    "896 OBANION RD",
+    "YUBA CITY",
+    "CA",
+    "95991"
+   ],
+   "awards": 2,
+   "amount": 7892242.75,
+   "places": {
+    "95991": 2
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "NP7VB8WH54K5": {
+   "names": [
+    "GOLD COAST PRODUCE INC.,"
+   ],
+   "address": [
+    "1800 NATIONS DR STE 120",
+    "GURNEE",
+    "IL",
+    "60031"
+   ],
+   "awards": 13,
+   "amount": 2534960.04,
+   "places": {
+    "49315": 13
+   },
+   "parent": [
+    "GOLD COAST PRODUCE INC.,",
+    "NP7VB8WH54K5"
+   ]
+  },
+  "NQJRL18JWAB7": {
+   "names": [
+    "RICH CHICKS LLC"
+   ],
+   "address": [
+    "13771 GRAMERCY PL",
+    "GARDENA",
+    "CA",
+    "90249"
+   ],
+   "awards": 39,
+   "amount": 80500755.61,
+   "places": {
+    "28357": 39
+   },
+   "parent": [
+    "RICH CHICKS, LLC",
+    "RZGAXKNS7WR6"
+   ]
+  },
+  "NWAANGNZW453": {
+   "names": [
+    "TABATCHNICK FINE FOODS INC"
+   ],
+   "address": [
+    "1230 HAMILTON ST",
+    "SOMERSET",
+    "NJ",
+    "08873"
+   ],
+   "awards": 64,
+   "amount": 186146335.2,
+   "places": {
+    "08873": 46,
+    "14059": 9,
+    "46368": 9
+   },
+   "parent": [
+    "TABATCHNICK FINE FOODS INC",
+    "NWAANGNZW453"
+   ]
+  },
+  "NWE2Q9Z21BZ6": {
+   "names": [
+    "BIG SKY VENTURE GROUP LLC"
+   ],
+   "address": [
+    "25609 US HIGHWAY 2 E",
+    "CUT BANK",
+    "MT",
+    "59427"
+   ],
+   "awards": 4,
+   "amount": 418400.0,
+   "places": {
+    "77530": 4
+   },
+   "parent": [
+    "BIG SKY VENTURE GROUP LLC",
+    "NWE2Q9Z21BZ6"
+   ]
+  },
+  "NY3AL2SKD176": {
+   "names": [
+    "JM GRAIN INC"
+   ],
+   "address": [
+    "12 N RAILROAD ST",
+    "GARRISON",
+    "ND",
+    "58540"
+   ],
+   "awards": 82,
+   "amount": 31342649.46,
+   "places": {
+    "50010": 2,
+    "58301": 1,
+    "58540": 21,
+    "59401": 4,
+    "71602": 1,
+    "77029": 8,
+    "77530": 21,
+    "78401": 13,
+    "91745": 11
+   },
+   "parent": [
+    "JM GRAIN INC",
+    "NY3AL2SKD176"
+   ]
+  },
+  "NZL6QLKFKRX7": {
+   "names": [
+    "AMERICAN CUSTOM MEATS, LLC"
+   ],
+   "address": [
+    "4276 N TRACY BLVD",
+    "TRACY",
+    "CA",
+    "95304"
+   ],
+   "awards": 20,
+   "amount": 55243744.43,
+   "places": {
+    "95304": 20
+   },
+   "parent": [
+    "AMERICAN CUSTOM MEATS, LLC",
+    "NZL6QLKFKRX7"
+   ]
+  },
+  "P21HK4L7XLU5": {
+   "names": [
+    "EB TRADING GROUP LLC"
+   ],
+   "address": [
+    "32 GEORGE RD",
+    "OMAK",
+    "WA",
+    "98841"
+   ],
+   "awards": 12,
+   "amount": 1132097.76,
+   "places": {
+    "97862": 11,
+    "98951": 1
+   },
+   "parent": [
+    "EB TRADING GROUP LLC",
+    "P21HK4L7XLU5"
+   ]
+  },
+  "P7HNMF2NDJY8": {
+   "names": [
+    "FARM FRESH FIRST LLC"
+   ],
+   "address": [
+    "40 STEVENS ST",
+    "OAKFIELD",
+    "NY",
+    "14125"
+   ],
+   "awards": 38,
+   "amount": 22140106.59,
+   "places": {
+    "13084": 9,
+    "14028": 2,
+    "14551": 14,
+    "14590": 13
+   },
+   "parent": [
+    "FARM FRESH FIRST LLC",
+    "P7HNMF2NDJY8"
+   ]
+  },
+  "PC29BNFCZ2F4": {
+   "names": [
+    "GRAIN MILLERS, INC."
+   ],
+   "address": [
+    "10400 VIKING DR STE 301",
+    "EDEN PRAIRIE",
+    "MN",
+    "55344"
+   ],
+   "awards": 9,
+   "amount": 11464343.43,
+   "places": {
+    "50472": 9
+   },
+   "parent": [
+    "GRAIN MILLERS, INC.",
+    "PC29BNFCZ2F4"
+   ]
+  },
+  "PCJ6GTJWS266": {
+   "names": [
+    "SUN VALLEY RAISINS, INC., A CALIFORNIA CORPORATION"
+   ],
+   "address": [
+    "9595 S HUGHES AVE",
+    "FRESNO",
+    "CA",
+    "93706"
+   ],
+   "awards": 22,
+   "amount": 97091142.64,
+   "places": {
+    "93706": 22
+   },
+   "parent": [
+    "SUN VALLEY RAISINS, INC., A CALIFORNIA CORPORATION",
+    "PCJ6GTJWS266"
+   ]
+  },
+  "PFT4L4C1M387": {
+   "names": [
+    "WAWONA FROZEN FOODS INC"
+   ],
+   "address": [
+    "100 W ALLUVIAL AVE",
+    "CLOVIS",
+    "CA",
+    "93611"
+   ],
+   "awards": 37,
+   "amount": 121467460.97,
+   "places": {
+    "93611": 37
+   },
+   "parent": [
+    "WAWONA FROZEN FOODS INC",
+    "PFT4L4C1M387"
+   ]
+  },
+  "PKFGRFQBLMZ8": {
+   "names": [
+    "TRAINA DRIED FRUIT, INC."
+   ],
+   "address": [
+    "337 LEMON AVE",
+    "PATTERSON",
+    "CA",
+    "95363"
+   ],
+   "awards": 4,
+   "amount": 4302559.15,
+   "places": {
+    "95363": 4
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "PLL6A6KHDZE8": {
+   "names": [
+    "JTM PROVISIONS CO INC"
+   ],
+   "address": [
+    "200 SALES AVE",
+    "HARRISON",
+    "OH",
+    "45030"
+   ],
+   "awards": 152,
+   "amount": 306768547.76,
+   "places": {
+    "30040": 20,
+    "45014": 85,
+    "45030": 29,
+    "50201": 18
+   },
+   "parent": [
+    "JTM PROVISIONS CO INC",
+    "PLL6A6KHDZE8"
+   ]
+  },
+  "PMMLSCW867W6": {
+   "names": [
+    "DIMARE FRESH, INC."
+   ],
+   "address": [
+    "4629 DIPLOMACY RD",
+    "FORT WORTH",
+    "TX",
+    "76155"
+   ],
+   "awards": 2,
+   "amount": 30088.27,
+   "places": {
+    "33578": 2
+   },
+   "parent": [
+    "DIMARE FRESH, INC.",
+    "PMMLSCW867W6"
+   ]
+  },
+  "PNCLHNKB8K37": {
+   "names": [
+    "PACIFIC CHEESE CO INC"
+   ],
+   "address": [
+    "21090 CABOT BLVD",
+    "HAYWARD",
+    "CA",
+    "94545"
+   ],
+   "awards": 3,
+   "amount": 337734.4,
+   "places": {
+    "79120": 1,
+    "89521": 2
+   },
+   "parent": [
+    "PACIFIC CHEESE CO INC",
+    "PNCLHNKB8K37"
+   ]
+  },
+  "PNRZEBLPE5F4": {
+   "names": [
+    "SUNTREE SNACK FOODS LLC"
+   ],
+   "address": [
+    "4502 W MONTEROSA ST",
+    "PHOENIX",
+    "AZ",
+    "85031"
+   ],
+   "awards": 2,
+   "amount": 20794317.83,
+   "places": {
+    "85031": 2
+   },
+   "parent": [
+    "SUNTREE SNACK FOODS LLC",
+    "PNRZEBLPE5F4"
+   ]
+  },
+  "Q55LLZLNY5W3": {
+   "names": [
+    "RED GOLD, INC."
+   ],
+   "address": [
+    "1500 TOMATO COUNTRY WAY",
+    "ELWOOD",
+    "IN",
+    "46036"
+   ],
+   "awards": 101,
+   "amount": 118837557.56,
+   "places": {
+    "46036": 13,
+    "46063": 26,
+    "46740": 61,
+    "93611": 1
+   },
+   "parent": [
+    "RED GOLD, INC.",
+    "Q55LLZLNY5W3"
+   ]
+  },
+  "Q6JSYMK3FMJ7": {
+   "names": [
+    "NORTHWEST BERRY CO-OP"
+   ],
+   "address": [
+    "1010 E POLE RD",
+    "EVERSON",
+    "WA",
+    "98247"
+   ],
+   "awards": 5,
+   "amount": 2757578.81,
+   "places": {
+    "98247": 5
+   },
+   "parent": [
+    "NORTHWEST BERRY COOP",
+    "UURVMMTVQDN5"
+   ]
+  },
+  "Q7ASEN8HXSJ3": {
+   "names": [
+    "PW MONTGOMERY LLC"
+   ],
+   "address": [
+    "276 63RD AVE",
+    "EVANS",
+    "CO",
+    "80634"
+   ],
+   "awards": 36,
+   "amount": 36287788.66,
+   "places": {
+    "58272": 2,
+    "58301": 20,
+    "58422": 2,
+    "80734": 12
+   },
+   "parent": [
+    "PW MONTGOMERY LLC",
+    "Q7ASEN8HXSJ3"
+   ]
+  },
+  "QAMJD15FE1K9": {
+   "names": [
+    "MIGHTY FRESH FARMS, LLC"
+   ],
+   "address": [
+    "250 WILSON ST",
+    "CONKLIN",
+    "MI",
+    "49403"
+   ],
+   "awards": 5,
+   "amount": 2069849.59,
+   "places": {
+    "49403": 5
+   },
+   "parent": [
+    "MIGHTY FRESH FARMS, LLC",
+    "QAMJD15FE1K9"
+   ]
+  },
+  "QBPWBWJSZLT1": {
+   "names": [
+    "M & B PRODUCTS, INC."
+   ],
+   "address": [
+    "8601 HARNEY RD",
+    "TAMPA",
+    "FL",
+    "33637"
+   ],
+   "awards": 4,
+   "amount": 1058228.87,
+   "places": {
+    "33637": 4
+   },
+   "parent": [
+    "M & B PRODUCTS, INC.",
+    "QBPWBWJSZLT1"
+   ]
+  },
+  "QC9CZLW37MA8": {
+   "names": [
+    "SUNBERRY LIMITED MANUFACTURING, LLC"
+   ],
+   "address": [
+    "38345 W 10 MILE RD STE 355",
+    "FARMINGTON HILLS",
+    "MI",
+    "48335"
+   ],
+   "awards": 4,
+   "amount": 2732563.02,
+   "places": {
+    "17353": 1,
+    "49079": 3
+   },
+   "parent": [
+    "SUNBERRY LIMITED MANUFACTURING, LLC",
+    "QC9CZLW37MA8"
+   ]
+  },
+  "QG3DJWJ7R4J3": {
+   "names": [
+    "CROWN ORCHARD COMPANY LLC"
+   ],
+   "address": [
+    "5861 PIEDMONT APPLE LN",
+    "COVESVILLE",
+    "VA",
+    "22931"
+   ],
+   "awards": 7,
+   "amount": 1611227.28,
+   "places": {
+    "22924": 7
+   },
+   "parent": [
+    "CROWN ORCHARD COMPANY LLC",
+    "QG3DJWJ7R4J3"
+   ]
+  },
+  "QKK9MD43KPG4": {
+   "names": [
+    "CALIFORNIA SPLENDOR, INC."
+   ],
+   "address": [
+    "7684 SAINT ANDREWS AVE STE A",
+    "SAN DIEGO",
+    "CA",
+    "92154"
+   ],
+   "awards": 1,
+   "amount": 618899.73,
+   "places": {
+    "97013": 1
+   },
+   "parent": [
+    "CALIFORNIA SPLENDOR, INC.",
+    "QKK9MD43KPG4"
+   ]
+  },
+  "QMF3VF5S7DJ8": {
+   "names": [
+    "BUSHMANS' INC."
+   ],
+   "address": [
+    "621 E GRAND AVE",
+    "ROSHOLT",
+    "WI",
+    "54473"
+   ],
+   "awards": 62,
+   "amount": 100528456.02,
+   "places": {
+    "53936": 62
+   },
+   "parent": [
+    "BUSHMANS' INC.",
+    "QMF3VF5S7DJ8"
+   ]
+  },
+  "QQVLRSXM1CA6": {
+   "names": [
+    "BROWNOTTER BUFFALO RANCH, LLC"
+   ],
+   "address": [
+    "24851 116TH ST",
+    "TIMBER LAKE",
+    "SD",
+    "57656"
+   ],
+   "awards": 14,
+   "amount": 796280.0,
+   "places": {
+    "57656": 13,
+    "80216": 1
+   },
+   "parent": [
+    "BROWNOTTER BUFFALO RANCH, LLC",
+    "QQVLRSXM1CA6"
+   ]
+  },
+  "QRJ8DK4MKNG6": {
+   "names": [
+    "JASPER WYMAN & SON"
+   ],
+   "address": [
+    "280 MAIN ST",
+    "MILBRIDGE",
+    "ME",
+    "04658"
+   ],
+   "awards": 3,
+   "amount": 1908957.6,
+   "places": {
+    "04622": 3
+   },
+   "parent": [
+    "JASPER WYMAN & SON",
+    "QRJ8DK4MKNG6"
+   ]
+  },
+  "QSE9V2GD1QK3": {
+   "names": [
+    "TRIDENT SEAFOODS CORPORATION"
+   ],
+   "address": [
+    "5303 SHILSHOLE AVE NW",
+    "SEATTLE",
+    "WA",
+    "98107"
+   ],
+   "awards": 47,
+   "amount": 334237987.23,
+   "places": {
+    "30117": 3,
+    "98107": 10,
+    "98221": 23,
+    "98225": 2,
+    "99553": 4,
+    "99901": 5
+   },
+   "parent": [
+    "TRIDENT SEAFOODS CORPORATION",
+    "QSE9V2GD1QK3"
+   ]
+  },
+  "QU8MKFDVKBL8": {
+   "names": [
+    "AMERICAN FOODS GROUP, LLC"
+   ],
+   "address": [
+    "500 S WASHINGTON ST",
+    "GREEN BAY",
+    "WI",
+    "54301"
+   ],
+   "awards": 21,
+   "amount": 27792063.0,
+   "places": {
+    "54302": 20,
+    "68137": 1
+   },
+   "parent": [
+    "ROSEN'S DIVERSIFIED, INC",
+    "FARFAMU4CU41"
+   ]
+  },
+  "QWKQJHDDMVN7": {
+   "names": [
+    "GOODMAN FOOD PRODUCTS, INC."
+   ],
+   "address": [
+    "200 E BEACH AVE",
+    "INGLEWOOD",
+    "CA",
+    "90302"
+   ],
+   "awards": 88,
+   "amount": 311479037.1,
+   "places": {
+    "76063": 7,
+    "90302": 81
+   },
+   "parent": [
+    "GOODMAN FOOD PRODUCTS, INC.",
+    "QWKQJHDDMVN7"
+   ]
+  },
+  "QZQ5UWKR7HH5": {
+   "names": [
+    "FM MEAT PRODUCTS LIMITED PARTNERSHIP"
+   ],
+   "address": [
+    "19798 NE HIGHWAY 315",
+    "FORT MC COY",
+    "FL",
+    "32134"
+   ],
+   "awards": 1,
+   "amount": 408057.75,
+   "places": {
+    "32134": 1
+   },
+   "parent": [
+    "FM MEAT PRODUCTS LIMITED PARTNERSHIP",
+    "QZQ5UWKR7HH5"
+   ]
+  },
+  "RD6AA8SN2FA5": {
+   "names": [
+    "BAY VALLEY FOODS LLC"
+   ],
+   "address": [
+    "3200 RIVERSIDE DR STE A",
+    "GREEN BAY",
+    "WI",
+    "54301"
+   ],
+   "awards": 18,
+   "amount": 24953478.63,
+   "places": {
+    "42445": 4,
+    "43130": 3,
+    "49017": 4,
+    "52402": 7
+   },
+   "parent": [
+    "TREEHOUSE FOODS, INC.",
+    "GKWUWKCK7AD1"
+   ]
+  },
+  "RGETL5GVBJB5": {
+   "names": [
+    "AGROPUR INC."
+   ],
+   "address": [
+    "3500 E DESTINATION DR",
+    "APPLETON",
+    "WI",
+    "54915"
+   ],
+   "awards": 15,
+   "amount": 24697849.78,
+   "places": {
+    "57248": 13,
+    "93611": 2
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "RRCXH5E2NRQ8": {
+   "names": [
+    "BUNGE MILLING, INC."
+   ],
+   "address": [
+    "11720 BORMAN DR",
+    "SAINT LOUIS",
+    "MO",
+    "63146"
+   ],
+   "awards": 31,
+   "amount": 16430690.89,
+   "places": {
+    "68333": 31
+   },
+   "parent": [
+    "BUNGE NORTH AMERICA  INC.",
+    "HGTGUNKQSKT8"
+   ]
+  },
+  "S6H8QNZLGC77": {
+   "names": [
+    "NORTH BAY PRODUCE INC"
+   ],
+   "address": [
+    "1868 MC RAE HILL RD",
+    "TRAVERSE CITY",
+    "MI",
+    "49685"
+   ],
+   "awards": 11,
+   "amount": 8652091.24,
+   "places": {
+    "49303": 11
+   },
+   "parent": [
+    "NORTH BAY PRODUCE, INC.",
+    "FT6LDCX8N3C3"
+   ]
+  },
+  "S7H4LSKMHNF5": {
+   "names": [
+    "PRAIRIE STAR FARMS LLC"
+   ],
+   "address": [
+    "13801 ROSS MEDFORD RD",
+    "NEW WESTON",
+    "OH",
+    "45348"
+   ],
+   "awards": 11,
+   "amount": 4211634.2,
+   "places": {
+    "47326": 11
+   },
+   "parent": [
+    "PRAIRIE STAR FARMS LLC",
+    "S7H4LSKMHNF5"
+   ]
+  },
+  "S7X6RFGJXDA1": {
+   "names": [
+    "MORGAN FOODS, INC."
+   ],
+   "address": [
+    "90 W MORGAN ST",
+    "AUSTIN",
+    "IN",
+    "47102"
+   ],
+   "awards": 86,
+   "amount": 150162234.95,
+   "places": {
+    "47102": 86
+   },
+   "parent": [
+    "MORGAN FOODS, INC.",
+    "S7X6RFGJXDA1"
+   ]
+  },
+  "S896DLKHSBL8": {
+   "names": [
+    "NICK SCIABICA & SONS, A CORPORATION"
+   ],
+   "address": [
+    "2150 YOSEMITE BLVD",
+    "MODESTO",
+    "CA",
+    "95354"
+   ],
+   "awards": 2,
+   "amount": 1693440.0,
+   "places": {
+    "95354": 2
+   },
+   "parent": [
+    "NICK SCIABICA & SONS, A CORPORATION",
+    "S896DLKHSBL8"
+   ]
+  },
+  "S8EFN8ACMK27": {
+   "names": [
+    "TOMMY'S SEAFOOD, INC."
+   ],
+   "address": [
+    "148 HARBOR CIR",
+    "NEW ORLEANS",
+    "LA",
+    "70126"
+   ],
+   "awards": 1,
+   "amount": 1768500.0,
+   "places": {
+    "70126": 1
+   },
+   "parent": [
+    "TOMMY'S SEAFOOD, INC.",
+    "S8EFN8ACMK27"
+   ]
+  },
+  "S8YMCM81U5R9": {
+   "names": [
+    "MOUNTAIN VIEW FRUIT SALES INC"
+   ],
+   "address": [
+    "4275 AVENUE 416",
+    "REEDLEY",
+    "CA",
+    "93654"
+   ],
+   "awards": 7,
+   "amount": 7728805.4,
+   "places": {
+    "93654": 7
+   },
+   "parent": [
+    "MOUNTAIN VIEW FRUIT SALES INC",
+    "S8YMCM81U5R9"
+   ]
+  },
+  "SA2GW9VG4LU7": {
+   "names": [
+    "JBS PACKING CO INC"
+   ],
+   "address": [
+    "101 HOUSTON AVE",
+    "PORT ARTHUR",
+    "TX",
+    "77640"
+   ],
+   "awards": 1,
+   "amount": 1332000.0,
+   "places": {
+    "77640": 1
+   },
+   "parent": [
+    "JBS PACKING CO INC",
+    "SA2GW9VG4LU7"
+   ]
+  },
+  "SAL9VQ58UMN8": {
+   "names": [
+    "BUTTERBALL LLC"
+   ],
+   "address": [
+    "1 BUTTERBALL LN",
+    "GARNER",
+    "NC",
+    "27529"
+   ],
+   "awards": 22,
+   "amount": 20114119.86,
+   "places": {
+    "28365": 3,
+    "72401": 1,
+    "72740": 18
+   },
+   "parent": [
+    "BUTTERBALL LLC",
+    "SAL9VQ58UMN8"
+   ]
+  },
+  "SDMUJHNKGEN3": {
+   "names": [
+    "SEA PEARL SEAFOOD COMPANY, INC."
+   ],
+   "address": [
+    "14120 SHELL BELT RD",
+    "BAYOU LA BATRE",
+    "AL",
+    "36509"
+   ],
+   "awards": 3,
+   "amount": 3590621.25,
+   "places": {
+    "36509": 3
+   },
+   "parent": [
+    "SEA PEARL SEAFOOD COMPANY, INC.",
+    "SDMUJHNKGEN3"
+   ]
+  },
+  "SF39YGZ13R14": {
+   "names": [
+    "KINGSBURG ORCHARDS"
+   ],
+   "address": [
+    "10363 DAVIS AVE",
+    "KINGSBURG",
+    "CA",
+    "93631"
+   ],
+   "awards": 10,
+   "amount": 47558807.54,
+   "places": {
+    "93631": 10
+   },
+   "parent": [
+    "KINGSBURG ORCHARDS",
+    "SF39YGZ13R14"
+   ]
+  },
+  "SJHHVRKGPW65": {
+   "names": [
+    "ESSENHAUS FOODS LLC"
+   ],
+   "address": [
+    "241 W US HIGHWAY 20",
+    "MIDDLEBURY",
+    "IN",
+    "46540"
+   ],
+   "awards": 1,
+   "amount": 887500.8,
+   "places": {
+    "46540": 1
+   },
+   "parent": [
+    "ESSENHAUS FOODS LLC",
+    "SJHHVRKGPW65"
+   ]
+  },
+  "SK6NPMLLWE38": {
+   "names": [
+    "UPSTATE NIAGARA COOPERATIVE, INC"
+   ],
+   "address": [
+    "25 ANDERSON RD",
+    "BUFFALO",
+    "NY",
+    "14225"
+   ],
+   "awards": 29,
+   "amount": 3709217.52,
+   "places": {
+    "12967": 5,
+    "14020": 6,
+    "14224": 3,
+    "14225": 1,
+    "14608": 3,
+    "17701": 11
+   },
+   "parent": [
+    "UPSTATE NIAGARA COOPERATIVE, INC",
+    "SK6NPMLLWE38"
+   ]
+  },
+  "SQNWTNLT4KL1": {
+   "names": [
+    "PILGRIM'S PRIDE CORPORATION"
+   ],
+   "address": [
+    "1770 PROMONTORY CIR",
+    "GREELEY",
+    "CO",
+    "80634"
+   ],
+   "awards": 83,
+   "amount": 190987485.02,
+   "places": {
+    "26836": 8,
+    "29150": 37,
+    "32060": 1,
+    "42051": 1,
+    "75455": 35,
+    "76705": 1
+   },
+   "parent": [
+    "JBS S/A",
+    "F716ANHE2SV9"
+   ]
+  },
+  "SQSMZJV1U7H7": {
+   "names": [
+    "CALUMET DIVERSIFIED MEATS INC."
+   ],
+   "address": [
+    "10000 80TH AVE",
+    "PLEASANT PRAIRIE",
+    "WI",
+    "53158"
+   ],
+   "awards": 18,
+   "amount": 33891976.46,
+   "places": {
+    "53158": 18
+   },
+   "parent": [
+    "CALUMET DIVERSIFIED MEATS INC.",
+    "SQSMZJV1U7H7"
+   ]
+  },
+  "SW7AJGU47YN8": {
+   "names": [
+    "OCEAN GOLD SEAFOODS, INC"
+   ],
+   "address": [
+    "1804 N NYHUS ST",
+    "WESTPORT",
+    "WA",
+    "98595"
+   ],
+   "awards": 5,
+   "amount": 23517572.4,
+   "places": {
+    "98595": 5
+   },
+   "parent": [
+    "OCEAN GOLD SEAFOODS, INC",
+    "SW7AJGU47YN8"
+   ]
+  },
+  "SW85KK7GSZ54": {
+   "names": [
+    "AGGRIGATOR, INC."
+   ],
+   "address": [
+    "30 E SAN JOAQUIN ST STE 202",
+    "SALINAS",
+    "CA",
+    "93901"
+   ],
+   "awards": 9,
+   "amount": 3971634.9,
+   "places": {
+    "95076": 9
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "T29CJ8K1MDY9": {
+   "names": [
+    "JENNIE-O TURKEY STORE INC"
+   ],
+   "address": [
+    "2505 WILLMAR AVE SW",
+    "WILLMAR",
+    "MN",
+    "56201"
+   ],
+   "awards": 83,
+   "amount": 367584265.01,
+   "places": {
+    "56201": 73,
+    "56572": 10
+   },
+   "parent": [
+    "HORMEL FOODS CORPORATION",
+    "GYKQRWNLHK66"
+   ]
+  },
+  "T5RKJN9P5WZ4": {
+   "names": [
+    "CHERRY CENTRAL COOPERATIVE, INC."
+   ],
+   "address": [
+    "1771 N US 31 S",
+    "TRAVERSE CITY",
+    "MI",
+    "49685"
+   ],
+   "awards": 70,
+   "amount": 184084616.79,
+   "places": {
+    "49420": 2,
+    "49424": 1,
+    "49431": 57,
+    "84651": 7,
+    "99344": 3
+   },
+   "parent": [
+    "CHERRY CENTRAL COOPERATIVE, INC.",
+    "T5RKJN9P5WZ4"
+   ]
+  },
+  "T653S13JS8V7": {
+   "names": [
+    "CLOVER FARMS DAIRY LLC"
+   ],
+   "address": [
+    "3300 POTTSVILLE PIKE",
+    "READING",
+    "PA",
+    "19605"
+   ],
+   "awards": 3,
+   "amount": 473497.57,
+   "places": {
+    "19605": 3
+   },
+   "parent": [
+    "CLOVER FARMS DAIRY LLC",
+    "T653S13JS8V7"
+   ]
+  },
+  "T714TCCF8B33": {
+   "names": [
+    "SUNNY VALLEY INTERNATIONAL, INC"
+   ],
+   "address": [
+    "800 ELLIS ST STE A",
+    "GLASSBORO",
+    "NJ",
+    "08028"
+   ],
+   "awards": 5,
+   "amount": 7857873.5,
+   "places": {
+    "08028": 3,
+    "08318": 1,
+    "29129": 1
+   },
+   "parent": [
+    "SUNNY VALLEY INTERNATIONAL, INC",
+    "T714TCCF8B33"
+   ]
+  },
+  "TNLXCH1J6168": {
+   "names": [
+    "ANTHONY VINEYARDS, INC."
+   ],
+   "address": [
+    "5512 VALPREDO AVE",
+    "BAKERSFIELD",
+    "CA",
+    "93307"
+   ],
+   "awards": 9,
+   "amount": 41838889.58,
+   "places": {
+    "92236": 8,
+    "93307": 1
+   },
+   "parent": [
+    "ANTHONY VINEYARDS, INC.",
+    "TNLXCH1J6168"
+   ]
+  },
+  "TPCDY3183C68": {
+   "names": [
+    "TOMATO THYME CORP"
+   ],
+   "address": [
+    "18632 US HIGHWAY 301 S",
+    "WIMAUMA",
+    "FL",
+    "33598"
+   ],
+   "awards": 1,
+   "amount": 326250.0,
+   "places": {
+    "33598": 1
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "TPCGF7HEWUL1": {
+   "names": [
+    "MASCOT PECAN SHELLING CO INC"
+   ],
+   "address": [
+    "819 S VETERANS BLVD",
+    "GLENNVILLE",
+    "GA",
+    "30427"
+   ],
+   "awards": 1,
+   "amount": 1180396.81,
+   "places": {
+    "30427": 1
+   },
+   "parent": [
+    "MASCOT PECAN SHELLING CO INC",
+    "TPCGF7HEWUL1"
+   ]
+  },
+  "TPYLK64PBBH3": {
+   "names": [
+    "WESCOTT AGRI PRODUCTS, INC"
+   ],
+   "address": [
+    "28085 COUNTY ROAD 25",
+    "ELGIN",
+    "MN",
+    "55932"
+   ],
+   "awards": 78,
+   "amount": 283474064.55,
+   "places": {
+    "28425": 1,
+    "55932": 77
+   },
+   "parent": [
+    "WESCOTT AGRI PRODUCTS, INC",
+    "TPYLK64PBBH3"
+   ]
+  },
+  "TSMQL8Z8HM43": {
+   "names": [
+    "FRESH GROUP LTD"
+   ],
+   "address": [
+    "4287 N PORT WASHINGTON RD",
+    "MILWAUKEE",
+    "WI",
+    "53212"
+   ],
+   "awards": 1,
+   "amount": 6471.0,
+   "places": {
+    "53212": 1
+   },
+   "parent": [
+    "FRESH GROUP LTD",
+    "TSMQL8Z8HM43"
+   ]
+  },
+  "TT7ZMSXMHCJ7": {
+   "names": [
+    "COSTA BRAVA MARINE LLC"
+   ],
+   "address": [
+    "25335 BUDDE RD APT 1022",
+    "SPRING",
+    "TX",
+    "77380"
+   ],
+   "awards": 20,
+   "amount": 6138605.89,
+   "places": {
+    "58801": 17,
+    "59528": 2,
+    "77029": 1
+   },
+   "parent": [
+    "COSTA BRAVA MARINE LLC",
+    "JAZMU757XE34"
+   ]
+  },
+  "TTB1W4DXY7L5": {
+   "names": [
+    "BONGARDS CREAMERIES"
+   ],
+   "address": [
+    "13200 COUNTY RD 51",
+    "NORWOOD",
+    "MN",
+    "55368"
+   ],
+   "awards": 152,
+   "amount": 438465575.56,
+   "places": {
+    "38343": 58,
+    "55368": 40,
+    "56573": 52,
+    "95240": 1,
+    "95334": 1
+   },
+   "parent": [
+    "BONGARDS CREAMERIES",
+    "TTB1W4DXY7L5"
+   ]
+  },
+  "TVMLDPURUQG8": {
+   "names": [
+    "PEARL CROP, INC."
+   ],
+   "address": [
+    "1550 INDUSTRIAL DR",
+    "STOCKTON",
+    "CA",
+    "95206"
+   ],
+   "awards": 9,
+   "amount": 82133823.82,
+   "places": {
+    "95240": 8,
+    "95354": 1
+   },
+   "parent": [
+    "PEARL CROP, INC.",
+    "TVMLDPURUQG8"
+   ]
+  },
+  "TX42Z8DVL515": {
+   "names": [
+    "SUNRISE GROWERS, INC."
+   ],
+   "address": [
+    "701 W KIMBERLY AVE STE 210",
+    "PLACENTIA",
+    "CA",
+    "92870"
+   ],
+   "awards": 3,
+   "amount": 10620397.71,
+   "places": {
+    "93030": 1,
+    "93458": 2
+   },
+   "parent": [
+    "SGF PRODUCE HOLDING CORP.",
+    "SXABFXKC68C5"
+   ]
+  },
+  "U4N2UW7ZT999": {
+   "names": [
+    "OUT OF THE SHELL LLC"
+   ],
+   "address": [
+    "9658 REMER ST",
+    "SOUTH EL MONTE",
+    "CA",
+    "91733"
+   ],
+   "awards": 36,
+   "amount": 32231700.01,
+   "places": {
+    "91733": 36
+   },
+   "parent": [
+    "OUT OF THE SHELL LLC",
+    "U4N2UW7ZT999"
+   ]
+  },
+  "U9EUJ8LZJL23": {
+   "names": [
+    "JIMBO'S JUMBOS, INC."
+   ],
+   "address": [
+    "185 PEANUT DR",
+    "EDENTON",
+    "NC",
+    "27932"
+   ],
+   "awards": 3,
+   "amount": 543761.28,
+   "places": {
+    "27932": 3
+   },
+   "parent": [
+    "MEHERRIN AGRICULTURAL & CHEMICAL CO",
+    "N8MNNLHS31J4"
+   ]
+  },
+  "UCF5DP81ZFG3": {
+   "names": [
+    "CARGILL, INCORPORATED"
+   ],
+   "address": [
+    "15407 MCGINTY RD W",
+    "WAYZATA",
+    "MN",
+    "55391"
+   ],
+   "awards": 16,
+   "amount": 102321155.04,
+   "places": {
+    "70084": 3,
+    "77015": 9,
+    "77029": 1,
+    "77530": 3
+   },
+   "parent": [
+    "CARGILL, INCORPORATED",
+    "UCF5DP81ZFG3"
+   ]
+  },
+  "UEUMKYNF64N5": {
+   "names": [
+    "CHS INC."
+   ],
+   "address": [
+    "5500 CENEX DR",
+    "INVER GROVE HEIGHTS",
+    "MN",
+    "55077"
+   ],
+   "awards": 24,
+   "amount": 265224984.53,
+   "places": {
+    "55164": 2,
+    "70037": 1,
+    "77015": 14,
+    "98625": 7
+   },
+   "parent": [
+    "CHS INC.",
+    "UEUMKYNF64N5"
+   ]
+  },
+  "UH24AD61RJT9": {
+   "names": [
+    "OBI SEAFOODS, LLC"
+   ],
+   "address": [
+    "1100 W EWING ST",
+    "SEATTLE",
+    "WA",
+    "98119"
+   ],
+   "awards": 15,
+   "amount": 198891375.39,
+   "places": {
+    "98031": 2,
+    "99615": 13
+   },
+   "parent": [
+    "OBI SEAFOODS, LLC",
+    "UH24AD61RJT9"
+   ]
+  },
+  "UQS2DM4GD6A7": {
+   "names": [
+    "FLEETWOOD FOODS LLC"
+   ],
+   "address": [
+    "4090 SAWMILL RD",
+    "DOYLESTOWN",
+    "PA",
+    "18902"
+   ],
+   "awards": 3,
+   "amount": 494687.2,
+   "places": {
+    "90620": 3
+   },
+   "parent": [
+    "FLEETWOOD FOODS LLC",
+    "UQS2DM4GD6A7"
+   ]
+  },
+  "UVLRNHPJD5K3": {
+   "names": [
+    "KINGS RIVER PACKING, LP"
+   ],
+   "address": [
+    "15749 E VENTURA AVE",
+    "SANGER",
+    "CA",
+    "93657"
+   ],
+   "awards": 4,
+   "amount": 2403690.5,
+   "places": {
+    "93657": 4
+   },
+   "parent": [
+    "KINGS RIVER PACKING, LP",
+    "UVLRNHPJD5K3"
+   ]
+  },
+  "UWGMRHDJB1N8": {
+   "names": [
+    "SONSTEGARD FOODS CO"
+   ],
+   "address": [
+    "5005 S BUR OAK PL",
+    "SIOUX FALLS",
+    "SD",
+    "57108"
+   ],
+   "awards": 76,
+   "amount": 60272892.14,
+   "places": {
+    "30504": 10,
+    "51250": 17,
+    "51334": 25,
+    "51345": 24
+   },
+   "parent": [
+    "SONSTEGARD FOODS CO",
+    "UWGMRHDJB1N8"
+   ]
+  },
+  "UWH3KKSHCQJ9": {
+   "names": [
+    "DIAMOND FOODS, LLC"
+   ],
+   "address": [
+    "1050 DIAMOND ST",
+    "STOCKTON",
+    "CA",
+    "95205"
+   ],
+   "awards": 4,
+   "amount": 14280444.28,
+   "places": {
+    "95205": 4
+   },
+   "parent": [
+    "CAMPBELL SOUP COMPANY",
+    "ZPAVARC5RM54"
+   ]
+  },
+  "V499BTDMMAJ8": {
+   "names": [
+    "MICELI DAIRY PRODUCTS CO"
+   ],
+   "address": [
+    "2721 E 90TH ST",
+    "CLEVELAND",
+    "OH",
+    "44104"
+   ],
+   "awards": 95,
+   "amount": 171960660.41,
+   "places": {
+    "29129": 2,
+    "44104": 93
+   },
+   "parent": [
+    "MICELI DAIRY PRODUCTS CO",
+    "V499BTDMMAJ8"
+   ]
+  },
+  "V65GHBNAPNE1": {
+   "names": [
+    "FURMAN FOODS INC"
+   ],
+   "address": [
+    "770 CANNERY RD",
+    "NORTHUMBERLAND",
+    "PA",
+    "17857"
+   ],
+   "awards": 29,
+   "amount": 28747740.48,
+   "places": {
+    "17857": 29
+   },
+   "parent": [
+    "FURMAN FOODS INC",
+    "V65GHBNAPNE1"
+   ]
+  },
+  "V9KLGAY5A8C1": {
+   "names": [
+    "FRESHOUSE II, LLC"
+   ],
+   "address": [
+    "215 ROGER'S WAY",
+    "WESTHAMPTON BEACH",
+    "NY",
+    "11978"
+   ],
+   "awards": 6,
+   "amount": 212624.0,
+   "places": {
+    "12085": 2,
+    "28147": 2,
+    "30046": 2
+   },
+   "parent": [
+    "FRESHOUSE II, LLC",
+    "V9KLGAY5A8C1"
+   ]
+  },
+  "VBBDFMAHLJV6": {
+   "names": [
+    "HOLLANDIA DAIRY, INC"
+   ],
+   "address": [
+    "622 E MISSION RD",
+    "SAN MARCOS",
+    "CA",
+    "92069"
+   ],
+   "awards": 14,
+   "amount": 1860215.39,
+   "places": {
+    "92069": 14
+   },
+   "parent": [
+    "HOLLANDIA DAIRY, INC",
+    "VBBDFMAHLJV6"
+   ]
+  },
+  "VFEMUQGDKAJ9": {
+   "names": [
+    "WESTSTAR FOOD CO LLC"
+   ],
+   "address": [
+    "1134 E PORT AVE",
+    "CORPUS CHRISTI",
+    "TX",
+    "78401"
+   ],
+   "awards": 22,
+   "amount": 23147208.8,
+   "places": {
+    "78401": 22
+   },
+   "parent": [
+    "WESTSTAR FOOD CO LLC",
+    "VFEMUQGDKAJ9"
+   ]
+  },
+  "VH17E95FKAV5": {
+   "names": [
+    "CATALLIA MEXICAN FOODS LLC"
+   ],
+   "address": [
+    "2965 LONE OAK CIR",
+    "EAGAN",
+    "MN",
+    "55121"
+   ],
+   "awards": 3,
+   "amount": 686227.85,
+   "places": {
+    "55121": 3
+   },
+   "parent": [
+    "CATALLIA MEXICAN FOODS LLC",
+    "VH17E95FKAV5"
+   ]
+  },
+  "VJ8AHZLGURU8": {
+   "names": [
+    "GRAIN CRAFT CORN, LLC"
+   ],
+   "address": [
+    "201 W MAIN ST STE 203",
+    "CHATTANOOGA",
+    "TN",
+    "37408"
+   ],
+   "awards": 6,
+   "amount": 2936915.3,
+   "places": {
+    "68333": 6
+   },
+   "parent": [
+    "GRAIN CRAFT CORN, LLC",
+    "VJ8AHZLGURU8"
+   ]
+  },
+  "VKFLRTJNBBZ3": {
+   "names": [
+    "GULF PRIDE ENTERPRISES, INC."
+   ],
+   "address": [
+    "308 OAK ST",
+    "BILOXI",
+    "MS",
+    "39530"
+   ],
+   "awards": 2,
+   "amount": 980750.0,
+   "places": {
+    "39530": 2
+   },
+   "parent": [
+    "GULF PRIDE ENTERPRISES, INC.",
+    "VKFLRTJNBBZ3"
+   ]
+  },
+  "VKK6BGN5BDH3": {
+   "names": [
+    "CRIDER, INC."
+   ],
+   "address": [
+    "1 PLANT AVE",
+    "STILLMORE",
+    "GA",
+    "30464"
+   ],
+   "awards": 148,
+   "amount": 288048995.96,
+   "places": {
+    "30464": 148
+   },
+   "parent": [
+    "CRIDER, INC.",
+    "VKK6BGN5BDH3"
+   ]
+  },
+  "VKTSH6PAV4N4": {
+   "names": [
+    "CHERRY MEAT PACKERS, INC"
+   ],
+   "address": [
+    "4750 S CALIFORNIA AVE",
+    "CHICAGO",
+    "IL",
+    "60632"
+   ],
+   "awards": 111,
+   "amount": 407779272.31,
+   "places": {
+    "60632": 111
+   },
+   "parent": [
+    "CHERRY MEAT PACKERS, INC",
+    "VKTSH6PAV4N4"
+   ]
+  },
+  "VN21AR4KBJQ3": {
+   "names": [
+    "GUERRA NUT SHELLING COMPANY"
+   ],
+   "address": [
+    "190 HILLCREST RD",
+    "HOLLISTER",
+    "CA",
+    "95023"
+   ],
+   "awards": 1,
+   "amount": 357894.72,
+   "places": {
+    "95023": 1
+   },
+   "parent": [
+    "GUERRA NUT SHELLING COMPANY",
+    "VN21AR4KBJQ3"
+   ]
+  },
+  "VXE8XNK8MP97": {
+   "names": [
+    "SMITH BROTHERS FARMS INC"
+   ],
+   "address": [
+    "26401 79TH AVE S",
+    "KENT",
+    "WA",
+    "98032"
+   ],
+   "awards": 2,
+   "amount": 100566.58,
+   "places": {
+    "98032": 2
+   },
+   "parent": [
+    "SMITH BROTHERS FARMS INC",
+    "XU4SA1ZB2MT7"
+   ]
+  },
+  "VXPMHU6K6QV4": {
+   "names": [
+    "TUDOR RANCH, INC."
+   ],
+   "address": [
+    "93400 HAMMOND RD",
+    "MECCA",
+    "CA",
+    "92254"
+   ],
+   "awards": 2,
+   "amount": 9060870.0,
+   "places": {
+    "92254": 2
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "VYBFFH8ZHJ11": {
+   "names": [
+    "GALLO FARMING LP"
+   ],
+   "address": [
+    "10561 STATE HIGHWAY 140",
+    "ATWATER",
+    "CA",
+    "95301"
+   ],
+   "awards": 1,
+   "amount": 80136.0,
+   "places": {
+    "95301": 1
+   },
+   "parent": [
+    "GALLO FARMING LP",
+    "VYBFFH8ZHJ11"
+   ]
+  },
+  "W2P7ZQN4XKW3": {
+   "names": [
+    "FAMILY TREE FARMS MARKETING, LLC"
+   ],
+   "address": [
+    "41646 ROAD 62",
+    "REEDLEY",
+    "CA",
+    "93654"
+   ],
+   "awards": 3,
+   "amount": 2342133.3,
+   "places": {
+    "93654": 3
+   },
+   "parent": [
+    "FAMILY TREE FARMS MARKETING, LLC",
+    "W2P7ZQN4XKW3"
+   ]
+  },
+  "W3EFR9PB86W7": {
+   "names": [
+    "DARIGOLD INC"
+   ],
+   "address": [
+    "5601 6TH AVE S STE 300",
+    "SEATTLE",
+    "WA",
+    "98108"
+   ],
+   "awards": 24,
+   "amount": 6741402.48,
+   "places": {
+    "83605": 8,
+    "98118": 15,
+    "99208": 1
+   },
+   "parent": [
+    "NORTHWEST DAIRY ASSOCIATION",
+    "YDDMF659Q4N5"
+   ]
+  },
+  "WCWGJXKWEZ91": {
+   "names": [
+    "FARMERS RICE MILLING CO LLC"
+   ],
+   "address": [
+    "3211 HIGHWAY 397",
+    "LAKE CHARLES",
+    "LA",
+    "70615"
+   ],
+   "awards": 58,
+   "amount": 84622689.51,
+   "places": {
+    "70615": 58
+   },
+   "parent": [
+    "THE POWELL GROUP INC",
+    "F8SMCMYJK6G7"
+   ]
+  },
+  "WDCVJGELGBB5": {
+   "names": [
+    "DE LUNE CORP"
+   ],
+   "address": [
+    "7405 ALBAN STATION CT STE B210",
+    "SPRINGFIELD",
+    "VA",
+    "22150"
+   ],
+   "awards": 106,
+   "amount": 56493039.47,
+   "places": {
+    "00720": 1,
+    "17034": 12,
+    "17055": 8,
+    "56716": 4,
+    "56744": 2,
+    "58272": 2,
+    "58341": 6,
+    "58438": 1,
+    "58801": 1,
+    "69301": 2,
+    "69336": 7,
+    "71261": 3,
+    "77015": 1,
+    "77029": 17,
+    "77530": 17,
+    "79045": 7,
+    "93277": 15
+   },
+   "parent": [
+    "DE LUNE CORP",
+    "WDCVJGELGBB5"
+   ]
+  },
+  "WE9HDS5BCNM7": {
+   "names": [
+    "THE HMC GROUP, MARKETING, INC."
+   ],
+   "address": [
+    "13138 S BETHEL AVE",
+    "KINGSBURG",
+    "CA",
+    "93631"
+   ],
+   "awards": 4,
+   "amount": 9535616.1,
+   "places": {
+    "93631": 4
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "WEYDJHKFLR63": {
+   "names": [
+    "LION RAISINS INC"
+   ],
+   "address": [
+    "9500 S DE WOLF AVE",
+    "SELMA",
+    "CA",
+    "93662"
+   ],
+   "awards": 5,
+   "amount": 10972102.9,
+   "places": {
+    "93662": 5
+   },
+   "parent": [
+    "LION RAISINS INC",
+    "WEYDJHKFLR63"
+   ]
+  },
+  "WHK5FD9FXAS4": {
+   "names": [
+    "M GROUP PARTNERS, L.L.C."
+   ],
+   "address": [
+    "1387 N LEXINGTON ST",
+    "WASHINGTON",
+    "UT",
+    "84780"
+   ],
+   "awards": 73,
+   "amount": 31975138.84,
+   "places": {
+    "54629": 2,
+    "58072": 3,
+    "58223": 2,
+    "58282": 13,
+    "58776": 6,
+    "59254": 19,
+    "59401": 3,
+    "59522": 1,
+    "59523": 4,
+    "68901": 17,
+    "77029": 1,
+    "77530": 1,
+    "99403": 1
+   },
+   "parent": [
+    "M GROUP PARTNERS, L.L.C.",
+    "WHK5FD9FXAS4"
+   ]
+  },
+  "WHNKYQ2XZDF3": {
+   "names": [
+    "G.E.R.J LOGISTIC SERVICES LLC"
+   ],
+   "address": [
+    "6471 SW 16 COURT",
+    "NORTH LAUDERDALE",
+    "FL",
+    "33068"
+   ],
+   "awards": 2,
+   "amount": 314415.0,
+   "places": {
+    "27262": 2
+   },
+   "parent": [
+    "G.E.R.J LOGISTIC SERVICES LLC",
+    "WHNKYQ2XZDF3"
+   ]
+  },
+  "WHVUUDLK51Y5": {
+   "names": [
+    "NATIVE AMERICAN ENTERPRISES, LLC"
+   ],
+   "address": [
+    "230 N WEST ST",
+    "WICHITA",
+    "KS",
+    "67203"
+   ],
+   "awards": 32,
+   "amount": 39705344.7,
+   "places": {
+    "12784": 6,
+    "67203": 26
+   },
+   "parent": [
+    "NATIVE AMERICAN ENTERPRISES, LLC",
+    "WHVUUDLK51Y5"
+   ]
+  },
+  "WK7MBZM5HR55": {
+   "names": [
+    "DAKOTA PURE MEATS, LLC"
+   ],
+   "address": [
+    "26727 266TH ST",
+    "WOOD",
+    "SD",
+    "57585"
+   ],
+   "awards": 4,
+   "amount": 12852800.0,
+   "places": {
+    "54727": 2,
+    "55009": 1,
+    "80216": 1
+   },
+   "parent": [
+    "DAKOTA PURE MEATS, LLC",
+    "WK7MBZM5HR55"
+   ]
+  },
+  "WMMQQM7JK4C8": {
+   "names": [
+    "SMITHFIELD FRESH MEATS SALES CORP"
+   ],
+   "address": [
+    "111 COMMERCE ST",
+    "SMITHFIELD",
+    "VA",
+    "23430"
+   ],
+   "awards": 9,
+   "amount": 3378715.67,
+   "places": {
+    "51401": 7,
+    "67213": 2
+   },
+   "parent": [
+    "MURPHY-BROWN LLC",
+    "KBTYDGXMADR4"
+   ]
+  },
+  "WR45V43LENF7": {
+   "names": [
+    "PASTA MONTANA LLC"
+   ],
+   "address": [
+    "1 PASTA PL",
+    "GREAT FALLS",
+    "MT",
+    "59401"
+   ],
+   "awards": 5,
+   "amount": 5464255.8,
+   "places": {
+    "59401": 5
+   },
+   "parent": [
+    "PASTA MONTANA LLC",
+    "WR45V43LENF7"
+   ]
+  },
+  "WXVNUBZQVKT5": {
+   "names": [
+    "WEST POINT DAIRY PRODUCTS, LLC"
+   ],
+   "address": [
+    "N8790 FAIRGROUND AVE",
+    "GREENWOOD",
+    "WI",
+    "54437"
+   ],
+   "awards": 2,
+   "amount": 332013.6,
+   "places": {
+    "84319": 2
+   },
+   "parent": [
+    "GRASSLAND DAIRY PRODUCTS, INC",
+    "EESNC7LGPLM5"
+   ]
+  },
+  "WZDAAWDZDEK5": {
+   "names": [
+    "ALSUM FARMS & PRODUCE INC"
+   ],
+   "address": [
+    "N 9083 COUNTY HWY EF",
+    "FRIESLAND",
+    "WI",
+    "53935"
+   ],
+   "awards": 1,
+   "amount": 101730.0,
+   "places": {
+    "53935": 1
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "X4TEC6VHLXK6": {
+   "names": [
+    "SUN PACIFIC MARKETING COOPERATIVE, INC."
+   ],
+   "address": [
+    "1095 E GREEN ST",
+    "PASADENA",
+    "CA",
+    "91106"
+   ],
+   "awards": 1,
+   "amount": 33735.0,
+   "places": {
+    "93308": 1
+   },
+   "parent": [
+    "SUN PACIFIC MARKETING COOPERATIVE, INC.",
+    "X4TEC6VHLXK6"
+   ]
+  },
+  "X5EWBTQXFCA5": {
+   "names": [
+    "CAHOON FARMS INC"
+   ],
+   "address": [
+    "10951 LUMMISVILLE RD",
+    "WOLCOTT",
+    "NY",
+    "14590"
+   ],
+   "awards": 3,
+   "amount": 3196103.18,
+   "places": {
+    "14590": 3
+   },
+   "parent": [
+    "CAHOON FARMS INC",
+    "X5EWBTQXFCA5"
+   ]
+  },
+  "XC2QB2C3KJZ9": {
+   "names": [
+    "WINLAND FOODS INC"
+   ],
+   "address": [
+    "2015 SPRING ROAD",
+    "OAK BROOK",
+    "IL",
+    "60523"
+   ],
+   "awards": 18,
+   "amount": 13518652.64,
+   "places": {
+    "14103": 4,
+    "29209": 3,
+    "63111": 1,
+    "64024": 5,
+    "64086": 1,
+    "85353": 4
+   },
+   "parent": [
+    "WINLAND FOODS INC",
+    "XC2QB2C3KJZ9"
+   ]
+  },
+  "XCNLGN954K35": {
+   "names": [
+    "R.W. SAUDER, INC."
+   ],
+   "address": [
+    "570 FURNACE HILLS PIKE",
+    "LITITZ",
+    "PA",
+    "17543"
+   ],
+   "awards": 6,
+   "amount": 762408.22,
+   "places": {
+    "17522": 6
+   },
+   "parent": [
+    "R.W. SAUDER, INC.",
+    "XCNLGN954K35"
+   ]
+  },
+  "XGMXFUBQCV24": {
+   "names": [
+    "SAN JOAQUIN FIGS INC"
+   ],
+   "address": [
+    "3564 N HAZEL AVE",
+    "FRESNO",
+    "CA",
+    "93722"
+   ],
+   "awards": 16,
+   "amount": 45487477.73,
+   "places": {
+    "93722": 16
+   },
+   "parent": [
+    "SAN JOAQUIN FIGS INC",
+    "XGMXFUBQCV24"
+   ]
+  },
+  "XKS2EB8AFA59": {
+   "names": [
+    "HENRY BROCH & CO."
+   ],
+   "address": [
+    "3600 SUNSET AVE",
+    "WAUKEGAN",
+    "IL",
+    "60087"
+   ],
+   "awards": 9,
+   "amount": 29450471.66,
+   "places": {
+    "60087": 9
+   },
+   "parent": [
+    "HENRY BROCH & CO",
+    "SU5KHYW3SFS1"
+   ]
+  },
+  "XKXACQAWZEN8": {
+   "names": [
+    "SMITHFOODS INC"
+   ],
+   "address": [
+    "1381 DAIRY LN",
+    "ORRVILLE",
+    "OH",
+    "44667"
+   ],
+   "awards": 1,
+   "amount": 187022.18,
+   "places": {
+    "44667": 1
+   },
+   "parent": [
+    "SMITHFOODS INC",
+    "XKXACQAWZEN8"
+   ]
+  },
+  "XLX1KERVEWX5": {
+   "names": [
+    "NORTHERN BAG AND BOX COMPANY"
+   ],
+   "address": [
+    "311 S 4TH ST STE 109",
+    "GRAND FORKS",
+    "ND",
+    "58201"
+   ],
+   "awards": 1,
+   "amount": 53952.0,
+   "places": {
+    "58201": 1
+   },
+   "parent": [
+    "NORTHERN BAG AND BOX COMPANY",
+    "XLX1KERVEWX5"
+   ]
+  },
+  "XUJKK26CW477": {
+   "names": [
+    "NICHOLS PISTACHIO"
+   ],
+   "address": [
+    "13762 1ST AVE",
+    "HANFORD",
+    "CA",
+    "93230"
+   ],
+   "awards": 1,
+   "amount": 4801187.0,
+   "places": {
+    "93230": 1
+   },
+   "parent": [
+    "NICHOLS PISTACHIO",
+    "XUJKK26CW477"
+   ]
+  },
+  "Y2R7GKN8RD78": {
+   "names": [
+    "TITAN PEACH FARMS INC"
+   ],
+   "address": [
+    "5 R W DUBOSE RD",
+    "RIDGE SPRING",
+    "SC",
+    "29129"
+   ],
+   "awards": 32,
+   "amount": 69171118.85,
+   "places": {
+    "29129": 32
+   },
+   "parent": [
+    "TITAN PEACH FARMS INC",
+    "Y2R7GKN8RD78"
+   ]
+  },
+  "Y2THY566B4P6": {
+   "names": [
+    "ALPINE PACIFIC NUT CO INC"
+   ],
+   "address": [
+    "6413 E KEYES RD",
+    "HUGHSON",
+    "CA",
+    "95326"
+   ],
+   "awards": 4,
+   "amount": 9787225.08,
+   "places": {
+    "95326": 4
+   },
+   "parent": [
+    "ALPINE PACIFIC NUT CO INC",
+    "Y2THY566B4P6"
+   ]
+  },
+  "Y3JYG9219563": {
+   "names": [
+    "KING FRESH PRODUCE, LLC"
+   ],
+   "address": [
+    "4375 AVENUE 400",
+    "DINUBA",
+    "CA",
+    "93618"
+   ],
+   "awards": 8,
+   "amount": 34133200.62,
+   "places": {
+    "93618": 8
+   },
+   "parent": [
+    "KING FRESH PRODUCE, LLC",
+    "Y3JYG9219563"
+   ]
+  },
+  "Y3S6K42X8EL8": {
+   "names": [
+    "PRIMA NOCE PACKING, INC."
+   ],
+   "address": [
+    "16461 E COMSTOCK RD",
+    "LINDEN",
+    "CA",
+    "95236"
+   ],
+   "awards": 1,
+   "amount": 754280.52,
+   "places": {
+    "95236": 1
+   },
+   "parent": [
+    "PRIMA NOCE PACKING, INC.",
+    "Y3S6K42X8EL8"
+   ]
+  },
+  "Y8GVCV52MWA9": {
+   "names": [
+    "WENOKA SALES, LLC"
+   ],
+   "address": [
+    "932 SKYLINE PL",
+    "WENATCHEE",
+    "WA",
+    "98801"
+   ],
+   "awards": 4,
+   "amount": 7996604.06,
+   "places": {
+    "98801": 4
+   },
+   "parent": [
+    "WENOKA SALES, LLC",
+    "Y8GVCV52MWA9"
+   ]
+  },
+  "YCBAHJDKB2Q5": {
+   "names": [
+    "TWENTY-FIRST CENTURY BEAN PROCESSING LLC"
+   ],
+   "address": [
+    "715 E 2ND ST",
+    "SHARON SPRINGS",
+    "KS",
+    "67758"
+   ],
+   "awards": 33,
+   "amount": 69852688.07,
+   "places": {
+    "58272": 2,
+    "58301": 1,
+    "67758": 29,
+    "80734": 1
+   },
+   "parent": [
+    "TWENTY-FIRST CENTURY BEAN PROCESSING LLC",
+    "YCBAHJDKB2Q5"
+   ]
+  },
+  "YD3CCBHPHCG5": {
+   "names": [
+    "AMERIQUAL GROUP, LLC"
+   ],
+   "address": [
+    "18200 HIGHWAY 41 N",
+    "EVANSVILLE",
+    "IN",
+    "47725"
+   ],
+   "awards": 65,
+   "amount": 321620341.26,
+   "places": {
+    "30083": 1,
+    "47710": 10,
+    "47725": 54
+   },
+   "parent": [
+    "AMERIQUAL GROUP, LLC",
+    "YD3CCBHPHCG5"
+   ]
+  },
+  "YH8ZEYH9KDE7": {
+   "names": [
+    "THE REDWOOD GROUP LLC"
+   ],
+   "address": [
+    "5920 NALL AVE STE 400",
+    "MISSION",
+    "KS",
+    "66202"
+   ],
+   "awards": 7,
+   "amount": 1247994.39,
+   "places": {
+    "58801": 6,
+    "77029": 1
+   },
+   "parent": [
+    "THE REDWOOD GROUP LLC",
+    "YH8ZEYH9KDE7"
+   ]
+  },
+  "YJY7G5AS3YS3": {
+   "names": [
+    "LAUT FARMS LLC"
+   ],
+   "address": [
+    "16140 LANDERS RD",
+    "ARVIN",
+    "CA",
+    "93203"
+   ],
+   "awards": 1,
+   "amount": 344370.0,
+   "places": {
+    "93203": 1
+   },
+   "parent": [
+    "LAUT FARMS LLC",
+    "YJY7G5AS3YS3"
+   ]
+  },
+  "YK7HNM8D2D35": {
+   "names": [
+    "CHICAGO MEAT AUTHORITY INC"
+   ],
+   "address": [
+    "1120 W 47TH PL",
+    "CHICAGO",
+    "IL",
+    "60609"
+   ],
+   "awards": 11,
+   "amount": 17113298.48,
+   "places": {
+    "60609": 11
+   },
+   "parent": [
+    "CHICAGO MEAT AUTHORITY INC",
+    "YK7HNM8D2D35"
+   ]
+  },
+  "YNWNKJJN8NF1": {
+   "names": [
+    "CARGILL KITCHEN SOLUTIONS, INC"
+   ],
+   "address": [
+    "15407 MCGINTY RD W # MS26",
+    "WAYZATA",
+    "MN",
+    "55391"
+   ],
+   "awards": 9,
+   "amount": 11628164.61,
+   "places": {
+    "55362": 9
+   },
+   "parent": [
+    "CARGILL, INCORPORATED",
+    "UCF5DP81ZFG3"
+   ]
+  },
+  "YPY8WHABW2U1": {
+   "names": [
+    "E. W. BRANDT & SONS, INC."
+   ],
+   "address": [
+    "561 RAGAN RD",
+    "WAPATO",
+    "WA",
+    "98951"
+   ],
+   "awards": 7,
+   "amount": 4942759.64,
+   "places": {
+    "98951": 7
+   },
+   "parent": [
+    "E. W. BRANDT & SONS, INC.",
+    "YPY8WHABW2U1"
+   ]
+  },
+  "YTNMKWFEUUL5": {
+   "names": [
+    "TFC POULTRY LLC"
+   ],
+   "address": [
+    "103 MELBY AVE",
+    "ASHBY",
+    "MN",
+    "56309"
+   ],
+   "awards": 34,
+   "amount": 13471751.4,
+   "places": {
+    "22601": 22,
+    "56309": 12
+   },
+   "parent": [
+    "TFC POULTRY LLC",
+    "YTNMKWFEUUL5"
+   ]
+  },
+  "YW9MLRLNFC13": {
+   "names": [
+    "PAUL PIAZZA & SON INC."
+   ],
+   "address": [
+    "1552 SAINT LOUIS ST",
+    "NEW ORLEANS",
+    "LA",
+    "70112"
+   ],
+   "awards": 4,
+   "amount": 39142935.0,
+   "places": {
+    "70112": 4
+   },
+   "parent": [
+    "PAUL PIAZZA & SON INC.",
+    "YW9MLRLNFC13"
+   ]
+  },
+  "YZB9L2M4N6J6": {
+   "names": [
+    "SIERRA SUN FRUIT MARKETING"
+   ],
+   "address": [
+    "1360 S RIO VISTA AVE",
+    "SANGER",
+    "CA",
+    "93657"
+   ],
+   "awards": 5,
+   "amount": 13128407.39,
+   "places": {
+    "93657": 5
+   },
+   "parent": [
+    "SIERRA SUN FRUIT MARKETING",
+    "YZB9L2M4N6J6"
+   ]
+  },
+  "ZBP1YZNJZ6N1": {
+   "names": [
+    "CEDAR CREST DAIRY INC"
+   ],
+   "address": [
+    "5850 BALSAM DR",
+    "HUDSONVILLE",
+    "MI",
+    "49426"
+   ],
+   "awards": 4,
+   "amount": 272457.0,
+   "places": {
+    "49548": 4
+   },
+   "parent": [
+    "CEDAR CREST DAIRY INC",
+    "ZBP1YZNJZ6N1"
+   ]
+  },
+  "ZCHGVXL6VFS9": {
+   "names": [
+    "ALGOOD FOOD CO"
+   ],
+   "address": [
+    "7401 TRADE PORT DR",
+    "LOUISVILLE",
+    "KY",
+    "40258"
+   ],
+   "awards": 11,
+   "amount": 32058108.58,
+   "places": {
+    "40258": 11
+   },
+   "parent": [
+    "ALGOOD FOOD CO",
+    "ZCHGVXL6VFS9"
+   ]
+  },
+  "ZEJMSMY4DVS3": {
+   "names": [
+    "DOLE PACKAGED FOODS, LLC"
+   ],
+   "address": [
+    "1 BAXTER WAY STE 100",
+    "WESTLAKE VILLAGE",
+    "CA",
+    "91362"
+   ],
+   "awards": 14,
+   "amount": 37902448.41,
+   "places": {
+    "95301": 14
+   },
+   "parent": [
+    "DOLE FOOD COMPANY  INC.",
+    "E691XAH2K8L3"
+   ]
+  },
+  "ZGG2UXESA635": {
+   "names": [
+    "DLF INTERNATIONAL, INC."
+   ],
+   "address": [
+    "150 N GRAVES RD",
+    "FORT PIERCE",
+    "FL",
+    "34945"
+   ],
+   "awards": 2,
+   "amount": 3981057.82,
+   "places": {
+    "34945": 2
+   },
+   "parent": [
+    null,
+    null
+   ]
+  },
+  "ZJ8CLBUWRBG5": {
+   "names": [
+    "RUBY ROBINSON COMPANY, LLC"
+   ],
+   "address": [
+    "100 LEXINGTON DR STE 201",
+    "BUFFALO GROVE",
+    "IL",
+    "60089"
+   ],
+   "awards": 26,
+   "amount": 22686754.64,
+   "places": {
+    "28425": 1,
+    "60089": 25
+   },
+   "parent": [
+    "RUBY ROBINSON COMPANY, LLC",
+    "ZJ8CLBUWRBG5"
+   ]
+  },
+  "ZK5SWMVP86X7": {
+   "names": [
+    "PROPORTION FOODS, LLC"
+   ],
+   "address": [
+    "101 CHISHOLM TRAIL RD",
+    "ROUND ROCK",
+    "TX",
+    "78681"
+   ],
+   "awards": 20,
+   "amount": 30668934.66,
+   "places": {
+    "78681": 18,
+    "90058": 2
+   },
+   "parent": [
+    "CARGILL, INCORPORATED",
+    "UCF5DP81ZFG3"
+   ]
+  },
+  "ZLNUVJKVV3L9": {
+   "names": [
+    "MISTICA FOODS LLC"
+   ],
+   "address": [
+    "50 W COMMERCIAL AVE",
+    "ADDISON",
+    "IL",
+    "60101"
+   ],
+   "awards": 80,
+   "amount": 173655778.82,
+   "places": {
+    "60101": 80
+   },
+   "parent": [
+    "MISTICA FOODS LLC",
+    "ZLNUVJKVV3L9"
+   ]
+  },
+  "ZPYQXJNTMZX3": {
+   "names": [
+    "MERUS LLC"
+   ],
+   "address": [
+    "10050 CROSSTOWN CIR STE 620",
+    "EDEN PRAIRIE",
+    "MN",
+    "55344"
+   ],
+   "awards": 3,
+   "amount": 2263979.2,
+   "places": {
+    "50010": 2,
+    "71602": 1
+   },
+   "parent": [
+    "MERUS LLC",
+    "ZPYQXJNTMZX3"
+   ]
+  },
+  "ZQB7KMJHDGS5": {
+   "names": [
+    "USA IMPORT PRODUCTS AND DISTRIBUTION, LLC"
+   ],
+   "address": [
+    "25002 FLYING ARROW",
+    "SAN ANTONIO",
+    "TX",
+    "78258"
+   ],
+   "awards": 6,
+   "amount": 3430834.26,
+   "places": {
+    "78207": 6
+   },
+   "parent": [
+    "USA IMPORT PRODUCTS AND DISTRIBUTION, LLC",
+    "ZQB7KMJHDGS5"
+   ]
+  },
+  "ZR2YR7PNLTT6": {
+   "names": [
+    "SENECA FOODS CORP"
+   ],
+   "address": [
+    "350 WILLOWBROOK OFFICE PARK",
+    "FAIRPORT",
+    "NY",
+    "14450"
+   ],
+   "awards": 180,
+   "amount": 152339402.22,
+   "places": {
+    "14456": 12,
+    "53065": 22,
+    "53546": 32,
+    "53923": 16,
+    "54829": 5,
+    "54971": 42,
+    "55336": 1,
+    "55904": 8,
+    "56013": 15,
+    "61559": 7,
+    "83661": 20
+   },
+   "parent": [
+    "W.A. BAXTER & SONS (HOLDINGS) LIMITED",
+    "YADVQPA8NQP7"
+   ]
+  },
+  "ZSTBMNLHZ5P9": {
+   "names": [
+    "FRANK M. GARGIULO & SON, INC."
+   ],
+   "address": [
+    "535 SWEETLAND AVE",
+    "HILLSIDE",
+    "NJ",
+    "07205"
+   ],
+   "awards": 2,
+   "amount": 57231.0,
+   "places": {
+    "07205": 2
+   },
+   "parent": [
+    "FRANK M. GARGIULO & SON, INC.",
+    "ZSTBMNLHZ5P9"
+   ]
+  },
+  "ZTRGQGUJXFJ8": {
+   "names": [
+    "CEDAR VALLEY CHEESE, INC."
+   ],
+   "address": [
+    "W3111 JAY RD",
+    "BELGIUM",
+    "WI",
+    "53004"
+   ],
+   "awards": 8,
+   "amount": 2315613.31,
+   "places": {
+    "53004": 8
+   },
+   "parent": [
+    "CEDAR VALLEY CHEESE, INC.",
+    "ZTRGQGUJXFJ8"
+   ]
+  }
+ }
+}

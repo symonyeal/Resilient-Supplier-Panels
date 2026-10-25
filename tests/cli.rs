@@ -18,7 +18,7 @@ fn tmp(name: &str) -> PathBuf {
 }
 
 fn srl(args: &[&str]) -> Output {
-    Command::new(SRL).args(args).env_remove("SRL_DATA_DIR").output().unwrap()
+    Command::new(SRL).args(args).env_remove("SRL_DATA_DIR").env_remove("SRL_SNAPSHOT").output().unwrap()
 }
 
 fn read(p: &Path) -> Value {
@@ -27,6 +27,22 @@ fn read(p: &Path) -> Value {
 
 fn write(p: &Path, v: &Value) {
     std::fs::write(p, v.to_string()).unwrap();
+}
+
+#[test]
+fn analysis_arguments_fail_before_computation() {
+    for args in [vec!["gaps", "--seeds", "0"], vec!["entities", "--seeds", "0"],
+                 vec!["--snapshot", "QBL-2025-06-20.xlsx", "entities"]] {
+        let o = srl(&args);
+        assert_eq!(o.status.code(), Some(2));
+        assert!(!String::from_utf8_lossy(&o.stderr).contains("panicked"));
+    }
+    let d = tmp("count-timeout");
+    let p = d.join("i.json");
+    write(&p, &json!({"V": ["a"], "P": ["p"], "E": [["a"]], "k": 0}));
+    for timeout in ["0", "-1", "NaN", "inf"] {
+        assert_eq!(srl(&["count", p.to_str().unwrap(), "--timeout", timeout]).status.code(), Some(2));
+    }
 }
 
 #[test]
@@ -150,6 +166,19 @@ fn data_override_is_used_and_staleness_reported() {
     assert_eq!(read(&o)["stale"], true);
     assert!(srl(&["audit", "-o", o.to_str().unwrap()]).status.success());
     assert_eq!((read(&o)["suppliers"].as_u64(), read(&o)["products"].as_u64()), (Some(981), Some(710)));
+}
+
+#[test]
+fn snapshot_option_selects_a_manifest_workbook() {
+    let d = tmp("snapshot");
+    let o = d.join("audit.json");
+    assert!(srl(&["--snapshot", "QBL-2025-06-20.xlsx", "audit", "-o", o.to_str().unwrap()]).status.success());
+    assert_eq!((read(&o)["suppliers"].as_u64(), read(&o)["rows"].as_u64()), (Some(780), Some(784)));
+    assert_eq!(srl(&["--snapshot", "QBL-1999.xlsx", "audit"]).status.code(), Some(2));
+    // the public case data are refused before anything is written
+    let o = srl(&["--snapshot", "QBL-2025-06-20.xlsx", "site", "--root", root().to_str().unwrap()]);
+    assert_eq!(o.status.code(), Some(1));
+    assert!(String::from_utf8_lossy(&o.stderr).contains("does not match the frozen manifest"));
 }
 
 #[test]

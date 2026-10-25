@@ -162,3 +162,19 @@ one minimum solve each.
 Timings are comparable within this campaign only. The 0.2 Python timings and these were
 taken on the same laptop but by different implementations; a speed-up between them is
 reported as a measurement of this pair, not of the algorithms.
+
+## 0.4 exploratory analyses (protocol fixed before the scale runs)
+
+The original 88-instance campaigns remain unchanged. `change` compares three dated
+workbooks under the same strict catalog, reporting both fixed October baskets and
+new draws at seed 1. `gaps` and `entities` use seeds 1 through 1000, the 40 primary
+uniform/overlap baskets per seed, and k = 1. Repeated baskets remain repeated draws.
+The gap ranking assumes new, independent approved suppliers and holds all other approvals
+fixed. Greedy lifting is a heuristic, with no claim of an optimal approval programme.
+
+The whole-class scale run uses each of the four precise classes, both all products and
+the subset with at least two suppliers, at k = 1. `count` gets 10 seconds per instance;
+the separate `solve` process gets a 10-second wall-clock deadline. A terminated solve
+is `timeout`, with no optimum reported. Counting and solving measure different tasks;
+an unfinished count is never an exact count. `analysis/whole_classes.py` retains the
+commands, input documents, result documents and statuses.

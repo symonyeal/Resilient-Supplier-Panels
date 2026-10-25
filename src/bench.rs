@@ -377,15 +377,7 @@ pub fn suite(seed: u64, L: &Limits, s: &Snapshot, provenance: Value, variants: b
                 rec[key] = v.clone();
             }
             if variants {
-                let Ec: Vec<Vec<String>> = I.E.iter().map(|E| {
-                    let s: BTreeSet<String> = E.iter().map(|&v| {
-                        let id = &I.V[v];
-                        rep.get(id).map_or(id.clone(), |d| (*d).clone())
-                    }).collect();
-                    s.into_iter().collect()
-                }).collect();
-                let Vc: BTreeSet<String> = Ec.iter().flatten().cloned().collect();
-                let Ic = Instance::new(Vc.into_iter().collect(), I.P.clone(), Ec, k as i64, vec![]).unwrap();
+                let Ic = crate::entities::merge(&I, &rep);
                 let Pm: BTreeSet<String> = P.iter().map(|p| merged[p].clone()).collect();
                 let Im = audit::basket(&MM, &Pm.into_iter().collect::<Vec<_>>(), k);
                 rec["sensitivity"] = json!({"merged": sens(&Im, L), "identity_candidates_merged": sens(&Ic, L)});
