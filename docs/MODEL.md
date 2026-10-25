@@ -43,7 +43,7 @@ Edge cases:
    transversal containing v, then T \ {v} is also a transversal. Restricting to the support
    ∪H therefore preserves Tr(H).
 
-These are the only reductions applied (`srl/instance.py`). Each preserves the whole family
+These are the only reductions applied (`src/instance.rs`). Each preserves the whole family
 Tr(H), not merely its optimum. Provenance maps every kept edge to all the pairs (p, F) that
 generate it.
 
@@ -63,7 +63,8 @@ Hence, for 𝓕_k, it suffices to take the edges E_p \ F with F ⊆ E_p and |F| 
 Any other F gives a superset of one of these edges. For k = 1 these are the |E_p| sets
 E_p \ {v}. If |E_p| ≤ k, the edge is empty, and the instance is infeasible by Theorem 1(1).
 
-The MILP and the certificates use the cardinality form directly. Only Berge and FK-B need H.
+The minimum, the cut route and the certificates use the cardinality form directly. Only
+Berge, FK-B and MMCS need H.
 
 ## Certificates (Theorem 3)
 
@@ -91,20 +92,74 @@ Let T be feasible.
    it.
 
 3. *Completeness.* A family 𝒞 of minimal panels equals Tr(H) iff no feasible T contains no
-   member of 𝒞. `certify.complete` searches for such a T with a separately encoded MILP, in
-   the cardinality form with the constraints Σ_{v∈S}(1 − x_v) ≥ 1 for S ∈ 𝒞. If a T is found,
-   it is shrunk to a minimal panel, which lies outside 𝒞.
+   member of 𝒞. `certify::complete` decides this by an exhaustive search on the matrix,
+   written apart from the solver in `src/solve.rs`. A node holds T; it takes the violated
+   row (|T ∩ E_p| < k + 1, or T ∩ (E_p \ F) = ∅) with fewest candidates and branches over
+   them, a candidate tried and abandoned being forbidden to its later siblings, and it
+   prunes T as soon as T contains a member of 𝒞.
 
-## MILP enumeration
+   *Proof that exhaustion is complete.* Let T′ be a minimal feasible panel containing no
+   member of 𝒞. Along the branch that always takes the first candidate in T′ \ T, the
+   invariant T ⊆ T′, forbidden ∩ T′ = ∅ holds: a violated row is met by T′ more often
+   than by T, so it has a candidate in T′ \ T, and the candidates before it lie outside
+   T′. That branch is never pruned, since subsets of T′ contain no member of 𝒞, and it
+   ends at a feasible subset of T′. ∎
 
-Repeat: solve min Σ x_v subject to feasibility and Σ_{v∈S} x_v ≤ |S| − 1 for every found S.
-Stop when the problem is infeasible.
+   A T found is shrunk to a minimal panel, which lies outside 𝒞.
+
+## Minimum and ordered enumeration
+
+The minimum solves min Σ x_v over the cardinality rows Σ_{v∈E_p} x_v ≥ k + 1 and
+Σ_{v∈E_p\F} x_v ≥ 1, x ∈ {0,1}^U, exactly, by depth-first branch and bound (`src/solve.rs`).
+A row with exactly as many available suppliers as it needs fixes them; the bound adds the
+deficits of a greedy set of deficient rows with pairwise disjoint free suppliers; the
+branch takes the free supplier of the tightest deficient row that meets most deficient
+rows, in, then out. Unit weights count suppliers; they are not costs.
+
+Ordered enumeration (route `cuts`): repeat the minimum subject also to
+Σ_{v∈S} x_v ≤ |S| − 1 for every found S; stop when the problem is infeasible.
 
 - Each optimum T is minimal. A feasible T′ ⊊ T contains no found S, because T contains none,
   and T′ is cheaper.
 - At termination, every feasible set contains a found panel, so every minimal panel has been
   found.
 - Panels are produced in nondecreasing size.
+
+## Theorem 4 (counting by signature classes)
+
+Call u, v ∈ V *equivalent* when they lie in the same E_p for every p and the same explicit
+F for every F. Let c_1, …, c_q be the classes meeting the support, n_j = |c_j| and
+r_j = min(n_j, k + 1). For a panel T write m_j = |T ∩ c_j|. Then
+
+  |Tr(H)| = Σ_{m ∈ M} Π_j C(n_j, m_j),
+
+where M is the set of vectors m of the minimal panels of the reduced instance that keeps
+r_j members of each class.
+
+*Proof.*
+1. Every row is a union of classes: E_p by definition, and E_p \ F because membership of
+   F is part of the signature. Hence |T ∩ E_p| = Σ_{c_j ⊆ E_p} m_j, and feasibility of T is
+   a property of m. Removing v ∈ c_j from T lowers m_j by one, whichever v is removed, so
+   minimality is a property of m as well: m is minimal iff it is feasible and m − e_j is
+   infeasible for every j with m_j > 0.
+2. A minimal m has m_j ≤ k + 1. If m_j ≥ k + 2, every row containing c_j still meets T in
+   at least k + 1 suppliers after one member of c_j is removed, so m − e_j is feasible.
+3. So the minimal vectors satisfy m_j ≤ r_j, and they are the same in the reduced instance,
+   whose rows are the same unions of the kept members. Each minimal m is realised by
+   Π_j C(n_j, m_j) panels of the original instance. ∎
+
+`src/quotient.rs` enumerates the reduced instance with MMCS and keeps each vector once, so
+|M| is also the number of panels up to signature symmetry (the 0.2 `orbits`). The reduced
+instance has at most q(k + 1) suppliers, which is what makes families of millions of
+panels countable without listing them.
+
+## MMCS
+
+Route `mmcs` enumerates Tr(H) by the minimal-hitting-set search of Murakami and Uno
+(2014). A node holds S and a candidate set CAND. It takes the uncovered edge e with
+|e ∩ CAND| least, removes C = e ∩ CAND from CAND, and for each v ∈ C in turn recurses on
+S + v when every member of S + v still has a critical edge, then returns v to CAND. Each
+member of Tr(H) is output exactly once, as soon as it is reached.
 
 ## What the model does not represent
 

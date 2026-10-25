@@ -3,7 +3,7 @@
 
 use crate::audit::round;
 use crate::json::{json, Map, Value};
-use crate::report::{median, Num};
+use crate::report::{g, median, Num};
 
 const PRECISE: [&str; 4] = ["material", "naics", "program", "description"];
 const VARIANTS: [&str; 2] = ["merged", "identity_candidates_merged"];
@@ -37,11 +37,13 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
     let ess_sub = feas.iter().filter(|x| (x["essential"].as_object().unwrap().len() as i64) < size(x).unwrap()).count();
     let ratio: Vec<f64> = X.iter().filter_map(|x| x.get("thesis").filter(|t| t.get("status").and_then(Value::as_str) == Some("dual")))
         .map(|t| t["tree_nodes"].as_f64().unwrap() / t["dag_nodes"].as_f64().unwrap()).collect();
-    let comp: Vec<f64> = exact.iter().filter(|x| x["k"] == 1 && x.get("orbits").and_then(Value::as_u64).is_some_and(|o| o > 0))
-        .map(|x| x["count_exact"].as_f64().unwrap() / x["orbits"].as_f64().unwrap()).collect();
+    let comp: Vec<f64> = exact.iter().filter_map(|x| {
+        let o = crate::report::orbits(x).and_then(Value::as_f64).filter(|&o| o > 0.0)?;
+        (x["k"] == 1).then(|| x["count_exact"].as_f64().unwrap() / o)
+    }).collect();
     let runs: Vec<&Value> = prim.iter().flat_map(|x| x["runs"].as_array().unwrap()).collect();
     let stopped = runs.iter().filter(|r| ["timeout", "cap"].contains(&r["status"].as_str().unwrap())).count();
-    let old = run(X[0], "berge").is_object() && X[0]["runs"].as_array().unwrap().iter().any(|r| r["method"] == "milp");
+    let old = X[0]["runs"].as_array().unwrap().iter().any(|r| r["method"] == "milp");
     let (cut, cut_name) = if old { ("milp", "MILP") } else { ("cuts", "the cut route") };
     let fkb_slowest = X.iter().filter(|x| total(x, "fkb") > total(x, "berge").min(total(x, cut))).count();
     let beats: Vec<&&Value> = X.iter().filter(|x| total(x, "fkb") < total(x, "berge")).collect();
@@ -93,7 +95,8 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
                     beats.iter().map(|x| total(x, "berge")).fold(f64::NEG_INFINITY, f64::max)) })),
         ("first output: Berge > 0.1 s, FK-B first faster".into(), json!(format!("{}/{}",
             late.iter().filter(|x| first(x, "fkb") < first(x, "berge")).count(), late.len()))),
-        (format!("rival: median {rival} time (s)"), json!(round(median(tmin).f(), 4))),
-        (format!("rival: max {rival} time (s)"), json!(round(tmax, 4))),
+        // 0.2 printed seconds to 4 places; exact minima take microseconds, so 0.3 prints 3 figures
+        (format!("rival: median {rival} time (s)"), if old { json!(round(median(tmin).f(), 4)) } else { json!(g(median(tmin).f(), 3)) }),
+        (format!("rival: max {rival} time (s)"), if old { json!(round(tmax, 4)) } else { json!(g(tmax, 3)) }),
     ]
 }

@@ -259,9 +259,11 @@ fn command(a: &Args) -> Result<(), Fail> {
             let R = json::loads(&std::fs::read(&f).map_err(|e| format!("{}: {e}", f.display()))?)?;
             let (rows, s) = snapshot()?;
             let md = report::markdown(&R, &f.file_name().unwrap().to_string_lossy(), verdicts::score(&R, &audit::audit(&rows, &s)));
+            // results/suite-<name>.json -> docs/findings/results-<name>.md
             let dest = out.map(PathBuf::from).unwrap_or_else(|| {
-                let root = std::fs::canonicalize(&f).ok().and_then(|p| p.parent()?.parent().map(Path::to_path_buf)).unwrap_or_default();
-                root.join(format!("docs/findings/results-seed{}.md", R["provenance"]["seed"]))
+                let root = f.parent().and_then(Path::parent).map(Path::to_path_buf).unwrap_or_default();
+                let stem = f.file_stem().unwrap().to_string_lossy().replacen("suite-", "results-", 1);
+                root.join(format!("docs/findings/{stem}.md"))
             });
             if let Some(dir) = dest.parent() {
                 std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
