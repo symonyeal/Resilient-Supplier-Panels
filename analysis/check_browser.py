@@ -67,8 +67,8 @@ def check(url, screenshots=None):
         if screenshots:
             page.screenshot(path=str(Path(screenshots) / "outcomes.png"))
         page.locator("#f-outcome").select_option("bound")
-        expect(page.locator("#outcome-count")).to_have_text("4 of 88 shown")
-        expect(page.locator("#record")).to_contain_text("Minimal panels · lower bound")
+        expect(page.locator("#outcome-count")).to_have_text("0 of 88 shown")
+        expect(page.locator("#chart-note")).to_contain_text("Every count is exact.")
         page.locator("#f-outcome").select_option("infeasible")
         expect(page.locator("#record")).to_contain_text("Infeasibility witness")
         page.locator("#f-product").fill("not-a-product-xyz")

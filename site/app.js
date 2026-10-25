@@ -173,12 +173,13 @@ function report() {
     + `<h1>${e(status)}: ${e(c.title)}</h1>`
     + `<p>Panel: ${p ? names(p.members) : "none"}. Survives any ${e(state.k)} failure. Outage tested: ${o.failed.length ? names(o.failed) : "none"} (hypothetical). Minimum ${e(m.minimum_size ?? "—")}; ${e(m.count)} minimal panels in total.</p>`
     + `<table><thead><tr><th>Product</th><th>Surviving suppliers</th></tr></thead><tbody>${rows}</tbody></table>`
-    + `<h2>Certificates</h2><ul>${certificates}</ul><p>Every panel certified minimal from the matrix; exhaustion check ${e(m.checks.milp_exhaustion)}.</p>`
+    + `<h2>Certificates</h2><ul>${certificates}</ul><p>Every panel certified minimal from the matrix; exhaustion check ${e(m.checks.exhaustion)}.</p>`
     + `<h2>Scope</h2><p>Qualification coverage only: not capacity, price, delivery or plant independence. Not a purchasing recommendation.</p>`
     + `<p>USDA QBL retrieved ${e(D.provenance.snapshot.retrieved_utc)}. <a href="${e(D.provenance.snapshot.url)}">Source</a> · <a href="${repo}">Code</a>.</p><dl>${provenance}</dl></html>`;
 }
 
-const ROUTES = { berge: "Berge", fkb: "FK-B", milp: "MILP enumeration" };
+const ROUTES = { berge: "Berge", fkb: "FK-B", cuts: "Cut enumeration", mmcs: "MMCS",
+  milp: "MILP enumeration" };
 const O = { class: "", rule: "", k: "", outcome: "", product: "", i: 0 };
 const kind = x => x.min.status !== "optimal" ? "infeasible" : x.count_exact === null ? "bound" : "exact";
 const kinds = { exact: "Exact count", bound: "Lower bound", infeasible: "Infeasible" };
@@ -274,7 +275,7 @@ function renderRecord(R) {
   scroll.append(table);
   const s = x.sensitivity;
   parts.push(node("h4", "Runs"), scroll, node("p",
-    `Exhaustion check: ${x.milp_exhaustion || "not run"}. Routes agree: ${x.complete_routes_agree === null ? "n/a" : x.complete_routes_agree ? "yes" : "no"}.`
+    `Exhaustion check: ${x.exhaustion || x.milp_exhaustion || "not run"}. Routes agree: ${x.complete_routes_agree === null ? "n/a" : x.complete_routes_agree ? "yes" : "no"}.`
     + (s ? ` Minimum with merged mappings: ${number(s.merged.min)}.` : ""), "fine"));
   $("record").replaceChildren(...parts);
 }
@@ -323,7 +324,7 @@ function initialiseOutcomes() {
   $("f-class").append(...distinct("class").map(v => option(v, v)));
   $("f-rule").append(...distinct("rule").map(v => option(v, v)));
   $("outcomes-summary").textContent = `All ${R.length} saved results, re-certified from the matrix; not rerun.`;
-  $("chart-note").textContent = `Spearman ρ = ${B.spearman_V_count}, n = ${B.feasible} feasible. ${R.length - B.feasible} infeasible: table only. △ lower bound (run stopped at ${B.provenance.limits.timeout_s} s). USDA QBL, seed 1, code ${B.provenance.code_rev.slice(0, 7)}.`;
+  $("chart-note").textContent = `Spearman ρ = ${B.spearman_V_count}, n = ${B.feasible} feasible. ${R.length - B.feasible} infeasible: table only.${R.some(x => kind(x) === "bound") ? ` △ lower bound (run stopped at ${B.provenance.limits.timeout_s} s).` : " Every count is exact."} USDA QBL, seed 1, code ${B.provenance.code_rev.slice(0, 7)}.`;
   for (const [id, key] of [["f-class", "class"], ["f-rule", "rule"], ["f-k", "k"], ["f-outcome", "outcome"]])
     $(id).addEventListener("change", e => { O[key] = e.target.value; renderOutcomes(); });
   $("f-product").addEventListener("input", e => { O.product = e.target.value; renderOutcomes(); });
@@ -388,12 +389,13 @@ function initialise() {
   $("h-primary").textContent = B.primary;
   $("resilient-count").textContent = `${blocked.length} / ${B.primary}`;
   $("finding-note").textContent = `${single === blocked.length ? "In every one" : `In ${single}`}, a product has one qualified supplier. In the other ${sizes.length}, ${Math.min(...sizes)}–${Math.max(...sizes)} suppliers suffice.`;
-  $("benchmark-summary").textContent = `${B.instances} instances, seed 1. Historical timings; not rerun.`;
+  $("benchmark-summary").textContent = `${B.instances} instances, seed 1, srl ${B.provenance.versions.srl}; one timed run.`;
   const best = B.routes.reduce((a, r) => r.complete > a.complete ? r : a);
   $("benchmark-caption").textContent = `${ROUTES[best.method]} finishes the most enumerations: ${best.complete} of ${best.runs}.`;
   $("benchmark-rows").replaceChildren(...B.routes.map(r => {
     const row = node("tr");
-    const time = node("td", `${(r.first_median_s * 1000).toPrecision(2)} ms`);
+    const s = r.first_median_s;
+    const time = node("td", s < 1e-3 ? `${(s * 1e6).toPrecision(2)} µs` : `${(s * 1000).toPrecision(2)} ms`);
     time.append(node("small", `n = ${r.first_n}`));
     row.append(node("td", ROUTES[r.method]), node("td", `${r.complete} / ${r.runs}`), time);
     return row;
