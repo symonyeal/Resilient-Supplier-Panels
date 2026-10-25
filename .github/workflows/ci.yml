@@ -16,24 +16,29 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.14"
-      - run: python -m pip install --upgrade pip
-      - run: python -m pip install "setuptools>=77" wheel
-      - run: python -m pip install --no-build-isolation ".[dev]"
+      - run: rustup update stable && rustup default stable
       # The frozen snapshot is versioned, so the real-data tests run here without network.
-      - run: python -m pytest -q
-      - run: python -m ruff check .
-      - run: python -m pip check
-      - run: python -m build --no-isolation
-      - run: python analysis/check_install.py dist/srl-0.2.0-py3-none-any.whl
+      - run: cargo clippy --release --locked --all-targets -- -D warnings
+      - run: cargo test --release --locked
+      # The binary carries its data: exercise it outside the checkout.
+      - run: |
+          smoke="$RUNNER_TEMP/smoke" && mkdir -p "$smoke"
+          cp target/release/srl* examples/canned.csv "$smoke/"
+          cd "$smoke"
+          ./srl build --basket canned.csv --k 1 -o basket.json
+          ./srl solve basket.json -o solution.json
+          ./srl enum basket.json -o family.json
+          ./srl verify family.json | tee verify.json
+          grep -q '"panels": 1284' verify.json && grep -q '"exhaustion": "complete"' verify.json
       - uses: actions/upload-artifact@v4
         with:
-          name: distributions-${{ matrix.os }}
-          path: dist/*
+          name: srl-${{ matrix.os }}
+          path: target/release/srl${{ matrix.os == 'windows-latest' && '.exe' || '' }}
   browser:
     runs-on: ubuntu-latest
     steps:

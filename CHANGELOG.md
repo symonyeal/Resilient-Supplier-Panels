@@ -1,6 +1,24 @@
 # Changelog
 
-## Unreleased
+## 0.3.0 — 2026-10-25
+
+- Rewritten in Rust: one `srl` binary with the frozen data compiled in; Windows and Linux
+  binaries on the release. The Python package is retired (last revision `99cd50c`).
+- The Berge, FK-A and FK-B code is ported line for line from the thesis code at
+  `1bb9de4` and tested against its outputs on 300 random and 88 suite instances.
+- HiGHS replaced by an exact branch and bound (minimum, cut enumeration) and an
+  exhaustive completeness search, which proves exhaustion rather than solver assurance.
+- New: the MMCS enumerator (`--method mmcs`), exact counts by signature classes
+  (`srl count`, MODEL Theorem 4), and status `memory` for Berge's working-set limit.
+- Release 0.3 campaign (`results/suite-seed1-v0.3.json`): every one of the 88 families has
+  an exact count, including the four censored in 0.2; K6 fires. See
+  [findings](docs/findings/2026-10-25-rust-campaign.md).
+- The site presents the 0.3 campaign. The case shortlists start from the first optimum in
+  label order instead of the solver's choice.
+- Interface: `verify` reports `exhaustion` (was `milp_exhaustion`); `--method milp` is now
+  `--method cuts`; `bench` needs `-o` and never overwrites a campaign.
+
+## After 0.2.0 (first released in 0.3.0)
 
 - Outcome explorer for all 88 seed-1 instances: filters by class, rule, failure budget,
   outcome and product; a log-log exhibit of minimal panels against eligible suppliers;

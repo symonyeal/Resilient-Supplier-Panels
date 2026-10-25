@@ -174,8 +174,7 @@ pub fn stats(I: &Instance) -> (Value, Vec<Vec<usize>>) {
     deg.sort_unstable();
     let sig = quotient::classes(I);
     let inc: usize = sizes.iter().sum();
-    let binom = |n: usize, r: usize| (0..r).fold(1u128, |a, i| a * (n - i) as u128 / (i + 1) as u128);
-    let before: u128 = I.E.iter().map(|E| binom(E.len(), I.k.min(E.len())) + I.F.len() as u128).sum();
+    let before: u128 = I.E.iter().map(|E| quotient::binom(E.len(), I.k.min(E.len())) + I.F.len() as u128).sum();
     (json!({"P": I.P.len(), "V": I.V.len(), "incidences": inc,
             "density": round(inc as f64 / (I.P.len() * I.V.len()).max(1) as f64, 4),
             "E_p_sizes": sizes,

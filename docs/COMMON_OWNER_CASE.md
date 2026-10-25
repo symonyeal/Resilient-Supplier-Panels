@@ -41,20 +41,20 @@ when it removes at most one supplier for each product already protected against
 any one loss. The calculated results, rather than an assumed benefit, decide this.
 
 Enumeration reads the qualification matrix directly. Every returned panel is
-independently checked for feasibility and minimality, and a separate MILP searches
-for a missing panel. Solver completion is numerical assurance, not a formal proof.
+independently checked for feasibility and minimality, and a separate exhaustive search
+finds no missing panel, which proves each family complete.
 
 ## Reproduce
 
 From the installed project, use the existing interface for each case:
 
 ```text
-python -m srl build "chicken legs chilled-bulk" pork --k 0 -o approvals.json
-python -m srl build "chicken legs chilled-bulk" pork --k 1 -o one_supplier.json
-python -m srl build "chicken legs chilled-bulk" pork --k 0 --fail r0911,r0912 -o group_only.json
-python -m srl build "chicken legs chilled-bulk" pork --k 1 --fail r0911,r0912 -o common_owner.json
-python -m srl enum common_owner.json --method exhaustive -o panels.json
-python -m srl verify panels.json
+srl build "chicken legs chilled-bulk" pork --k 0 -o approvals.json
+srl build "chicken legs chilled-bulk" pork --k 1 -o one_supplier.json
+srl build "chicken legs chilled-bulk" pork --k 0 --fail r0911,r0912 -o group_only.json
+srl build "chicken legs chilled-bulk" pork --k 1 --fail r0911,r0912 -o common_owner.json
+srl enum common_owner.json --method exhaustive -o panels.json
+srl verify panels.json
 ```
 
 Repeat the last two commands for each instance to compare the complete panel lists.

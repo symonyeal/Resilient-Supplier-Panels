@@ -1,6 +1,7 @@
 # Benchmarks
 
-The protocol is fixed before the main suite runs. `srl/bench.py` implements it.
+The protocol is fixed before the main suite runs. `src/bench.rs` implements it; release
+0.2 ran it in Python (`srl/bench.py` at `99cd50c`).
 
 ## Instances
 
@@ -32,16 +33,21 @@ Every route answers the same task, namely enumerating Tr(H) or producing its fir
 
 | Route | Code | Output |
 | --- | --- | --- |
-| Berge | `fka.transversal.transversal` (thesis oracle) | all at the end |
-| FK-B | `fkb` self-reduction, one equivalence test per panel | incremental |
-| MILP enumeration | HiGHS, minimum avoiding supersets of found panels | incremental, nondecreasing size |
+| Berge | `thesis::berge` (thesis oracle; `fka.transversal` in 0.2) | all at the end |
+| FK-B | `thesis::fkb::dualise`, one equivalence test per panel | incremental |
+| Cut enumeration (`cuts`; `milp` in 0.2) | minimum avoiding supersets of found panels: branch and bound (HiGHS in 0.2) | incremental, nondecreasing size |
+| MMCS (0.3) | `mmcs`, Murakami–Uno minimal hitting sets | incremental |
 | Exhaustive | all subsets of the support, checked against the matrix | small supports only |
 
-MILP enumeration is complete. Each optimum is minimal: a proper feasible subset would cost
+The class count (`quotient`, 0.3) is not an enumerator: it counts Tr(H) exactly from
+signature classes (MODEL, Theorem 4).
+
+Cut enumeration is complete. Each optimum is minimal: a proper feasible subset would cost
 less and still avoid every cut. Infeasibility of the cut problem means every feasible panel
 contains a found panel.
 
-The single minimum (`solve.milp`) is reported separately. It is not an enumeration baseline.
+The single minimum (`solve::minimum`; `solve.milp` in 0.2) is reported separately. It is not
+an enumeration baseline.
 
 FK-A and `fk_a_memo` are not enumerators. They decide C = Tr(H) for the complete family C,
 which gives a duality certificate, and they measure tree nodes against distinct

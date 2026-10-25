@@ -1,0 +1,45 @@
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  create:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      # Notes: the changelog section of this version.
+      - run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v v="$version" '/^## /{on = index($0, "## " v " ") == 1} on' CHANGELOG.md | tail -n +2 > notes.md
+          test -s notes.md
+          gh release create "$GITHUB_REF_NAME" --title "$GITHUB_REF_NAME" --notes-file notes.md --verify-tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+  binaries:
+    needs: create
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            asset: srl-x86_64-linux
+            bin: srl
+          - os: windows-latest
+            asset: srl-x86_64-windows.exe
+            bin: srl.exe
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+      - run: rustup update stable && rustup default stable
+      - run: cargo test --release --locked
+      - run: cp target/release/${{ matrix.bin }} ${{ matrix.asset }} && sha256sum ${{ matrix.asset }} > ${{ matrix.asset }}.sha256
+      - run: gh release upload "$GITHUB_REF_NAME" ${{ matrix.asset }} ${{ matrix.asset }}.sha256
+        env:
+          GH_TOKEN: ${{ github.token }}

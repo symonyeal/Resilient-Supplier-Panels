@@ -124,6 +124,9 @@ pub fn record(I: &Instance, deep: bool, fkb_cap: usize, rec: &Value) -> Value {
                 r["exhaustive"] = labels(I, &solve::exhaustive(I));
             }
             // the new routes must give the same family
+            let mut m = Vec::new();
+            srl::mmcs::transversals(&S.H, &Clock::unlimited(), &mut |t| { m.push(decode(&S.labels, &t)); true }).unwrap();
+            assert_eq!(labels(I, &m), r["berge"], "MMCS");
             let q = quotient::count(I, &Clock::unlimited()).unwrap();
             assert_eq!((q.panels, q.orbits), (C.len() as u128, r["orbits"].as_u64().unwrap() as usize));
             if C.len() <= 2000 {

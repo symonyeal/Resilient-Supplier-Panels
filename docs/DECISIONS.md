@@ -2,16 +2,63 @@
 
 Each entry gives the decision, the alternatives, the evidence and the date.
 
+## Release 0.3 (Rust)
+
+**The whole program is Rust; the Python package is retired** (2026-10-25).
+- One binary carries the frozen data and every command. Rust gives the speed that settles
+  the censored families and a single install step without Python, SciPy or Git.
+- *Alternative:* Rust kernels bound into the Python package (PyO3). Rejected: the CLI is
+  the public interface, and two languages would double the gate.
+- The last Python revision is `99cd50c` (release `v0.2.0` is `9dc3544`); git history is
+  its archive.
+
+**The thesis algorithms are ported line for line, not imported** (2026-10-25).
+- `src/thesis/` follows `fka`/`fkb` at `1bb9de4`: canonical term order, tie-breaks,
+  conditions and the dualisation loop. The evidence is exact agreement with the thesis code
+  on 300 random instances and the 88 seed-1 instances: Berge families, FK-B output order and
+  node counts per pass, FK-A tree and DAG node counts, and the conflicting assignment of a
+  non-dual pair. `tests/thesis.rs` keeps that agreement in CI from `tests/reference/`.
+- A planted change of FK-A's tie-break (last maximal variable instead of the first) makes
+  that test report 110 differences.
+- *Alternative:* keep calling the Python package. Rejected with the Python package.
+
+**HiGHS is replaced by an exact branch and bound, and the completeness check by an
+exhaustive search** (2026-10-25).
+- The minimum and the cut route solve the same 0-1 program as before. The minimum takes a
+  median of 2 µs on the suite against HiGHS's 0.8 ms in 0.2, and the minima, statuses and
+  infeasibility verdicts agree on all 88 instances and both sensitivity variants.
+- The completeness search is written apart from the solver and proves exhaustion
+  (MODEL, Theorem 3.3), where the 0.2 HiGHS search gave solver assurance.
+- *Alternative:* the `highs` crate. Rejected: it needs CMake and a C++ build, and the
+  problems here are small covering programs.
+
+**Counting by signature classes** (2026-10-25).
+- MODEL Theorem 4 counts minimal panels from the class vectors of a reduced instance with
+  at most k + 1 members per class. It agrees with enumeration on all 88 instances and
+  makes families of any size countable; `srl count` exposes it.
+
+**The shortlist starts from the first optimum in label order** (2026-10-25).
+- 0.2 started from whichever optimum HiGHS returned, so the published shortlist depended on
+  the solver. With HiGHS's choices fed in, the 0.3 shortlists equal the 0.2 ones exactly;
+  the deterministic choice changes the first panel in 4 of 6 case modes, and with it the
+  canned basket's two-supplier stress pair. Counts, families and certificates are unchanged.
+
+**Outputs keep the 0.2 bytes where they are deterministic** (2026-10-25).
+- JSON is written as Python wrote it (one-space indent, ASCII escapes, float repr), and
+  the 0.2 report rebuilds byte for byte except the line naming the command. Supplier
+  witness maps are sorted by supplier; 0.2 printed them in Python's hash order.
+
 ## Taken
 
 **Thesis integration is a pinned pip dependency, and the licence is GPL-3.0-or-later**
-(2026-10-15).
+(2026-10-15; superseded in 0.3 by the Rust port, below; the licence stands).
 - `fka` 2.0.0 at `1bb9de4` is GPL-3.0-or-later. This project imports it, so it is
   distributed under the same licence, with attribution in the README and `docs/SOURCES.md`.
 - *Alternatives:* vendoring the solver, which would diverge from the published reproduction
   tests; reimplementing it, which would not test the thesis code at all.
 
-**FK-B enumeration runs through an incremental adapter** (2026-10-15).
+**FK-B enumeration runs through an incremental adapter** (2026-10-15; kept in 0.3 as
+`thesis::fkb::dualise`).
 - `fkb.dualize.dualise` returns only at the end. `srl.solve.fkb_stream` restates its loop
   (initial guess, FK-B equivalence test, maximal false point, new clause) from the package's
   public functions and yields each panel as it is found.
@@ -24,7 +71,8 @@ Each entry gives the decision, the alternatives, the evidence and the date.
 - The workbook mixes four vocabularies (`docs/DATA.md`). Equating them requires judgement,
   so cross-vocabulary equivalence appears only in the `merged` sensitivity variant.
 
-**Stdlib xlsx reader** (2026-10-15).
+**Stdlib xlsx reader** (2026-10-15; in 0.3 a zip-directory reader with miniz_oxide and
+roxmltree, same output on every row).
 - The workbook has one sheet of shared strings and numbers. About 30 lines of `zipfile` and
   ElementTree read it, which avoids a dependency. openpyxl was used once, in discovery, as an
   independent reader; `tests/test_qbl.py` holds the literals it gave.
@@ -45,7 +93,7 @@ Each entry gives the decision, the alternatives, the evidence and the date.
 
 ## Tested and refused
 
-**Specialist enumerators (SHD, RS; Murakami–Uno)** (2026-10-15).
+**Specialist enumerators (SHD, RS; Murakami–Uno)** (2026-10-15; MMCS added in 0.3).
 - Not included. No maintained Windows build was verified in this session.
 - The suite's question is whether thesis methods are practical against a baseline that is
   easy to reproduce, and Berge and MILP enumeration serve that.

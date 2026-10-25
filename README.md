@@ -6,7 +6,7 @@ and shows which suppliers to rely on.
 
 [Live site](https://symonyeal.github.io/Resilient-Supplier-Panels/) ·
 [Case study](docs/CASE_STUDY.md) ·
-[Release 0.2.0](https://github.com/symonyeal/Resilient-Supplier-Panels/releases/tag/v0.2.0)
+[Releases](https://github.com/symonyeal/Resilient-Supplier-Panels/releases)
 
 ## The short answer
 
@@ -48,7 +48,8 @@ Panels are counted only when no supplier in them is redundant.
 On the [live site](https://symonyeal.github.io/Resilient-Supplier-Panels/) you can pick a
 basket and a panel, fail a supplier, and see which products lose coverage. You can download
 a one-page report. All [88 measured cases](https://symonyeal.github.io/Resilient-Supplier-Panels/#outcomes)
-(44 baskets, each with and without a failure) can be browsed and filtered.
+(44 baskets, each with and without a failure) can be browsed and filtered, each with an
+exact count of its panels.
 
 ## What this does and does not tell you
 
@@ -68,74 +69,80 @@ producer, and a billing address is not a plant. The data is one snapshot (retrie
 
 1. **Fixed source.** The USDA workbook is frozen and fingerprinted, so every result names
    the exact data it came from.
-2. **Two methods.** An optimisation solver finds the smallest resilient panel; a typical basket
-   takes under a millisecond. Enumeration algorithms from the author's MSc thesis list every
-   alternative.
-3. **Independent check.** Separate code checks every panel directly against the USDA list.
-   A second solver checks that no panel was missed.
+2. **Several methods.** An exact search finds the smallest resilient panel in microseconds.
+   Enumeration algorithms from the author's MSc thesis, and a specialist enumerator, list
+   every alternative; a counting theorem gives the number of panels without listing them.
+3. **Independent check.** Separate code checks every panel directly against the USDA list,
+   and a separate exhaustive search checks that no panel was missed.
 
-Benchmark timings are historical (one run, October 2026) and were not rerun for this release.
-[Findings](docs/findings/2026-10-15-supplier-resilience.md) ·
+Benchmark timings are from one run on one laptop (release 0.3, October 2026).
+[Findings](docs/findings/2026-10-25-rust-campaign.md) ·
 [Validation](docs/VALIDATION.md)
 
 ## Try it on your own basket
 
-Requires Python 3.14 and Git. From a copy of this repository:
+Download `srl` for Windows or Linux from the
+[latest release](https://github.com/symonyeal/Resilient-Supplier-Panels/releases/latest),
+or build it with [Rust](https://rustup.rs) from a copy of this repository:
 
 ```text
-python -m pip install "setuptools>=77" wheel
-python -m pip install --no-build-isolation .
+cargo install --locked --path .
 srl build --basket examples/canned.csv --k 1 -o basket.json
 srl solve basket.json -o solution.json
 ```
 
 Replace `examples/canned.csv` with your own list of products. `--k 1` means "survive any one
-failure". Expected result for the example: a two-supplier panel.
+failure". Expected result for the example: a two-supplier panel. The frozen USDA data is
+built into the program.
 
 ## For technical readers
 
 A panel T is feasible when, for every product p, it keeps a qualified member under every
 modelled failure. For any k failures this means |T ∩ E_p| ≥ k + 1. Minimal panels are the
-minimal transversals of a scenario hypergraph. MILP gives a minimum-cardinality panel;
-Berge and FK-B enumerate. Matrix witnesses certify minimality, and a separately encoded
-MILP certifies that no panel is missing. Proofs are in [MODEL](docs/MODEL.md).
+minimal transversals of a scenario hypergraph. Branch and bound gives a minimum-cardinality
+panel; Berge, FK-B and MMCS enumerate; a quotient by supplier signature classes counts.
+Matrix witnesses certify minimality, and a separately written exhaustive search certifies
+that no panel is missing. Proofs are in [MODEL](docs/MODEL.md).
 
 ```mermaid
 flowchart LR
     A[Frozen USDA workbook] --> B[Qualification matrix]
-    B --> C[Minimum panel: MILP]
+    B --> C[Minimum panel: branch and bound]
     B --> D[Scenario hypergraph]
-    D --> E[Minimal panels: Berge / FK-B]
+    D --> E[Minimal panels: Berge / FK-B / MMCS]
+    D --> Q[Exact count: signature classes]
     C --> F[Independent matrix certificates]
     E --> F
     F --> G[Versioned cases and reports]
     G --> H[Static interactive site]
 ```
 
-Seed-1 suite (code `09cb123`, 10 s limit): median MILP minimum 0.8 ms; Berge completed 84
-of 88 enumerations, FK-B and MILP enumeration 76. The 4 unfinished enumerations are
-reported as lower bounds. [Protocol](docs/BENCHMARKS.md)
+Seed-1 suite, release 0.3 (code `55e8e4a`, 10 s limit): Berge finished all 88
+enumerations, the slowest in 12 ms, so every family has an exact count (largest 20,478
+panels); the class count agrees on all 88. The median minimum took 2 µs. The 0.2 Python
+release had left four families censored at 10 s. [Protocol](docs/BENCHMARKS.md)
 
 | Responsibility | Code |
 | --- | --- |
-| Read qualifications and preserve provenance | `srl/qbl.py`, `srl/catalog.py` |
-| Failure model and scenario hypergraph | `srl/instance.py` |
-| Solve and enumerate | `srl/solve.py` |
-| Certify from the matrix | `srl/certify.py` |
-| Versioned documents and data selection | `srl/contracts.py`, `srl/resources.py` |
-| Public cases and site data | `srl/portfolio.py`, `analysis/build_site.py` |
-| Benchmark and report | `srl/bench.py`, `srl/report.py`, `srl/verdicts.py` |
+| Read qualifications and preserve provenance | `src/xlsx.rs`, `src/qbl.rs`, `src/catalog.rs`, `src/audit.rs` |
+| Failure model and scenario hypergraph | `src/instance.rs` |
+| Minimum and ordered enumeration | `src/solve.rs` |
+| Thesis algorithms: Berge, FK-A, FK-B | `src/thesis/` |
+| Specialist enumerator and class count | `src/mmcs.rs`, `src/quotient.rs` |
+| Certify from the matrix | `src/certify.rs` |
+| Versioned documents and data | `src/contracts.rs`, `src/data.rs`, `src/json.rs` |
+| Public cases and site data | `src/portfolio.rs` |
+| Benchmark and report | `src/bench.rs`, `src/report.rs`, `src/verdicts.rs` |
 
 Full reproduction and checks:
 
 ```text
-python -m pip install --no-build-isolation ".[dev]"
-python analysis/build_site.py      # rebuilds site/data.js and site/cases.json after certificates pass
+cargo test --release                 # includes agreement with the thesis code's outputs
+cargo run --release -- site          # rebuilds site/data.js and site/cases.json after certificates pass
 srl enum basket.json --method berge -o family.json
-srl verify family.json             # 1,284 certified panels; milp_exhaustion: complete
-python -m pytest -q
-python -m ruff check .
-python analysis/check_browser.py   # needs .[browser]; uses Edge on Windows
+srl verify family.json               # 1,284 certified panels; exhaustion: complete
+srl count basket.json                # the same count from signature classes
+python analysis/check_browser.py     # needs playwright; uses Edge on Windows
 ```
 
 The site opens from `site/index.html` with no server or network; Plotly basic 4.1.1 (MIT) is
@@ -146,8 +153,8 @@ vendored. Supplier IDs are snapshot rows; 31 possible duplicate identities are u
 
 ## Licence and attribution
 
-GPL-3.0-or-later; see [LICENSE](LICENSE). Uses the author's
+GPL-3.0-or-later; see [LICENSE](LICENSE). The Berge, FK-A and FK-B code ports the author's
 [Hypergraph-Dualization](https://github.com/symonyeal/Hypergraph-Dualization)
-(S. Y. Islam, MSc thesis, SFU 2024), pinned at `1bb9de48`. USDA data is presumed public
-domain as a U.S. Government work; the workbook states no terms.
-[Source register](docs/SOURCES.md)
+(S. Y. Islam, MSc thesis, SFU 2024) at `1bb9de48`, and is tested against its outputs.
+USDA data is presumed public domain as a U.S. Government work; the workbook states no
+terms. [Source register](docs/SOURCES.md)
