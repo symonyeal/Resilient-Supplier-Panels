@@ -18,6 +18,7 @@ pub struct Snapshot {
     pub D: BTreeMap<String, Entry>,
 }
 
+/// Records, qualifications, issues and the product dictionary of a workbook.
 pub fn snapshot(rows: &[Row], mappings: &str) -> Snapshot {
     let (S, Q, issues) = qbl::records(rows);
     let tokens: BTreeSet<String> = Q.iter().map(|q| q.1.clone()).collect();

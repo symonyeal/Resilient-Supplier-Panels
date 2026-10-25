@@ -142,6 +142,7 @@ fn min_count(r: &Value) -> String {
     best.unwrap()
 }
 
+/// Exhibits 1-6 of a saved campaign.
 pub fn tables(res: &Value) -> String {
     let X = res["instances"].as_array().unwrap();
     let by = |b: &str, k: u64| X.iter().find(|r| basket_id(r) == b && r["k"] == k).unwrap();

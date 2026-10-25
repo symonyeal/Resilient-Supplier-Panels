@@ -42,6 +42,7 @@ pub const LIMITS: Limits = Limits { timeout_s: 10.0, cap: 10_000, K: 10, fka_nod
                                     repeat_below_s: 1.0, repeats: 3, berge_sets: 10_000_000 };
 
 impl Limits {
+    /// The limits as recorded in a campaign's provenance.
     pub fn json(&self) -> Value {
         json!({"timeout_s": self.timeout_s, "cap": self.cap, "K": self.K, "fka_nodes": self.fka_nodes,
                "fka_max_family": self.fka_max_family, "exhaustive_support": self.exhaustive_support,
@@ -224,10 +225,12 @@ fn lab(I: &Instance, T: &[usize]) -> Value {
     json!(I.labels(T))
 }
 
+/// A witness (p, F) as [product, sorted failed suppliers].
 pub fn witness(I: &Instance, w: &certify::Witness) -> Value {
     json!([I.P[w.0], I.labels(&w.1)])
 }
 
+/// Essential suppliers and their witnesses by supplier, or null when infeasible.
 pub fn essential_json(I: &Instance) -> Value {
     match certify::essential(I) {
         None => Value::Null,
@@ -239,10 +242,12 @@ pub fn essential_json(I: &Instance) -> Value {
     }
 }
 
+/// The infeasibility witness, or null when V is feasible.
 pub fn infeasibility_json(I: &Instance) -> Value {
     certify::infeasibility(I).map_or(Value::Null, |w| witness(I, &w))
 }
 
+/// The status word of a minimum: optimal, infeasible or the stop reason.
 pub fn minimum_status(m: &Minimum) -> String {
     match m {
         Minimum::Optimal(_) => "optimal".into(),
@@ -337,6 +342,7 @@ pub fn instance_record(I: &Instance, L: &Limits) -> Value {
     Value::Object(rec)
 }
 
+/// A count as a JSON integer, or as a string above u64.
 pub fn count_json(c: u128) -> Value {
     u64::try_from(c).map_or_else(|_| json!(c.to_string()), |x| json!(x))
 }
