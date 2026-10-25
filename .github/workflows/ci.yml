@@ -50,3 +50,4 @@ jobs:
       - run: python -m playwright install --with-deps chromium
       - run: node --check site/app.js
       - run: python analysis/check_browser.py
+      - run: python analysis/check_evidence.py

@@ -1,0 +1,22 @@
+{
+  "awards-raw.json.gz": {
+    "uncompressed_sha256": "64e4af8a438f67da943b4eded1674620925d4f9a0d706999774d7b7acf8becca",
+    "sha256": "51b05f07834dad02c9e43e9eb213903c850bd363cd212e87e0b5852c5421d184",
+    "bytes": 1292768
+  },
+  "parents.json.gz": {
+    "uncompressed_sha256": "155c55b6c75e4b218cb40a85f274261a4d3694fa20aebea5c778007facdb3c11",
+    "sha256": "4596abf54374ba6b13328b029122480b54207032d9e98cdc32ddce410e4d6f56",
+    "bytes": 41434
+  },
+  "links.json.gz": {
+    "uncompressed_sha256": "28e2288e5a2d3e2a839ac5650d7c473851b39acbddcf95c05a32277f1ec18062",
+    "sha256": "315f8c1253ce95a6adeb84c5c87d5c33ec2f2087785c4427778746c2f87be980",
+    "bytes": 30695
+  },
+  "recipients.json.gz": {
+    "uncompressed_sha256": "5ba8184b4a473878c6a73c4b19a4f562a9c66b7f01ff8e6746fbffdf631e9ae5",
+    "sha256": "db5348aed878934e3bbf6015e330d959ba4e339c337f38532380d3c0a8539d12",
+    "bytes": 41219
+  }
+}

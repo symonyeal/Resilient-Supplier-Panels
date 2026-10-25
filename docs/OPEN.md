@@ -1,7 +1,6 @@
 # Open work
 
-Ordered by what a finding would change. Each item ends in the command that continues it,
-run from the repository root.
+The 0.4 work is recorded in the [findings and review log](findings/2026-10-25-open-work.md).
 
 ## Settled in 0.3
 
@@ -11,31 +10,34 @@ run from the repository root.
 - **Specialist enumerator** (0.2 item 5). MMCS is a route; it completes 83 of 88 runs and
   stops only at the 10,000-panel cap.
 
-## Next
+## Completed in 0.4
 
-1. **A second snapshot.** The strongest limit on every finding is one workbook. Fetch the
-   current QBL; if its hash differs, add a manifest entry, rerun the campaign on both, and
-   measure how many single-source products gained or lost a second supplier. This turns
-   "30 of 40 baskets have no backup" into a statement about change over time.
-   `srl acquire`
-2. **Qualification gaps, ranked.** Every infeasible basket names its blocking products.
-   Across the whole strict matrix, rank the products whose second approval would make the
-   most sampled baskets resilient: the direct action the findings point to. Needs only the
-   frozen data and the existing certificates.
-   `srl audit` (single-supplier products), then a new `srl gaps` command
-3. **Identity candidates.** 31 candidate pairs remain unresolved. Resolving them needs
-   evidence such as a SAM UEI or an FDA facility number, not name similarity. The
-   sensitivity variant already shows the stakes: merging them makes 2 primary baskets
-   infeasible.
-   `srl audit`
-4. **Correlated scenarios beyond one group.** `--fail` supports parent-company or
-   shared-plant failures, and the common-owner case uses one sourced relationship. More
-   need verified ownership data, one sourced entry per group.
-   `srl build <products...> --fail rA,rB -o i.json; srl solve i.json`
-5. **Capacity and price.** Award data has not been reconciled with QBL rows. Monetary or
-   capacity objectives wait for comparable data; the branch and bound already takes unit
-   weights and would take costs.
-6. **Larger baskets.** Every sampled basket now completes. Whole-programme baskets (all
-   products of a class) are the next scale test; the class count handles families far
-   beyond listing size.
-   `srl build <all products of a class> --k 1 -o big.json; srl count big.json`
+- Three frozen workbook observations and `srl change`, with fixed-basket and
+  within-snapshot comparisons under one strict catalog.
+- `srl gaps`: ranked second-approval opportunities over 40,000 primary draws,
+  exact uniform shares and a greedy approval sequence.
+- Evidence entries for all 31 identity candidates: six supported duplicate-row
+  sensitivities, 13 distinct-row entity scenarios, 12 unresolved. Strict identities
+  remain unchanged; `srl entities` reports the sensitivities separately.
+- Fifteen sourced owner groups (44 member entries), transitive entity scenarios and
+  their product/basket exposure. Joint outages are assumptions.
+- Retained and reconciled 13,798 AMS awards: candidate UEI links for 341 supplier rows.
+  Recipient amounts are contextual totals, with no unit-price or capacity claim.
+- Whole-class scale runs: all four full classes infeasible at k = 1. Restricted to
+  products with two suppliers, exact counts reach 75,180,897,792. One count timed out.
+
+## Evidence still needed
+
+1. **Twelve unresolved identity pairs.** Obtain a source connecting each QBL row to an
+   entity and facility. A common registration or two billing addresses do not establish
+   one site. Update `catalog/identities.csv`, then run `srl entities --seeds 1000`.
+2. **Comparable prices and capacity.** Obtain matched quantities, units, delivery periods
+   and facility capacity before adding monetary objectives or capacity constraints.
+   `python analysis/check_evidence.py` checks the available contextual evidence.
+3. **Programme-class count.** Thirty products with two suppliers have a minimum resilient
+   panel of 31; their number of panels remains unestablished. A new run can use
+   `srl count results/whole-classes-v0.4/program-min2.json --timeout 60`; retain it
+   separately from the 10-second observation.
+4. **Independent entity verification.** Audit candidate UEI joins and reported parents
+   against authoritative facility records. Date ownership changes separately from
+   workbook observations. No outage probabilities are available.

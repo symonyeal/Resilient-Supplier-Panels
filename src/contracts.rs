@@ -45,7 +45,7 @@ pub fn load(path: &Path) -> Result<(Map<String, Value>, Instance), String> {
 /// Content hashes and versions used to interpret the matrix.
 pub fn provenance() -> Result<Map<String, Value>, String> {
     let mut m = Map::new();
-    m.insert("data_sha256".into(), json!(data::sha256(&data::bytes("raw/QBL.xlsx")?)));
+    m.insert("data_sha256".into(), json!(data::sha256(&data::workbook()?)));
     m.insert("mappings_sha256".into(), json!(data::sha256(&data::bytes("catalog/mappings.csv")?)));
     m.insert("software_version".into(), json!(VERSION));
     m.insert("thesis_rev".into(), json!(THESIS_REV));

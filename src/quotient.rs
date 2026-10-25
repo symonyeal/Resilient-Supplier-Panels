@@ -38,9 +38,9 @@ pub struct Count {
     pub reduced: usize,
 }
 
-/// C(n, r), exact: a product of r consecutive integers is divisible by r!.
+/// C(n, r), exact: a product of r consecutive integers is divisible by r!; 0 when r > n.
 pub fn binom(n: usize, r: usize) -> u128 {
-    (0..r).fold(1u128, |a, i| a * (n - i) as u128 / (i + 1) as u128)
+    if r > n { 0 } else { (0..r).fold(1u128, |a, i| a * (n - i) as u128 / (i + 1) as u128) }
 }
 
 /// The count, or the stop reason (clock, or a product above u128).

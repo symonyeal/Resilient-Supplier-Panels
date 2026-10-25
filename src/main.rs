@@ -1,4 +1,4 @@
-//! srl {acquire, audit, schema, build, solve, enum, count, verify, bench, report, site}.
+//! srl {acquire, audit, change, entities, gaps, schema, build, solve, enum, count, verify, bench, report, site}.
 //! The shell: parse arguments, read documents and data, call the library, write JSON.
 //! Exit status 2 is an argument or input error, 1 a failed verification or build check.
 
@@ -13,16 +13,22 @@ use srl::instance::Instance;
 use srl::json::{self, json, Map, Style, Value};
 use srl::run::Clock;
 use srl::solve::{self, Minimum};
-use srl::{data, portfolio, qbl, quotient, report, verdicts, THESIS_REV};
+use srl::{change, data, entities, gaps, portfolio, qbl, quotient, report, verdicts, THESIS_REV};
 
-const USAGE: &str = "usage: srl [--version] [--data-dir PATH] COMMAND ...
+const USAGE: &str = "usage: srl [--version] [--data-dir PATH] [--snapshot NAME] COMMAND ...
 
 commands:
   acquire                          download the sources to data/fetched (network, curl)
   audit [-o FILE]                  Stage 0 audit of the frozen snapshot
+  change [--seed N] [-o FILE]      change across the dated snapshots (backups gained, lost)
+  entities [--seeds N] [-o FILE]   identity verdicts, owner-group exposure, award dollars
+  gaps [--seeds N] [--k N] [-o FILE]
+                                   approvals that would make the most sampled baskets resilient
   schema [-o FILE]                 JSON Schema for version 1.0 exchange documents
-  build [PRODUCT ...] [--basket CSV] [--k N] [--variant strict|merged] [--fail ID,ID ...] [-o FILE]
-                                   instance document for a basket
+  build [PRODUCT ...] [--basket CSV] [--class C [--min-suppliers N]] [--k N] [--variant strict|merged]
+        [--fail ID,ID ...] [-o FILE]
+                                   instance document for a basket (--class: every product of class C
+                                   with at least N suppliers)
   solve FILE [-o FILE]             minimum panel, witnesses, essential suppliers
   enum FILE [--method berge|fkb|cuts|mmcs|exhaustive] [--timeout S] [--cap N] [-o FILE]
                                    minimal panels
@@ -63,8 +69,8 @@ impl Args {
     }
 }
 
-const VALUED: [&str; 11] = ["-o", "--output", "--basket", "--k", "--variant", "--fail", "--method", "--timeout",
-                            "--cap", "--seed", "--results"];
+const VALUED: [&str; 14] = ["-o", "--output", "--basket", "--class", "--min-suppliers", "--k", "--variant", "--fail",
+                            "--method", "--timeout", "--cap", "--seed", "--seeds", "--results"];
 
 fn parse(argv: Vec<String>) -> Result<Option<Args>, String> {
     let mut it = argv.into_iter();
@@ -77,7 +83,7 @@ fn parse(argv: Vec<String>) -> Result<Option<Args>, String> {
         } else if x == "-h" || x == "--help" {
             println!("{USAGE}");
             return Ok(None);
-        } else if x == "--data-dir" || x == "--root" || VALUED.contains(&x.as_str()) {
+        } else if x == "--data-dir" || x == "--snapshot" || x == "--root" || VALUED.contains(&x.as_str()) {
             let v = it.next().ok_or(format!("argument {x}: expected one argument"))?;
             a.opt.push((name, v));
         } else if x == "--no-variants" {
@@ -124,6 +130,13 @@ fn main() -> ExitCode {
                 // SAFETY: set once, before any other thread exists.
                 unsafe { std::env::set_var("SRL_DATA_DIR", d) };
             }
+            if let Some(w) = a.get("--snapshot") {
+                if !data::SNAPSHOTS.contains(&w) {
+                    return Err(Fail::Usage(format!("--snapshot {w}: not one of {}", data::SNAPSHOTS.join(", "))));
+                }
+                // SAFETY: as above.
+                unsafe { std::env::set_var("SRL_SNAPSHOT", w) };
+            }
             command(&a)
         }
     });
@@ -142,7 +155,7 @@ fn main() -> ExitCode {
 }
 
 fn snapshot() -> Result<(Vec<qbl::Row>, Snapshot), String> {
-    let rows = qbl::read(&data::bytes("raw/QBL.xlsx")?)?;
+    let rows = qbl::read(&data::workbook()?)?;
     let s = audit::snapshot(&rows, &data::text("catalog/mappings.csv")?);
     Ok((rows, s))
 }
@@ -160,11 +173,58 @@ fn command(a: &Args) -> Result<(), Fail> {
         "audit" => {
             let (rows, s) = snapshot()?;
             let m = json::loads(&data::bytes("manifest.json")?)?;
-            let r = m["QBL.xlsx"]["retrieved_utc"].as_str().ok_or("manifest without retrieved_utc")?.to_string();
+            let e = &m[data::snapshot().as_str()];
+            let r = e["captured_utc"].as_str().or(e["retrieved_utc"].as_str())
+                .ok_or("manifest without retrieved_utc")?.to_string();
             let mut A = audit::audit(&rows, &s);
             A["snapshot_age_days"] = json!(qbl::age_days(&r, &today()));
             A["stale"] = json!(qbl::stale(&r, &today()));
             contracts::write(&A, out)?;
+        }
+        "change" => {
+            let m = json::loads(&data::bytes("manifest.json")?)?;
+            let mappings = data::text("catalog/mappings.csv")?;
+            let mut W = Vec::new();
+            for name in data::SNAPSHOTS {
+                let e = &m[name];
+                let date = e["captured_utc"].as_str().or(e["retrieved_utc"].as_str()).ok_or("manifest without date")?;
+                let rows = qbl::read(&data::bytes(&format!("raw/{name}"))?)?;
+                W.push((name.to_string(), date[..10].to_string(), audit::snapshot(&rows, &mappings)));
+            }
+            let mut d = change::series(&W, a.num("--seed", 1)?);
+            d["provenance"] = analysis_provenance()?;
+            contracts::write(&d, out)?;
+        }
+        "entities" => {
+            if data::snapshot() != "QBL.xlsx" {
+                return Err(Fail::Usage("entity catalogs apply only to QBL.xlsx".into()));
+            }
+            let n = a.num("--seeds", 1000)?;
+            if n == 0 {
+                return Err(Fail::Usage("--seeds must be positive".into()));
+            }
+            let (_, s) = snapshot()?;
+            let pairs = entities::identities(&data::text("catalog/identities.csv")?, &s)?;
+            let G = entities::owners(&data::text("catalog/owners.csv")?, &s)?;
+            let A = json::loads(&data::bytes("catalog/usaspending.json")?)?;
+            entities::awards(&A, &s)?;
+            let mut d = entities::report(&s, &pairs, &G, &A, n);
+            d["provenance"] = analysis_provenance()?;
+            contracts::write(&d, out)?;
+        }
+        "gaps" => {
+            let (_, s) = snapshot()?;
+            let n: u64 = a.num("--seeds", 1000)?;
+            if n == 0 {
+                return Err(Fail::Usage("--seeds must be positive".into()));
+            }
+            let k: usize = a.num("--k", 1)?;
+            if k > i64::MAX as usize {
+                return Err(Fail::Usage("--k exceeds the supported integer range".into()));
+            }
+            let mut d = gaps::gaps(&audit::matrix(&s, "strict"), n, k);
+            d["provenance"] = analysis_provenance()?;
+            contracts::write(&d, out)?;
         }
         "schema" => contracts::write(&json::loads(SCHEMA.as_bytes())?, out)?,
         "build" => build(a, out)?,
@@ -205,7 +265,11 @@ fn command(a: &Args) -> Result<(), Fail> {
         }
         "count" => {
             let (_, I) = file(a)?;
-            let c = quotient::count(&I, &Clock::limit(a.num("--timeout", LIMITS.timeout_s)?));
+            let timeout: f64 = a.num("--timeout", LIMITS.timeout_s)?;
+            if !timeout.is_finite() || timeout <= 0.0 {
+                return Err(Fail::Usage("timeout must be finite and positive".into()));
+            }
+            let c = quotient::count(&I, &Clock::limit(timeout));
             contracts::write(&match c {
                 Ok(c) => json!({"status": "complete", "panels": bench::count_json(c.panels), "orbits": c.orbits,
                                 "reduced_panels": c.reduced, "classes": quotient::classes(&I).len()}),
@@ -278,16 +342,6 @@ fn command(a: &Args) -> Result<(), Fail> {
 }
 
 fn build(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
-    let mut P: Vec<String> = a.pos.clone();
-    if let Some(b) = a.get("--basket") {
-        if !P.is_empty() {
-            return Err(Fail::Usage("use either product arguments or --basket".into()));
-        }
-        P = contracts::basket_csv(Path::new(b))?;
-    }
-    if P.is_empty() {
-        return Err(Fail::Usage("provide products or --basket".into()));
-    }
     let variant = a.get("--variant").unwrap_or("strict");
     if !["strict", "merged"].contains(&variant) {
         return Err(Fail::Usage(format!("argument --variant: invalid choice: {variant:?}")));
@@ -295,6 +349,24 @@ fn build(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
     let k: i64 = a.num("--k", 0)?;
     let (_, s) = snapshot()?;
     let M = audit::matrix(&s, variant);
+    let mut P: Vec<String> = a.pos.clone();
+    let sources = [!P.is_empty(), a.get("--basket").is_some(), a.get("--class").is_some()];
+    if sources.iter().filter(|x| **x).count() > 1 {
+        return Err(Fail::Usage("use one of product arguments, --basket or --class".into()));
+    }
+    if a.get("--min-suppliers").is_some() && a.get("--class").is_none() {
+        return Err(Fail::Usage("--min-suppliers selects within --class".into()));
+    }
+    if let Some(b) = a.get("--basket") {
+        P = contracts::basket_csv(Path::new(b))?;
+    }
+    if let Some(c) = a.get("--class") {
+        let n: usize = a.num("--min-suppliers", 1)?;
+        P = M.iter().filter(|(_, (cl, E))| cl == c && E.len() >= n).map(|(p, _)| p.clone()).collect();
+    }
+    if P.is_empty() {
+        return Err(Fail::Usage("provide products, --basket or --class with at least one product".into()));
+    }
     let missing: Vec<&String> = P.iter().filter(|p| !M.contains_key(*p)).collect();
     if !missing.is_empty() {
         return Err(Fail::Check(format!("not a {variant} product: {}", report::repr(&json!(missing)))));
@@ -316,6 +388,22 @@ fn git(root: &Path, args: &[&str]) -> String {
         .map(|o| String::from_utf8_lossy(&o.stdout).trim().to_string()).unwrap_or_default()
 }
 
+/// Source revision and hashes for the exploratory analyses, including every snapshot.
+fn analysis_provenance() -> Result<Value, String> {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    let mut p = contracts::provenance()?;
+    p.insert("code_rev".into(), json!(env!("SRL_CODE_REV")));
+    p.insert("code_sha256".into(), json!(portfolio::code_sha256(&root).ok()));
+    let files = ["manifest.json", "catalog/mappings.csv", "catalog/identities.csv",
+                 "catalog/owners.csv", "catalog/usaspending.json"];
+    let mut hashes = Map::new();
+    for f in files.iter().map(|f| f.to_string()).chain(data::SNAPSHOTS.iter().map(|w| format!("raw/{w}"))) {
+        hashes.insert(f.clone(), json!(data::sha256(&data::bytes(&f)?)));
+    }
+    p.insert("inputs_sha256".into(), json!(hashes));
+    Ok(json!(p))
+}
+
 fn cpu() -> String {
     std::env::var("PROCESSOR_IDENTIFIER").ok().or_else(|| {
         std::fs::read_to_string("/proc/cpuinfo").ok()?.lines()
@@ -326,9 +414,10 @@ fn cpu() -> String {
 /// Everything a result needs to be reproduced and dated.
 fn provenance(L: &bench::Limits, seed: u64) -> Result<Value, String> {
     let root = std::env::current_dir().map_err(|e| e.to_string())?;
-    let sha = data::sha256(&data::bytes("raw/QBL.xlsx")?);
+    let sha = data::sha256(&data::workbook()?);
     let frozen = json::loads(&data::bytes("manifest.json")?)?;
-    Ok(json!({"data_sha256": sha, "data_matches_manifest": frozen["QBL.xlsx"]["sha256"] == sha.as_str(),
+    let snap = data::snapshot();
+    Ok(json!({"snapshot": snap, "data_sha256": sha, "data_matches_manifest": frozen[snap.as_str()]["sha256"] == sha.as_str(),
               "code_rev": git(&root, &["rev-parse", "HEAD"]),
               "dirty": !git(&root, &["status", "--porcelain", "--untracked-files=no"]).is_empty(),
               "thesis_rev": THESIS_REV, "seed": seed, "limits": L.json(),
@@ -401,7 +490,7 @@ fn acquire() -> Result<Value, String> {
     let mut got = Map::new();
     for (name, m) in frozen.as_object().unwrap() {
         let url = m["url"].as_str().ok_or("manifest entry without url")?;
-        let path = dir.join(url.rsplit('/').next().unwrap());
+        let path = dir.join(name);
         let headers = dir.join(format!("{name}.headers"));
         let st = Command::new("curl").args(["-sSL", "--max-time", "60", "-A", "Mozilla/5.0 (srl acquire)", "-D"])
             .arg(&headers).arg("-o").arg(&path).arg(url).status().map_err(|e| format!("curl: {e}"))?;

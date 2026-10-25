@@ -1,5 +1,26 @@
 # Validation
 
+## Release 0.4 additions
+
+The three embedded workbook hashes are checked against the manifest. Historical changes
+and seeded gap rankings have real-workbook regression checks in `tests/data.rs`; selected
+backup changes were independently read from the workbooks. `tests/entities.rs` checks
+transitive grouping, separate identity merging, owner-outage matrix certificates,
+malformed catalog rejection and the frozen catalogs' supplier IDs/names. It also requires
+missing award amounts to fail instead of silently dropping them.
+
+`analysis/check_evidence.py` checks four compressed-source hashes, all 13,798 distinct
+award IDs, every published recipient aggregate (336) against raw Award Amount values,
+and all 341 candidate links against the retained join table. This checks the extraction
+and aggregation; it does not prove that a heuristic link identifies a QBL facility.
+`tests/analyses.rs` independently checks saved whole-class panels for matrix feasibility
+and minimality, plus infeasibility witnesses. It does not independently enumerate the
+75-billion-panel family or prove the solver's optimality.
+
+The original saved campaigns and reports retain their results. Every source change
+requires rebuilding site provenance. The [0.4 findings](findings/2026-10-25-open-work.md)
+give the protocol, observed statuses and identification review log.
+
 This file lists what must be checked, how, and what has been checked. A check is a
 certificate (feasibility, a witness, agreement of independent routes, a completeness
 search), never an output snapshot; the one exception, agreement with the thesis code's
