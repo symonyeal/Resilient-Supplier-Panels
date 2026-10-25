@@ -1,0 +1,24 @@
+[package]
+name = "srl"
+version = "0.3.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Certified resilient qualified-supplier panels from the USDA AMS Qualified Bidders List"
+license = "GPL-3.0-or-later"
+authors = ["Saimon Y. Islam"]
+repository = "https://github.com/symonyeal/Resilient-Supplier-Panels"
+homepage = "https://symonyeal.github.io/Resilient-Supplier-Panels/"
+readme = "README.md"
+
+[dependencies]
+miniz_oxide = "0.8"
+roxmltree = "0.20"
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
+sha2 = "0.10"
+
+[profile.release]
+opt-level = 3
+debug = "line-tables-only"
+
+[lints.rust]
+non_snake_case = "allow"

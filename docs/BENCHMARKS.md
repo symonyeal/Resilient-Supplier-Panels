@@ -123,3 +123,36 @@ The token is now split in `mappings.csv`, by the same parse repair already appli
 two programme-code pairs. `test_catalog.py` asserts that no such token remains. The limits,
 the basket rules and the seed are unchanged. The suite was rerun whole, and only that run is
 reported.
+
+## Release 0.3 campaign (Rust)
+
+Recorded 2026-10-25, before the run. The 0.2 measurements above stay as they are; this
+campaign is a new file, `results/suite-seed1-v0.3.json`.
+
+**Unchanged.** Seed 1 and the same 88 instances: the Rust port draws the baskets with
+Python's Mersenne Twister and reproduces the 0.2 basket lists for seeds 0–5 exactly
+(`tests/parity.rs`). Limits: 10 s and 10,000 panels per run, K = 10, FK-A certificate for
+complete families of at most 2,000 panels within 200,000 tree nodes, exhaustive check for
+supports of at most 18, three repeats of complete runs under 1 s, sensitivity variants by
+one minimum solve each.
+
+**Changed, with the reason.**
+- **Routes.** `berge` and `fkb` are line-for-line ports of the thesis code (same output
+  order, same FK-A/FK-B node counts on every reference instance). `cuts` replaces the HiGHS
+  MILP enumeration: the same cut problem, solved exactly by branch and bound, because the
+  port has no LP solver. `mmcs` (Murakami–Uno) is new: the specialist enumerator that
+  `docs/OPEN.md` item 5 asked for.
+- **Execution.** Each run is a thread with a deadline checked at every recursion step,
+  not a process killed at the limit; a panic is `error`. Process start is no longer inside
+  any measurement.
+- **New limit.** Berge's working family is capped at 10,000,000 sets; reaching it ends the
+  run with status `memory`, a censored observation like `timeout`.
+- **New measurement.** `quotient`: the exact count of minimal panels by signature classes
+  (MODEL, Theorem 4), under the same 10 s limit, compared with every complete family.
+- **Certificates.** The minimum is solved exactly under the 10 s limit (status `timeout`
+  if it does not finish). Completeness of a family is an exhaustive search over the
+  matrix rather than a HiGHS solve; it has no time limit and its time is `t_exhaustion`.
+
+Timings are comparable within this campaign only. The 0.2 Python timings and these were
+taken on the same laptop but by different implementations; a speed-up between them is
+reported as a measurement of this pair, not of the algorithms.
