@@ -94,10 +94,11 @@ roxmltree, same output on every row).
 ## Tested and refused
 
 **Specialist enumerators (SHD, RS; Murakami–Uno)** (2026-10-15; MMCS added in 0.3).
-- Not included. No maintained Windows build was verified in this session.
+- Not included in 0.2: no maintained Windows build was verified on 2026-10-15.
 - The suite's question is whether thesis methods are practical against a baseline that is
   easy to reproduce, and Berge and MILP enumeration serve that.
-- Open for Stage 3.
+- 0.3 adds MMCS, written from the published algorithm and checked against Berge; SHD and
+  RS remain out.
 
 **Dashboard** (2026-10-15).
 - Deferred until verified findings exist.
