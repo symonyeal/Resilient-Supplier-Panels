@@ -101,6 +101,12 @@ fn sec(t: &Value) -> String {
     t.as_f64().map_or("—".into(), |t| g(t, 3))
 }
 
+/// Panels up to signature symmetry: from the stored complete family, else (0.3 campaigns)
+/// from the class count, which equals it wherever both exist (MODEL, Theorem 4).
+pub fn orbits(r: &Value) -> Option<&Value> {
+    r.get("orbits").or_else(|| r.get("quotient").and_then(|q| q.get("orbits")))
+}
+
 /// A proved minimum size, or the solve status when no optimum was returned.
 fn minimum(r: &Value) -> String {
     if r["status"] == "optimal" { r["size"].to_string() } else { r["status"].as_str().unwrap().into() }
@@ -185,7 +191,7 @@ pub fn tables(res: &Value) -> String {
             many += (c.as_i64().is_some_and(|c| c >= 2) && is_primary(b)) as usize;
             rows.push(format!("| {b} | {k} | {} | {} | {} | {} |", r["min"]["size"],
                               if c.is_null() { min_count(r) } else { c.to_string() },
-                              r.get("orbits").map_or("—".into(), |o| o.to_string()), essential(r)));
+                              orbits(r).map_or("—".into(), |o| o.to_string()), essential(r)));
         }
     }
     out.extend(exhibit(&format!("{many} feasible primary basket/k cases have at least 2 minimal panels (complete count)"),
@@ -275,29 +281,31 @@ pub fn tables(res: &Value) -> String {
     // Exhibit 6 (0.3 campaigns): exact counts by signature classes
     if X.iter().any(|r| r.get("quotient").is_some()) {
         let mut rows = Vec::new();
-        let (mut agree, mut checked, mut exact) = (0, 0, 0);
+        let (mut exact, mut counted, mut equal, mut stored, mut same) = (0, 0, 0, 0, 0);
         for b in &ids {
             for k in [0, 1] {
                 let r = by(b, k);
                 let q = &r["quotient"];
-                if q["status"] == "complete" {
-                    exact += 1;
-                }
+                exact += (q["status"] == "complete") as usize;
+                let enumerated = (q["status"] == "complete" && !r["count_exact"].is_null()).then(|| q["count"] == r["count_exact"]);
+                counted += enumerated.is_some() as usize;
+                equal += (enumerated == Some(true)) as usize;
                 if let Some(a) = r.get("quotient_agrees").and_then(Value::as_bool) {
-                    checked += 1;
-                    agree += a as usize;
+                    stored += 1;
+                    same += a as usize;
                 }
                 if r["min"]["size"].is_null() {
                     continue;
                 }
                 rows.push(format!("| {b} | {k} | {} | {} | {} | {} |", show(&q["count"]), q["orbits"],
                                   if r["count_exact"].is_null() { min_count(r) } else { r["count_exact"].to_string() },
-                                  r.get("quotient_agrees").map_or("—", |a| if a == true { "yes" } else { "no" })));
+                                  enumerated.map_or("—", |a| if a { "yes" } else { "no" })));
             }
         }
-        out.extend(exhibit(&format!("Exact counts by signature classes on {exact} of {} instances; equal to the complete family on {agree} of {checked}",
+        out.extend(exhibit(&format!("Exact counts by signature classes on {exact} of {} instances: equal to the enumerated count on {equal} of {counted}",
                                     X.len()),
-                           &["basket", "k", "minimal panels (classes)", "class vectors", "enumerated", "agree"], rows, None));
+                           &["basket", "k", "minimal panels (classes)", "class vectors", "enumerated", "equal"], rows,
+                           Some(format!("Count and class vectors also equal those of the stored complete family on {same} of {stored}."))));
     }
     out.join("\n")
 }
