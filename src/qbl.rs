@@ -42,10 +42,12 @@ pub fn read(workbook: &[u8]) -> Result<Vec<Row>, String> {
         .collect())
 }
 
+/// Python's `str.isspace`.
 pub fn space(c: char) -> bool {
     c.is_whitespace() || ('\x1c'..='\x1f').contains(&c)
 }
 
+/// Python's `str.strip()`.
 pub fn strip(s: &str) -> &str {
     s.trim_matches(space)
 }
@@ -85,6 +87,7 @@ fn zfill(s: &str, w: usize) -> String {
     format!("{}{s}", "0".repeat(w.saturating_sub(s.chars().count())))
 }
 
+/// The 5-digit ZIP: the part before '-', zero-padded (Excel stored ZIPs as numbers).
 pub fn zip5(s: &str) -> String {
     let d = strip(s).split('-').next().unwrap_or("");
     if d.chars().count() <= 5 { zfill(d, 5) } else { zfill(d, 9).chars().take(5).collect() }
@@ -164,6 +167,7 @@ pub fn age_days(retrieved_utc: &str, today: &str) -> i64 {
     days(&today[..10]) - days(&retrieved_utc[..10])
 }
 
+/// The snapshot is older than STALE_DAYS.
 pub fn stale(retrieved_utc: &str, today: &str) -> bool {
     age_days(retrieved_utc, today) > STALE_DAYS
 }

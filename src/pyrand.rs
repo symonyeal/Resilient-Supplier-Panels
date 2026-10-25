@@ -11,6 +11,7 @@ pub struct Random {
 }
 
 impl Random {
+    /// random.Random(seed) for a nonnegative integer seed.
     pub fn new(seed: u64) -> Self {
         let mut key: Vec<u32> = Vec::new();
         let mut s = seed;

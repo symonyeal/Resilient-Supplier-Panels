@@ -128,6 +128,7 @@ pub struct Scenarios<const W: usize> {
     pub prov: Vec<Vec<Scenario>>,
 }
 
+/// The scenario hypergraph of I (see `Scenarios`).
 pub fn hypergraph<const W: usize>(I: &Instance) -> Scenarios<W> {
     let labels = I.support();
     let mut pos = vec![usize::MAX; I.V.len()];
