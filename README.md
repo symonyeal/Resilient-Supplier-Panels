@@ -1,40 +1,39 @@
 # Resilient Supplier Panels
 
-**If one supplier drops out, can every product in a basket still be bought?** This project
-answers that question for food products on the USDA's public list of approved suppliers,
-and shows which suppliers to rely on.
+This project tests whether suppliers on the USDA's Qualified Bidders List can cover every
+product in a basket after supplier failures. It identifies products and suppliers that limit
+that coverage.
 
 [Live site](https://symonyeal.github.io/Resilient-Supplier-Panels/) ·
 [Case study](docs/CASE_STUDY.md) ·
 [Releases](https://github.com/symonyeal/Resilient-Supplier-Panels/releases)
 
-## The short answer
+## Main result
 
-- **Most baskets have no backup.** In 30 of 40 baskets drawn from the list (3 to 20
-  products each), no combination of suppliers survives the loss of any one supplier.
-- **The cause is always one product.** Each of those 30 baskets contains a product that only
-  one supplier is approved to provide. Choosing suppliers differently cannot fix that.
-  Approving a second supplier for that product can.
-- **Where backup is possible, it is cheap in suppliers.** In the other 10 baskets, 2 to 6
-  suppliers cover every product even if any one of them fails.
+- Of 40 baskets drawn from the list, each with 3 to 20 products, 30 have no panel that
+  survives the loss of any one supplier.
+- Each of those 30 baskets includes a product with only one approved supplier. Choosing a
+  different panel cannot provide backup for that product; a second approval would be needed.
+- In the remaining 10 baskets, panels of 2 to 6 suppliers cover every product after any one
+  supplier fails.
 
-## The question
+## Data and scope
 
-Release 0.4 adds [three dated observations, ranked qualification gaps, entity scenarios
-and whole-class baskets](docs/findings/2026-10-25-open-work.md). Across 40,000 seeded
-draws, 11,256 have one-supplier backup. Counts reach 75,180,897,792 minimal panels on a
-whole-class basket. The original 40-basket headline above remains the October seed-1
-campaign. [Remaining evidence requirements](docs/OPEN.md) include 12 unresolved identity
-pairs and comparable price/capacity data.
+The [release 0.4 analysis](docs/findings/2026-10-25-open-work.md) adds three dated
+observations, ranked qualification gaps, entity scenarios and whole-class baskets. Across
+40,000 seeded basket draws, 11,256 have one-supplier backup. One whole-class basket has
+75,180,897,792 minimal panels. These draws are not a demand sample.
+[Remaining evidence requirements](docs/OPEN.md) include 12 unresolved identity pairs and
+comparable price and capacity data. The 40-basket result above is from the October seed-1
+campaign.
 
 The USDA's Agricultural Marketing Service approves vendors for specific products before they
 may bid on its food purchases. The approved vendors and their products appear on the
 [Qualified Bidders List](https://www.ams.usda.gov/selling-food/solicitations).
 
-A buyer chooses a *panel*: a set of suppliers that together cover every product in a basket.
-A resilient panel still covers every product after any one supplier fails. The questions
-are how small a resilient panel can be, how many choices exist, and which suppliers cannot
-be replaced.
+A buyer chooses a *panel*: suppliers that together cover every product in a basket. A panel
+survives a modelled failure if it still covers every product. The analysis finds the smallest
+resilient panels, counts minimal alternatives, and identifies suppliers that cannot be replaced.
 
 ## Three examples
 
@@ -46,11 +45,10 @@ be replaced.
 
 Panels are counted only when no supplier in them is redundant.
 
-- **Canned:** 1,284 options leave room to choose on price, capacity and delivery record.
-- **Poultry:** one product has only two approved suppliers, so both are required. A single
-  resilient panel means the buyer has no choice.
-- **Scarce:** lentils and sweet potatoes each have one approved supplier. No panel is
-  resilient until another supplier is approved.
+The canned basket offers alternatives a buyer can compare on price, capacity and delivery record.
+The poultry basket has one resilient panel because one product has only two approved suppliers,
+so both are required. The scarce basket is infeasible because lentils and sweet potatoes each
+have one approved supplier.
 
 On the [live site](https://symonyeal.github.io/Resilient-Supplier-Panels/) you can pick a
 basket and a panel, fail a supplier, and see which products lose coverage. You can download
@@ -58,32 +56,27 @@ a one-page report. All [88 measured cases](https://symonyeal.github.io/Resilient
 (44 baskets, each with and without a failure) can be browsed and filtered, each with an
 exact count of its panels.
 
-## What this does and does not tell you
+## Scope and limits
 
 [A common-owner case](docs/COMMON_OWNER_CASE.md) uses a sourced corporate relationship
 and an explicitly assumed joint outage. It compares approval-only, single-supplier
 and common-owner protection using the existing model and frozen data.
 
-**Does:** whether the approvals on paper allow full coverage when a supplier fails, which
-suppliers are irreplaceable, and which product is the bottleneck.
+The model uses qualification records. It does not include capacity, price, delivery record,
+or whether a supplier will bid. It does not establish shared plants or failure probabilities.
+A listed vendor need not be the producer, and a billing address is not a plant. The main
+campaign uses the snapshot retrieved 2026-10-15; the change analysis compares it with two
+archived observations. Entity scenarios use sourced relationships and explicit joint-outage
+assumptions. Award totals provide context, without unit prices or capacity.
 
-**Does not:** capacity, price, delivery record, or whether a supplier will bid. It also does
-not establish shared plants or failure probabilities. A listed vendor need not be the
-producer, and a billing address is not a plant. The main campaign uses the snapshot
-retrieved 2026-10-15; the separate change analysis compares it with two archived
-observations. Entity scenarios use sourced relationships and explicit joint-outage
-assumptions. Award totals provide context, without unit prices or capacity. This is
-research, not a purchasing recommendation.
+## Validation
 
-## How the results are checked
-
-1. **Fixed source.** The USDA workbook is frozen and fingerprinted, so every result names
-   the exact data it came from.
-2. **Several methods.** An exact search finds the smallest resilient panel in microseconds.
-   Enumeration algorithms from the author's MSc thesis, and a specialist enumerator, list
-   every alternative; a counting theorem gives the number of panels without listing them.
-3. **Independent check.** Separate code checks every panel directly against the USDA list,
-   and a separate exhaustive search checks that no panel was missed.
+1. The USDA workbook is frozen and fingerprinted; each result names its source.
+2. Exact search finds a smallest panel. Enumeration methods from the author's MSc thesis
+   and a specialist enumerator list alternatives; a counting theorem counts panels without
+   listing them.
+3. Separate code checks every panel against the USDA list. An exhaustive search checks
+   that the enumeration is complete.
 
 Benchmark timings are from one run on one laptop (release 0.3, October 2026).
 [Findings](docs/findings/2026-10-25-rust-campaign.md) ·
@@ -105,7 +98,7 @@ Replace `examples/canned.csv` with your own list of products. `--k 1` means "sur
 failure". Expected result for the example: a two-supplier panel. The frozen USDA data is
 built into the program.
 
-## For technical readers
+## Model
 
 A panel T is feasible when, for every product p, it keeps a qualified member under every
 modelled failure. For any k failures this means |T ∩ E_p| ≥ k + 1. Minimal panels are the
