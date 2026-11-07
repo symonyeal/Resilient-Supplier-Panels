@@ -134,3 +134,37 @@ roxmltree, same output on every row).
 - Plotly basic 4.1.1 (MIT) is vendored, not loaded from a CDN, so the page keeps working
   offline and from `file://`, as the static-site decision requires. SHA-256
   `99784e3abfb07b142a15e521a439e6d9addceadb3f79553fd24c72774f0649ba`.
+
+**Exact arithmetic and admitted evidence** (2026-11-06).
+- Signature multiplicities use the index-size integer. Binomial coefficients cancel
+  factors before checked multiplication; a count exceeding `u128` reports `overflow`.
+  Overflow is distinct from an enumeration cap. Structural edge counts retain their
+  full representable value; gap shares use a product ratio rather than large integers.
+- An instance owns its labels, sets and index space. Construction rejects repeated
+  members and empty labels; readers receive immutable views. Support restriction
+  preserves that index space. Raw duplicate or out-of-range panel indices are invalid.
+- Verification rejects malformed members and inconsistent run metadata. A fully
+  stored complete family requires independent exhaustion. A complete count with only
+  a stored subset requires the independent signature-class count and is labelled as
+  a subset, never as exhausted. Partial counts are checked as lower bounds. Versioned
+  documents require `stored`; unversioned documents may infer it from the panel list.
+- Saved campaign minima are checked for cardinality optimality by the matrix solver.
+  Claimed complete and quotient counts must agree with a fresh exact class count.
+  Historical partial fields, timings and provenance stay unchanged; current admission
+  is recorded separately. The old `milp` method label remains valid historical metadata.
+
+**Input selection and publication ownership** (2026-11-06).
+- Each command selects one immutable Dataset from explicit options or environment,
+  captures its bytes and checks the selected workbook against its manifest. No command
+  mutates the process environment. Optional catalogues are required only by commands
+  that use them. Site campaign evidence must name the same selected workbook hash.
+- Catalogue classes and variants own their classification policy. Run status and
+  enumeration method parsing have closed owners; minimum status belongs to the solver.
+- Campaign files are synced before exclusive publication and cannot be replaced by a
+  competing writer. Site data are generated off-tree, under one OS writer lease, then
+  projected with rollback and next-writer recovery. Readers needing a consistent set
+  pin the immutable accepted inventory under `.srl-releases`. Fixed-path readers are
+  not promised atomic multi-file visibility or directory durability under power loss.
+  Rust 1.89 supplies the standard-library file locks; no locking crate is added.
+- Pages requires successful checks from this repository's main push. Manual unchecked
+  deployment is removed. No historical timed campaign is rerun or overwritten here.

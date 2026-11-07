@@ -37,8 +37,9 @@
    "properties": {
     "kind": {"const": "enumeration"}, "panels": {"$ref": "#/$defs/sets"},
     "run": {"type": "object", "required": ["status", "count", "stored"],
-            "properties": {"status": {"type": "string"},
-                           "count": {"type": "integer", "minimum": 0},
+            "properties": {"status": {"enum": ["complete", "timeout", "cap", "memory", "overflow", "error"]},
+                           "method": {"enum": ["berge", "fkb", "cuts", "mmcs", "exhaustive"]},
+                           "count": {"oneOf": [{"type": "integer", "minimum": 0}, {"type": "string", "pattern": "^[0-9]+$"}]},
                            "stored": {"type": "integer", "minimum": 0}}}
    }
   }]}

@@ -59,7 +59,7 @@ fn data_layer() {
     check("merged_of", &json!(catalog::merged_of(&s.D)), &load("merged_of.json"));
     check("audit", &audit::audit(&rows, &s), &load("audit.json"));
     for (v, f) in [("strict", "matrix-strict.json"), ("merged", "matrix-merged.json")] {
-        let M: serde_json::Map<String, Value> = audit::matrix(&s, v).into_iter()
+        let M: serde_json::Map<String, Value> = audit::matrix(&s, srl::catalog::Variant::parse(v).unwrap()).into_iter()
             .map(|(p, (c, E))| (p, json!([c, E]))).collect();
         check(v, &Value::Object(M), &load(f));
     }
@@ -87,7 +87,7 @@ fn python_random_and_baskets() {
     }
     check("pyrandom", &Value::Object(got), &load("pyrandom.json"));
     let (_, s) = snapshot();
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let B: serde_json::Map<String, Value> = (0..6u64).map(|seed| (seed.to_string(),
         json!(bench::baskets(&M, seed).into_iter().map(|(c, r, n, P)| json!([c, r, n, P])).collect::<Vec<_>>()))).collect();
     check("baskets", &Value::Object(B), &load("baskets.json"));
@@ -99,7 +99,7 @@ fn suite_seed1_instances() {
         return;
     }
     let (_, s) = snapshot();
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let ref_suite = load("suite1.json");
     let B = bench::baskets(&M, 1);
     let mut d = Vec::new();
@@ -146,10 +146,16 @@ fn verdicts_and_site_from_the_saved_campaign() {
     let R = srl::json::loads(&std::fs::read(root.join("results/suite-seed1.json")).unwrap()).unwrap();
     let V: serde_json::Map<String, Value> = srl::verdicts::score(&R, &audit::audit(&rows, &s)).into_iter().collect();
     check("verdicts", &Value::Object(V), &load("verdicts.json"));
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let names = srl::portfolio::names(&s);
     let site = load("site/cases.json");
-    check("evidence", &srl::portfolio::evidence(&R, &M, &names).unwrap(), &site["evidence"]);
+    let mut evidence = srl::portfolio::evidence(&R, &M, &names).unwrap();
+    // Admission receipts are new; every historical evidence value remains comparable.
+    for record in evidence["records"].as_array_mut().unwrap() {
+        assert_eq!(record["admission"]["minimum"], "independently verified");
+        record.as_object_mut().unwrap().remove("admission");
+    }
+    check("evidence", &evidence, &site["evidence"]);
     // cases: the run timings are new measurements and the exhaustion key is renamed
     let strip = |mut c: Value| {
         for m in c["modes"].as_object_mut().unwrap().values_mut() {

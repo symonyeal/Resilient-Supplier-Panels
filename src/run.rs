@@ -33,6 +33,7 @@ pub enum Stop {
     Timeout,
     Cap,
     Memory,
+    Overflow,
 }
 
 impl Stop {
@@ -41,6 +42,20 @@ impl Stop {
             Stop::Timeout => "timeout",
             Stop::Cap => "cap",
             Stop::Memory => "memory",
+            Stop::Overflow => "overflow",
         }
     }
+}
+
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+pub enum Status { Complete,Stopped(Stop),Error }
+impl Status {
+    pub fn parse(s:&str)->Option<Self> {Some(match s {"complete"=>Self::Complete,"timeout"=>Self::Stopped(Stop::Timeout),"cap"=>Self::Stopped(Stop::Cap),"memory"=>Self::Stopped(Stop::Memory),"overflow"=>Self::Stopped(Stop::Overflow),"error"=>Self::Error,_=>return None})}
+    pub fn name(self)->&'static str {match self {Self::Complete=>"complete",Self::Stopped(s)=>s.name(),Self::Error=>"error"}}
+}
+
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+pub enum Method { Berge,Fkb,Cuts,Mmcs,Exhaustive }
+impl Method {
+    pub fn parse(s:&str)->Option<Self> {Some(match s {"berge"=>Self::Berge,"fkb"=>Self::Fkb,"cuts"=>Self::Cuts,"mmcs"=>Self::Mmcs,"exhaustive"=>Self::Exhaustive,_=>return None})}
 }

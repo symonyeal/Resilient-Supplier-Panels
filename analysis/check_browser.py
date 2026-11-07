@@ -1,8 +1,9 @@
 """Exercise the public case controls and downloads in a real browser."""
 import argparse
 import json
+import os
 import sys
-import tempfile
+import time
 from pathlib import Path
 
 from playwright.sync_api import expect, sync_playwright
@@ -12,7 +13,10 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def check(url, screenshots=None):
     """Check retained/lost/infeasible coverage, alternatives, downloads and mobile layout."""
-    with sync_playwright() as p, tempfile.TemporaryDirectory(prefix="srl-browser-") as tmp:
+    base = Path(os.environ.get("SRL_TEST_ROOT", ROOT / "target/browser-tests"))
+    tmp = base / f"browser-{os.getpid()}-{time.time_ns()}"
+    tmp.mkdir(parents=True)
+    with sync_playwright() as p:
         browser = p.chromium.launch(channel="msedge" if sys.platform == "win32" else None)
         page = browser.new_page(viewport={"width": 1440, "height": 1000}, accept_downloads=True)
         errors = []

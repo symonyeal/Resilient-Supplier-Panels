@@ -129,7 +129,7 @@ fn every_snapshot_token_has_an_entry_and_one_merged_image() {
 fn multi_product_tokens_reach_both_products() {
     let (S, Q, _) = qbl::records(&[row(2, "A", "1", "1", "DYO - High Protein Yogurt DFM - Fluid Milk")]);
     let s = audit::Snapshot { D: catalog::load(Q.iter().map(|q| &q.1), &mappings()), S, Q, issues: vec![] };
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     assert_eq!(M["dfm - fluid milk"].1, BTreeSet::from(["r0002".to_string()]));
 }
 
@@ -176,7 +176,7 @@ fn no_snapshot_token_holds_two_codes_unsplit() {
 #[test]
 fn gaps_on_the_campaign_seed() {
     let rows = qbl::read(&data::bytes("raw/QBL.xlsx").unwrap()).unwrap();
-    let M = audit::matrix(&audit::snapshot(&rows, &mappings()), "strict");
+    let M = audit::matrix(&audit::snapshot(&rows, &mappings()), srl::catalog::Variant::Strict);
     let g = gaps::gaps(&M, 1, 1);
     assert_eq!((g["population"]["baskets"].as_u64(), g["population"]["resilient"].as_u64()), (Some(40), Some(10)));
     let last = g["greedy"].as_array().unwrap().last().unwrap();

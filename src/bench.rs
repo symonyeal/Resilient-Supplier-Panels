@@ -13,13 +13,13 @@ use crate::certify::{self, Completeness};
 use crate::instance::{decode, encode, hypergraph, Instance};
 use crate::json::{json, Map, Value};
 use crate::pyrand::Random;
-use crate::run::{Clock, Stop};
+use crate::run::{Clock, Stop, Method, Status};
 use crate::solve::{self, Minimum};
 use crate::thesis::{berge, fka, fkb, Mbf};
 use crate::{mmcs, quotient};
 
 pub const SIZES: [usize; 5] = [3, 5, 8, 12, 20];
-pub const CLASSES: [&str; 4] = ["description", "program", "naics", "material"];
+pub use crate::catalog::CLASSES;
 pub const ROUTES: [&str; 4] = ["berge", "fkb", "cuts", "mmcs"];
 
 /// Limits of a campaign (docs/BENCHMARKS.md); they change only there, before a run.
@@ -105,7 +105,8 @@ pub fn baskets(M: &Matrix, seed: u64) -> Vec<Basket> {
 /// emits only after its fold has finished.
 pub fn route(method: &str, I: &Instance, clock: &Clock, L: &Limits,
              emit: &mut dyn FnMut(Vec<usize>) -> bool) -> Result<(), Stop> {
-    if method == "cuts" {
+    let method=Method::parse(method).expect("known enumeration method");
+    if method == Method::Cuts {
         return solve::cut_stream(I, clock, emit);
     }
     let n = I.support().len();
@@ -113,15 +114,15 @@ pub fn route(method: &str, I: &Instance, clock: &Clock, L: &Limits,
         let S = hypergraph::<W>(I);
         let mut out = |t: crate::bits::Bits<W>| emit(decode(&S.labels, &t));
         match method {
-            "berge" => {
+            Method::Berge => {
                 for t in berge::transversal(&S.H, clock, L.berge_sets)? {
                     out(t);
                 }
                 Ok(())
             }
-            "fkb" => fkb::dualise(&S.H, clock, &mut out).map(|_| ()),
-            "mmcs" => mmcs::transversals(&S.H, clock, &mut out),
-            _ => panic!("unknown route {method}"),
+            Method::Fkb => fkb::dualise(&S.H, clock, &mut out).map(|_| ()),
+            Method::Mmcs => mmcs::transversals(&S.H, clock, &mut out),
+            Method::Cuts | Method::Exhaustive => unreachable!("handled outside hypergraph routes"),
         }
     })
 }
@@ -148,10 +149,10 @@ pub fn run(method: &str, I: &Instance, timeout: f64, cap: usize, L: &Limits) -> 
     }));
     let t_end = clock.elapsed();
     let status = match &res {
-        Ok(Ok(())) => "complete",
-        Ok(Err(s)) => s.name(),
-        Err(_) => "error",
-    };
+        Ok(Ok(())) => Status::Complete,
+        Ok(Err(s)) => Status::Stopped(*s),
+        Err(_) => Status::Error,
+    }.name();
     let t = |i: usize| times.get(i).map_or(Value::Null, |&x| json!(x));
     let r = json!({"method": method, "status": status, "count": n, "stored": panels.len(),
                    "t_first": t(0), "t_K": if L.K >= 1 { t(L.K - 1) } else { Value::Null },
@@ -169,20 +170,20 @@ fn timed(method: &str, I: &Instance, L: &Limits) -> f64 {
 pub fn stats(I: &Instance) -> (Value, Vec<Vec<usize>>) {
     let n = I.support().len();
     let edges = crate::with_width!(n, W => hypergraph::<W>(I).H.len());
-    let mut sizes: Vec<usize> = I.E.iter().map(Vec::len).collect();
+    let mut sizes: Vec<usize> = I.E().iter().map(Vec::len).collect();
     sizes.sort_unstable();
-    let mut deg: Vec<usize> = (0..I.V.len()).map(|v| I.E.iter().filter(|E| E.contains(&v)).count()).collect();
+    let mut deg: Vec<usize> = (0..I.V().len()).map(|v| I.E().iter().filter(|E| E.contains(&v)).count()).collect();
     deg.sort_unstable();
     let sig = quotient::classes(I);
     let inc: usize = sizes.iter().sum();
-    let before: u128 = I.E.iter().map(|E| quotient::binom(E.len(), I.k.min(E.len())) + I.F.len() as u128).sum();
-    (json!({"P": I.P.len(), "V": I.V.len(), "incidences": inc,
-            "density": round(inc as f64 / (I.P.len() * I.V.len()).max(1) as f64, 4),
+    let before = I.E().iter().try_fold(0u128,|a,E| a.checked_add(quotient::binom(E.len(),I.k().min(E.len()))?.checked_add(I.F().len() as u128)?));
+    (json!({"P": I.P().len(), "V": I.V().len(), "incidences": inc,
+            "density": round(inc as f64 / (I.P().len() * I.V().len()).max(1) as f64, 4),
             "E_p_sizes": sizes,
             "supplier_degree_min_median_max": if deg.is_empty() { json!([]) } else {
                 json!([deg[0], deg[deg.len() / 2], deg[deg.len() - 1]]) },
             "H_edges_after_reduction": edges,
-            "H_edges_before_reduction": before as u64,
+            "H_edges_before_reduction": before.map(count_json),
             "signature_classes": sig.len(),
             "largest_class": sig.iter().map(Vec::len).max().unwrap_or(0)}), sig)
 }
@@ -227,7 +228,7 @@ fn lab(I: &Instance, T: &[usize]) -> Value {
 
 /// A witness (p, F) as [product, sorted failed suppliers].
 pub fn witness(I: &Instance, w: &certify::Witness) -> Value {
-    json!([I.P[w.0], I.labels(&w.1)])
+    json!([I.P()[w.0], I.labels(&w.1)])
 }
 
 /// Essential suppliers and their witnesses by supplier, or null when infeasible.
@@ -235,7 +236,7 @@ pub fn essential_json(I: &Instance) -> Value {
     match certify::essential(I) {
         None => Value::Null,
         Some(W) => {
-            let mut m: Vec<(String, Value)> = W.iter().map(|(v, w)| (I.V[*v].clone(), witness(I, w))).collect();
+            let mut m: Vec<(String, Value)> = W.iter().map(|(v, w)| (I.V()[*v].clone(), witness(I, w))).collect();
             m.sort_by(|a, b| a.0.cmp(&b.0));
             Value::Object(m.into_iter().collect())
         }
@@ -249,11 +250,7 @@ pub fn infeasibility_json(I: &Instance) -> Value {
 
 /// The status word of a minimum: optimal, infeasible or the stop reason.
 pub fn minimum_status(m: &Minimum) -> String {
-    match m {
-        Minimum::Optimal(_) => "optimal".into(),
-        Minimum::Infeasible => "infeasible".into(),
-        Minimum::Stopped(s) => s.name().into(),
-    }
+    m.status().into()
 }
 
 /// Minimum, certificates, every route under the limits, checks of complete families, and
@@ -360,8 +357,8 @@ pub fn sens(J: &Instance, L: &Limits) -> Value {
 pub fn suite(seed: u64, L: &Limits, s: &Snapshot, provenance: Value, variants: bool,
              log: &mut dyn FnMut(&str)) -> Value {
     let t0 = Clock::unlimited();
-    let M = audit::matrix(s, "strict");
-    let MM = audit::matrix(s, "merged");
+    let M = audit::matrix(s, crate::catalog::Variant::Strict);
+    let MM = audit::matrix(s, crate::catalog::Variant::Merged);
     let merged = crate::catalog::merged_of(&s.D);
     let first: std::collections::HashMap<usize, &String> = s.S.iter().map(|(sid, x)| (x.rows[0], sid)).collect();
     let rep: std::collections::HashMap<&String, &String> = s.issues.iter()
@@ -385,7 +382,7 @@ pub fn suite(seed: u64, L: &Limits, s: &Snapshot, provenance: Value, variants: b
             let runs: Vec<String> = rec["runs"].as_array().unwrap().iter()
                 .map(|r| format!("{}:{}/{}", r["method"].as_str().unwrap(), r["status"].as_str().unwrap(), r["count"]))
                 .collect();
-            log(&format!("{c:11} {rule:7} s={size:2} k={k} V={:3} min={} {} quotient={}", I.V.len(),
+            log(&format!("{c:11} {rule:7} s={size:2} k={k} V={:3} min={} {} quotient={}", I.V().len(),
                          rec["min"]["size"], runs.join(" "), rec["quotient"]["count"]));
             instances.push(rec);
         }

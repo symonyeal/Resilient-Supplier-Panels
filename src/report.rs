@@ -160,10 +160,9 @@ pub fn tables(res: &Value) -> String {
     let (mut rows, mut inc) = (Vec::new(), Vec::new());
     for b in &ids {
         let (r0, r1) = (by(b, 0), by(b, 1));
-        if let (Some(m0), Some(m1)) = (r0["min"]["size"].as_i64(), r1["min"]["size"].as_i64()) {
-            if is_primary(b) {
+        if let (Some(m0), Some(m1)) = (r0["min"]["size"].as_i64(), r1["min"]["size"].as_i64())
+            && is_primary(b) {
                 inc.push(Num::I(m1 - m0));
-            }
         }
         let w = &r1["infeasibility"];
         rows.push(format!("| {b} | {} | {} | {} | {} |", r0["stats"]["V"], minimum(&r0["min"]), minimum(&r1["min"]),

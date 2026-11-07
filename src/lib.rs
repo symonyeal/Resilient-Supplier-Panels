@@ -23,6 +23,7 @@ pub mod quotient;
 pub mod report;
 pub mod run;
 pub mod solve;
+#[allow(clippy::collapsible_if)] // Keep the pinned thesis transcription unchanged.
 pub mod thesis;
 pub mod verdicts;
 pub mod xlsx;

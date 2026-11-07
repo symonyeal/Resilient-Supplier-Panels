@@ -32,7 +32,7 @@ const CAMPAIGNS: [&str; 2] = ["results/suite-seed1.json", "results/suite-seed1-v
 #[test]
 fn saved_minima_and_matrix_certificates() {
     let (_, s) = snapshot();
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     for c in CAMPAIGNS {
         for r in read(c)["instances"].as_array().unwrap() {
             let I = audit::basket(&M, &strs(&r["P"]), r["k"].as_u64().unwrap() as usize);
@@ -83,11 +83,11 @@ fn published_cases_have_matrix_certificates_and_exhaustion() {
                 let T = I.index(&strs(&p["members"])).unwrap();
                 assert!(C.contains(&T));
                 for o in c["outages"].as_array().unwrap() {
-                    let J = Instance::new(I.V.clone(), I.P.clone(), E.clone(), 0, vec![strs(&o["failed"])]).unwrap();
+                    let J = Instance::new(I.V().clone(), I.P().clone(), E.clone(), 0, vec![strs(&o["failed"])]).unwrap();
                     let res = &p["outages"][o["id"].as_str().unwrap()];
                     assert_eq!(certify::feasible(&J, &T), res["covered"] == true);
                     let F = I.index(&strs(&o["failed"])).unwrap();
-                    for (Ep, got) in I.E.iter().zip(res["suppliers"].as_array().unwrap()) {
+                    for (Ep, got) in I.E().iter().zip(res["suppliers"].as_array().unwrap()) {
                         let want: Vec<usize> = Ep.iter().copied().filter(|v| T.contains(v) && !F.contains(v)).collect();
                         assert_eq!(strs(got), I.labels(&want));
                     }
@@ -109,7 +109,7 @@ fn published_data_matches_files_source_and_campaign() {
     let js = js.trim().strip_prefix("window.DATA=").unwrap().strip_suffix(';').unwrap();
     assert_eq!(json::loads(js.as_bytes()).unwrap(), D);
     let (_, s) = snapshot();
-    let E = portfolio::evidence(&read(CAMPAIGNS[1]), &audit::matrix(&s, "strict"), &portfolio::names(&s)).unwrap();
+    let E = portfolio::evidence(&read(CAMPAIGNS[1]), &audit::matrix(&s, srl::catalog::Variant::Strict), &portfolio::names(&s)).unwrap();
     assert_eq!(D["evidence"], E);
     assert_eq!((E["checks"]["matrix_records"].as_u64(), E["checks"]["partial"].as_u64()), (Some(88), Some(0)));
 }
@@ -117,7 +117,7 @@ fn published_data_matches_files_source_and_campaign() {
 #[test]
 fn evidence_keeps_every_record_and_honest_partial_counts() {
     let (_, s) = snapshot();
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let R = read(CAMPAIGNS[0]);
     let E = portfolio::evidence(&R, &M, &portfolio::names(&s)).unwrap();
     let (a, b) = (E["records"].as_array().unwrap(), R["instances"].as_array().unwrap());

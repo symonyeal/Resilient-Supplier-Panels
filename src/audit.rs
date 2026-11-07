@@ -28,11 +28,11 @@ pub fn snapshot(rows: &[Row], mappings: &str) -> Snapshot {
 
 /// The qualification matrix of a variant ("strict" or "merged"); a product's class is that
 /// of the first qualification naming it.
-pub fn matrix(s: &Snapshot, variant: &str) -> Matrix {
+pub fn matrix(s: &Snapshot, variant: catalog::Variant) -> Matrix {
     let mut M: Matrix = BTreeMap::new();
     for (sid, t, _) in &s.Q {
         let e = &s.D[t];
-        for p in if variant == "strict" { &e.strict } else { &e.merged } {
+        for p in match variant {catalog::Variant::Strict=>&e.strict,catalog::Variant::Merged=>&e.merged} {
             M.entry(p.clone()).or_insert_with(|| (e.class.clone(), BTreeSet::new())).1.insert(sid.clone());
         }
     }
@@ -66,7 +66,7 @@ pub fn round(x: f64, n: usize) -> f64 {
 /// Stage 0 questions (docs/DATA.md): identities, tokens, granularity, supplier counts per
 /// product and per supplier, repeated signatures, share of precise incidences.
 pub fn audit(rows: &[Row], s: &Snapshot) -> Value {
-    let M = matrix(s, "strict");
+    let M = matrix(s, crate::catalog::Variant::Strict);
     let mut kinds = Map::new();
     for (_, k, _) in &s.issues {
         let n = kinds.get(*k).and_then(Value::as_u64).unwrap_or(0);

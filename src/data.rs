@@ -1,6 +1,5 @@
-//! Frozen data: compiled into the binary from data/, or read from SRL_DATA_DIR (a directory
-//! with manifest.json, raw/<workbook> and catalog/mappings.csv) when that is set.
-//! SRL_SNAPSHOT names the workbook (a manifest key); the default is the current QBL.xlsx.
+//! Packaged frozen data and immutable Dataset selection. Only Dataset::select reads
+//! SRL_DATA_DIR/SRL_SNAPSHOT; one command then uses the same captured bytes throughout.
 
 use std::path::PathBuf;
 
@@ -16,20 +15,13 @@ const OWNERS: &[u8] = include_bytes!("../data/catalog/owners.csv");
 const USASPENDING: &[u8] = include_bytes!("../data/catalog/usaspending.json");
 const MANIFEST: &[u8] = include_bytes!("../data/manifest.json");
 
-fn dir() -> Option<PathBuf> {
-    std::env::var_os("SRL_DATA_DIR").map(PathBuf::from)
-}
-
 /// The selected workbook's manifest key.
 pub fn snapshot() -> String {
-    std::env::var("SRL_SNAPSHOT").unwrap_or_else(|_| SNAPSHOTS[2].to_string())
+    SNAPSHOTS[2].to_string()
 }
 
-/// Bytes of a data file by its path below data/.
+/// Packaged bytes of a data file by its path below data/.
 pub fn bytes(name: &str) -> Result<Vec<u8>, String> {
-    if let Some(d) = dir() {
-        return std::fs::read(d.join(name)).map_err(|e| format!("{}: {e}", d.join(name).display()));
-    }
     if let Some(i) = name.strip_prefix("raw/").and_then(|w| SNAPSHOTS.iter().position(|s| *s == w)) {
         return Ok(QBL[i].to_vec());
     }
@@ -50,6 +42,31 @@ pub fn workbook() -> Result<Vec<u8>, String> {
 
 pub fn text(name: &str) -> Result<String, String> {
     String::from_utf8(bytes(name)?).map_err(|e| format!("{name}: {e}"))
+}
+
+/// One immutable input selection. Environment options are read only at this boundary.
+pub struct Dataset { snapshot:String, files:std::collections::BTreeMap<String,Vec<u8>> }
+impl Dataset {
+    pub fn select(dir:Option<PathBuf>,snapshot:Option<&str>)->Result<Self,String> {
+        let dir=dir.or_else(||std::env::var_os("SRL_DATA_DIR").map(PathBuf::from));
+        let snapshot=snapshot.map(str::to_owned).or_else(||std::env::var("SRL_SNAPSHOT").ok()).unwrap_or_else(crate::data::snapshot);
+        if !SNAPSHOTS.contains(&snapshot.as_str()){return Err(format!("--snapshot {snapshot}: not one of {}",SNAPSHOTS.join(", ")));}
+        let required=[format!("raw/{snapshot}"),"catalog/mappings.csv".into(),"manifest.json".into()];
+        let names=SNAPSHOTS.iter().map(|s|format!("raw/{s}")).chain(["manifest.json","catalog/mappings.csv","catalog/identities.csv","catalog/owners.csv","catalog/usaspending.json"].map(str::to_owned));
+        let mut files=std::collections::BTreeMap::new();
+        for name in names {
+            let content=if let Some(dir)=&dir {std::fs::read(dir.join(&name)).map_err(|e|format!("{}: {e}",dir.join(&name).display()))}else{bytes(&name)};
+            match content {Ok(b)=>{files.insert(name,b);},Err(e) if required.contains(&name)=>return Err(e),Err(_)=>{}}
+        }
+        let dataset=Self{snapshot,files};
+        let manifest=crate::json::loads(&dataset.bytes("manifest.json")?)?;
+        if manifest[dataset.snapshot.as_str()]["sha256"]!=sha256(&dataset.workbook()?).as_str(){return Err("data does not match the frozen manifest".into());}
+        Ok(dataset)
+    }
+    pub fn snapshot(&self)->&str {&self.snapshot}
+    pub fn bytes(&self,name:&str)->Result<Vec<u8>,String>{self.files.get(name).cloned().ok_or_else(||format!("{name} is absent from the selected dataset"))}
+    pub fn text(&self,name:&str)->Result<String,String>{String::from_utf8(self.bytes(name)?).map_err(|e|format!("{name}: {e}"))}
+    pub fn workbook(&self)->Result<Vec<u8>,String>{self.bytes(&format!("raw/{}",self.snapshot))}
 }
 
 /// SHA-256 of bytes, lowercase hex.

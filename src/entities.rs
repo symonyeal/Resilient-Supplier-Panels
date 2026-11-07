@@ -11,7 +11,8 @@
 use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use crate::audit::{self, Matrix, Snapshot};
-use crate::bench::{self, CLASSES};
+use crate::bench;
+use crate::catalog::CLASSES;
 use crate::catalog::csv;
 use crate::certify;
 use crate::instance::Instance;
@@ -96,28 +97,28 @@ pub fn owners(text: &str, s: &Snapshot) -> Result<BTreeMap<String, Vec<String>>,
 
 /// The instance with each supplier replaced by its representative (identity merge).
 pub fn merge(I: &Instance, rep: &HashMap<&String, &String>) -> Instance {
-    let E: Vec<Vec<String>> = I.E.iter().map(|E| {
+    let E: Vec<Vec<String>> = I.E().iter().map(|E| {
         let s: BTreeSet<String> = E.iter().map(|&v| {
-            let id = &I.V[v];
+            let id = &I.V()[v];
             rep.get(id).map_or(id.clone(), |d| (*d).clone())
         }).collect();
         s.into_iter().collect()
     }).collect();
     let V: BTreeSet<String> = E.iter().flatten().cloned().collect();
-    let F: Vec<Vec<String>> = I.F.iter().map(|F| {
-        F.iter().map(|&v| rep.get(&I.V[v]).map_or(I.V[v].clone(), |d| (*d).clone()))
+    let F: Vec<Vec<String>> = I.F().iter().map(|F| {
+        F.iter().map(|&v| rep.get(&I.V()[v]).map_or(I.V()[v].clone(), |d| (*d).clone()))
             .filter(|v| V.contains(v)).collect::<BTreeSet<_>>().into_iter().collect()
     }).collect();
-    Instance::new(V.into_iter().collect(), I.P.clone(), E, I.k as i64, F).expect("merged instance")
+    Instance::new(V.into_iter().collect(), I.P().clone(), E, I.k() as i64, F).expect("merged instance")
 }
 
 /// The basket at level k with every owner group meeting its support as a scenario.
 pub fn with_owners(M: &Matrix, P: &[String], k: usize, G: &BTreeMap<String, Vec<String>>) -> Instance {
     let I = audit::basket(M, P, k);
     let F: Vec<Vec<String>> = G.values()
-        .map(|m| m.iter().filter(|v| I.V.contains(v)).cloned().collect::<Vec<_>>())
+        .map(|m| m.iter().filter(|v| I.V().contains(v)).cloned().collect::<Vec<_>>())
         .filter(|f| !f.is_empty()).collect();
-    Instance::new(I.V.clone(), I.P.clone(), P.iter().map(|p| M[p].1.iter().cloned().collect()).collect(), k as i64, F)
+    Instance::new(I.V().clone(), I.P().clone(), P.iter().map(|p| M[p].1.iter().cloned().collect()).collect(), k as i64, F)
         .expect("owner scenarios lie in V")
 }
 
@@ -176,7 +177,7 @@ pub fn groups(pairs: &[Pair], G: &BTreeMap<String, Vec<String>>) -> BTreeMap<Str
 ///                        and the groups that break them
 ///         awards ....... suppliers linked to a UEI, their distinct UEIs and award dollars
 pub fn report(s: &Snapshot, pairs: &[Pair], G: &BTreeMap<String, Vec<String>>, A: &Value, n: u64) -> Value {
-    let M = audit::matrix(s, "strict");
+    let M = audit::matrix(s, crate::catalog::Variant::Strict);
     let all: HashMap<&String, &String> = pairs.iter().map(|p| (&p.1, &p.0)).collect();
     let same: HashMap<&String, &String> = pairs.iter().filter(|p| p.2 == "same").map(|p| (&p.1, &p.0)).collect();
     let feasible = |I: &Instance| certify::infeasibility(I).is_none();

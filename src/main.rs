@@ -3,6 +3,7 @@
 //! Exit status 2 is an argument or input error, 1 a failed verification or build check.
 
 use std::path::{Path, PathBuf};
+mod publication;
 use std::process::{Command, ExitCode};
 
 use srl::audit::{self, Snapshot};
@@ -125,19 +126,8 @@ fn main() -> ExitCode {
     let res = parse(argv).map_err(Fail::Usage).and_then(|a| match a {
         None => Ok(()),
         Some(a) => {
-            if let Some(d) = a.get("--data-dir") {
-                let d = std::fs::canonicalize(d).map_err(|e| Fail::Usage(format!("--data-dir {d}: {e}")))?;
-                // SAFETY: set once, before any other thread exists.
-                unsafe { std::env::set_var("SRL_DATA_DIR", d) };
-            }
-            if let Some(w) = a.get("--snapshot") {
-                if !data::SNAPSHOTS.contains(&w) {
-                    return Err(Fail::Usage(format!("--snapshot {w}: not one of {}", data::SNAPSHOTS.join(", "))));
-                }
-                // SAFETY: as above.
-                unsafe { std::env::set_var("SRL_SNAPSHOT", w) };
-            }
-            command(&a)
+            let dataset=data::Dataset::select(a.get("--data-dir").map(PathBuf::from),a.get("--snapshot"))?;
+            command(&a,&dataset)
         }
     });
     match res {
@@ -154,9 +144,9 @@ fn main() -> ExitCode {
     }
 }
 
-fn snapshot() -> Result<(Vec<qbl::Row>, Snapshot), String> {
-    let rows = qbl::read(&data::workbook()?)?;
-    let s = audit::snapshot(&rows, &data::text("catalog/mappings.csv")?);
+fn snapshot(dataset:&data::Dataset) -> Result<(Vec<qbl::Row>, Snapshot), String> {
+    let rows = qbl::read(&dataset.workbook()?)?;
+    let s = audit::snapshot(&rows, &dataset.text("catalog/mappings.csv")?);
     Ok((rows, s))
 }
 
@@ -165,15 +155,15 @@ fn file(a: &Args) -> Result<(Map<String, Value>, Instance), Fail> {
     Ok(contracts::load(Path::new(f))?)
 }
 
-fn command(a: &Args) -> Result<(), Fail> {
+fn command(a: &Args,dataset:&data::Dataset) -> Result<(), Fail> {
     let out = a.out();
     let out = out.as_deref();
     match a.cmd.as_str() {
-        "acquire" => println!("{}", json::dumps(&acquire()?, Style::Indent(1))),
+        "acquire" => println!("{}", json::dumps(&acquire(dataset)?, Style::Indent(1))),
         "audit" => {
-            let (rows, s) = snapshot()?;
-            let m = json::loads(&data::bytes("manifest.json")?)?;
-            let e = &m[data::snapshot().as_str()];
+            let (rows, s) = snapshot(dataset)?;
+            let m = json::loads(&dataset.bytes("manifest.json")?)?;
+            let e = &m[dataset.snapshot()];
             let r = e["captured_utc"].as_str().or(e["retrieved_utc"].as_str())
                 .ok_or("manifest without retrieved_utc")?.to_string();
             let mut A = audit::audit(&rows, &s);
@@ -182,58 +172,59 @@ fn command(a: &Args) -> Result<(), Fail> {
             contracts::write(&A, out)?;
         }
         "change" => {
-            let m = json::loads(&data::bytes("manifest.json")?)?;
-            let mappings = data::text("catalog/mappings.csv")?;
+            let m = json::loads(&dataset.bytes("manifest.json")?)?;
+            let mappings = dataset.text("catalog/mappings.csv")?;
             let mut W = Vec::new();
             for name in data::SNAPSHOTS {
                 let e = &m[name];
                 let date = e["captured_utc"].as_str().or(e["retrieved_utc"].as_str()).ok_or("manifest without date")?;
-                let rows = qbl::read(&data::bytes(&format!("raw/{name}"))?)?;
+                let rows = qbl::read(&dataset.bytes(&format!("raw/{name}"))?)?;
                 W.push((name.to_string(), date[..10].to_string(), audit::snapshot(&rows, &mappings)));
             }
             let mut d = change::series(&W, a.num("--seed", 1)?);
-            d["provenance"] = analysis_provenance()?;
+            d["provenance"] = analysis_provenance(dataset)?;
             contracts::write(&d, out)?;
         }
         "entities" => {
-            if data::snapshot() != "QBL.xlsx" {
+            if dataset.snapshot() != "QBL.xlsx" {
                 return Err(Fail::Usage("entity catalogs apply only to QBL.xlsx".into()));
             }
             let n = a.num("--seeds", 1000)?;
             if n == 0 {
                 return Err(Fail::Usage("--seeds must be positive".into()));
             }
-            let (_, s) = snapshot()?;
-            let pairs = entities::identities(&data::text("catalog/identities.csv")?, &s)?;
-            let G = entities::owners(&data::text("catalog/owners.csv")?, &s)?;
-            let A = json::loads(&data::bytes("catalog/usaspending.json")?)?;
+            let (_, s) = snapshot(dataset)?;
+            let pairs = entities::identities(&dataset.text("catalog/identities.csv")?, &s)?;
+            let G = entities::owners(&dataset.text("catalog/owners.csv")?, &s)?;
+            let A = json::loads(&dataset.bytes("catalog/usaspending.json")?)?;
             entities::awards(&A, &s)?;
             let mut d = entities::report(&s, &pairs, &G, &A, n);
-            d["provenance"] = analysis_provenance()?;
+            d["provenance"] = analysis_provenance(dataset)?;
             contracts::write(&d, out)?;
         }
         "gaps" => {
-            let (_, s) = snapshot()?;
+            let (_, s) = snapshot(dataset)?;
             let n: u64 = a.num("--seeds", 1000)?;
             if n == 0 {
                 return Err(Fail::Usage("--seeds must be positive".into()));
             }
             let k: usize = a.num("--k", 1)?;
+            if k>i64::MAX as usize{return Err(Fail::Usage("--k exceeds the supported integer range".into()));}
             if k > i64::MAX as usize {
                 return Err(Fail::Usage("--k exceeds the supported integer range".into()));
             }
-            let mut d = gaps::gaps(&audit::matrix(&s, "strict"), n, k);
-            d["provenance"] = analysis_provenance()?;
+            let mut d = gaps::gaps(&audit::matrix(&s, srl::catalog::Variant::Strict), n, k);
+            d["provenance"] = analysis_provenance(dataset)?;
             contracts::write(&d, out)?;
         }
         "schema" => contracts::write(&json::loads(SCHEMA.as_bytes())?, out)?,
-        "build" => build(a, out)?,
+        "build" => build(a, out, dataset)?,
         "solve" => {
             let (d, I) = file(a)?;
             let m = solve::minimum(&I, &[], &Clock::unlimited());
             let T = match &m { Minimum::Optimal(T) => Some(T), _ => None };
             let W = T.map(|T| -> Value {
-                certify::witnesses(&I, T).iter().map(|(v, w)| (I.V[*v].clone(),
+                certify::witnesses(&I, T).iter().map(|(v, w)| (I.V()[*v].clone(),
                     w.as_ref().map_or(Value::Null, |w| bench::witness(&I, w)))).collect::<Map<_, _>>().into()
             });
             contracts::write(&json!({"schema_version": SCHEMA_VERSION, "kind": "solution", "software_version": VERSION,
@@ -279,15 +270,19 @@ fn command(a: &Args) -> Result<(), Fail> {
         "verify" => {
             let (d, I) = file(a)?;
             let panels = d.get("panels").and_then(Value::as_array).ok_or("expected an enumeration document".to_string())?;
-            let L: Vec<Vec<String>> = panels.iter().map(|T| T.as_array().map(|T| T.iter().filter_map(|v| v.as_str().map(String::from)).collect()))
-                .collect::<Option<_>>().ok_or("panels must be lists of labels".to_string())?;
+            let L: Vec<Vec<String>> = panels.iter().map(|T| contracts::labels(T,"panels")).collect::<Result<_,_>>()?;
             let C: Vec<Option<Vec<usize>>> = L.iter().map(|T| I.index(T)).collect();
             let all = C.iter().all(|T| T.as_ref().is_some_and(|T| certify::minimal(&I, T)));
             let distinct = L.iter().map(|T| { let mut t = T.clone(); t.sort(); t }).collect::<std::collections::HashSet<_>>().len() == L.len();
             let r = &d["run"];
+            let status=srl::run::Status::parse(r["status"].as_str().ok_or("run status must be a string")?).ok_or("Unknown run status")?;
+            if let Some(m)=r.get("method") && m.as_str().and_then(srl::run::Method::parse).is_none(){return Err(Fail::Usage("Unknown enumeration method".into()));}
+            let count=contracts::count(&r["count"])?;
+            let stored=match r.get("stored") {Some(n)=>n.as_u64().ok_or("stored must be a nonnegative integer")? as u128,None if !d.contains_key("schema_version")=>L.len() as u128,_=>return Err(Fail::Usage("Versioned enumeration requires stored".into()))};
+            if stored!=L.len() as u128||stored>count{return Err(Fail::Usage("stored must equal panel length and not exceed count".into()));}
             let mut o = json!({"panels": L.len(), "all_feasible_and_minimal": all, "distinct_panels": distinct, "run": r["status"]});
             let mut ok = all && distinct;
-            if ok && r["status"] == "complete" && r["count"].as_u64() == Some(L.len() as u64) {
+            if ok && status==srl::run::Status::Complete && count==stored {
                 let C: Vec<Vec<usize>> = C.into_iter().map(Option::unwrap).collect();
                 let e = match certify::complete(&I, &C) {
                     Completeness::Complete => "complete",
@@ -296,6 +291,11 @@ fn command(a: &Args) -> Result<(), Fail> {
                 };
                 o["exhaustion"] = json!(e);
                 ok = e == "complete";
+            } else if ok {
+                let exact=quotient::count(&I,&Clock::unlimited()).map_err(|s|Fail::Check(format!("Count admission unresolved: {}",s.name())))?.panels;
+                ok=if status==srl::run::Status::Complete {count==exact}else{count<=exact};
+                o["count_admission"]=json!(if ok {"verified"}else{"invalid"});
+                o["exhaustion"]=json!(if status==srl::run::Status::Complete && stored<count {"stored subset"}else{"not claimed"});
             }
             contracts::write(&o, out)?;
             if !ok {
@@ -309,19 +309,20 @@ fn command(a: &Args) -> Result<(), Fail> {
             if path.exists() {
                 return Err(Fail::Usage(format!("{} exists; a campaign is written once", path.display())));
             }
+            let _writer=contracts::claim(path)?;
             let L = bench::Limits { timeout_s: a.num("--timeout", LIMITS.timeout_s)?, ..LIMITS };
-            let (_, s) = snapshot()?;
-            let res = bench::suite(seed, &L, &s, provenance(&L, seed)?, !a.flags.iter().any(|f| f == "--no-variants"),
+            let (_, s) = snapshot(dataset)?;
+            let res = bench::suite(seed, &L, &s, provenance(&L, seed, dataset)?, !a.flags.iter().any(|f| f == "--no-variants"),
                                    &mut |line| println!("{line}"));
             if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
                 std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
             }
-            std::fs::write(path, json::dumps(&res, Style::Indent(1))).map_err(|e| e.to_string())?;
+            contracts::write_once(&res,path)?;
         }
         "report" => {
             let f = PathBuf::from(a.pos.first().ok_or("the following arguments are required: FILE".to_string())?);
             let R = json::loads(&std::fs::read(&f).map_err(|e| format!("{}: {e}", f.display()))?)?;
-            let (rows, s) = snapshot()?;
+            let (rows, s) = snapshot(dataset)?;
             let md = report::markdown(&R, &f.file_name().unwrap().to_string_lossy(), verdicts::score(&R, &audit::audit(&rows, &s)));
             // results/suite-<name>.json -> docs/findings/results-<name>.md
             let dest = out.map(PathBuf::from).unwrap_or_else(|| {
@@ -335,20 +336,20 @@ fn command(a: &Args) -> Result<(), Fail> {
             std::fs::write(&dest, md).map_err(|e| e.to_string())?;
             println!("{}", dest.display());
         }
-        "site" => site(a)?,
+        "site" => site(a, dataset)?,
         c => return Err(Fail::Usage(format!("argument COMMAND: invalid choice: {c:?}"))),
     }
     Ok(())
 }
 
-fn build(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
+fn build(a: &Args, out: Option<&Path>, dataset:&data::Dataset) -> Result<(), Fail> {
     let variant = a.get("--variant").unwrap_or("strict");
     if !["strict", "merged"].contains(&variant) {
         return Err(Fail::Usage(format!("argument --variant: invalid choice: {variant:?}")));
     }
     let k: i64 = a.num("--k", 0)?;
-    let (_, s) = snapshot()?;
-    let M = audit::matrix(&s, variant);
+    let (_, s) = snapshot(dataset)?;
+    let M = audit::matrix(&s, srl::catalog::Variant::parse(variant).expect("validated variant"));
     let mut P: Vec<String> = a.pos.clone();
     let sources = [!P.is_empty(), a.get("--basket").is_some(), a.get("--class").is_some()];
     if sources.iter().filter(|x| **x).count() > 1 {
@@ -377,8 +378,8 @@ fn build(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
     let I = Instance::new(V.into_iter().collect(), P, E, k, F)?;
     let mut d = contracts::document(&I);
     d.insert("variant".into(), json!(variant));
-    d.extend(contracts::provenance()?);
-    let names: Map<String, Value> = I.V.iter().map(|v| (v.clone(), json!(s.S[v].name))).collect();
+    d.extend(contracts::provenance(dataset)?);
+    let names: Map<String, Value> = I.V().iter().map(|v| (v.clone(), json!(s.S[v].name))).collect();
     d.insert("names".into(), Value::Object(names));
     Ok(contracts::write(&Value::Object(d), out)?)
 }
@@ -389,16 +390,16 @@ fn git(root: &Path, args: &[&str]) -> String {
 }
 
 /// Source revision and hashes for the exploratory analyses, including every snapshot.
-fn analysis_provenance() -> Result<Value, String> {
+fn analysis_provenance(dataset:&data::Dataset) -> Result<Value, String> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
-    let mut p = contracts::provenance()?;
+    let mut p = contracts::provenance(dataset)?;
     p.insert("code_rev".into(), json!(env!("SRL_CODE_REV")));
     p.insert("code_sha256".into(), json!(portfolio::code_sha256(&root).ok()));
     let files = ["manifest.json", "catalog/mappings.csv", "catalog/identities.csv",
                  "catalog/owners.csv", "catalog/usaspending.json"];
     let mut hashes = Map::new();
     for f in files.iter().map(|f| f.to_string()).chain(data::SNAPSHOTS.iter().map(|w| format!("raw/{w}"))) {
-        hashes.insert(f.clone(), json!(data::sha256(&data::bytes(&f)?)));
+        hashes.insert(f.clone(), json!(data::sha256(&dataset.bytes(&f)?)));
     }
     p.insert("inputs_sha256".into(), json!(hashes));
     Ok(json!(p))
@@ -412,12 +413,12 @@ fn cpu() -> String {
 }
 
 /// Everything a result needs to be reproduced and dated.
-fn provenance(L: &bench::Limits, seed: u64) -> Result<Value, String> {
+fn provenance(L: &bench::Limits, seed: u64, dataset:&data::Dataset) -> Result<Value, String> {
     let root = std::env::current_dir().map_err(|e| e.to_string())?;
-    let sha = data::sha256(&data::workbook()?);
-    let frozen = json::loads(&data::bytes("manifest.json")?)?;
-    let snap = data::snapshot();
-    Ok(json!({"snapshot": snap, "data_sha256": sha, "data_matches_manifest": frozen[snap.as_str()]["sha256"] == sha.as_str(),
+    let sha = data::sha256(&dataset.workbook()?);
+    let frozen = json::loads(&dataset.bytes("manifest.json")?)?;
+    let snap = dataset.snapshot();
+    Ok(json!({"snapshot": snap, "data_sha256": sha, "data_matches_manifest": frozen[snap]["sha256"] == sha.as_str(),
               "code_rev": git(&root, &["rev-parse", "HEAD"]),
               "dirty": !git(&root, &["status", "--porcelain", "--untracked-files=no"]).is_empty(),
               "thesis_rev": THESIS_REV, "seed": seed, "limits": L.json(),
@@ -427,32 +428,36 @@ fn provenance(L: &bench::Limits, seed: u64) -> Result<Value, String> {
 }
 
 /// Writes the public case data only after their certificates pass.
-fn site(a: &Args) -> Result<(), Fail> {
+fn site(a: &Args, dataset:&data::Dataset) -> Result<(), Fail> {
     let root = PathBuf::from(a.get("--root").unwrap_or("."));
+    let generation=publication::Generation::new(&root.join("site"),"site")?;
     let results = root.join(a.get("--results").unwrap_or(CAMPAIGN));
-    let (_, s) = snapshot()?;
-    let M = audit::matrix(&s, "strict");
+    let (_, s) = snapshot(dataset)?;
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let names = portfolio::names(&s);
-    let manifest = json::loads(&data::bytes("manifest.json")?)?;
-    let mut prov = contracts::provenance()?;
+    let manifest = json::loads(&dataset.bytes("manifest.json")?)?;
+    let mut prov = contracts::provenance(dataset)?;
     prov.insert("code_rev".into(), json!(git(&root, &["rev-parse", "HEAD"])));
     prov.insert("code_sha256".into(), json!(portfolio::code_sha256(&root)?));
     prov.insert("dirty".into(), json!(!git(&root, &["status", "--porcelain", "--", "src", "Cargo.toml", "Cargo.lock", "build.rs"]).is_empty()));
     prov.insert("identity_candidates".into(), json!(portfolio::identity_candidates(&s)));
-    prov.insert("snapshot".into(), manifest["QBL.xlsx"].clone());
+    prov.insert("snapshot".into(), manifest[dataset.snapshot()].clone());
     if prov["data_sha256"] != prov["snapshot"]["sha256"] {
         return Err(Fail::Check("public case data does not match the frozen manifest".into()));
     }
     let R = json::loads(&std::fs::read(&results).map_err(|e| format!("{}: {e}", results.display()))?)?;
+    if R["provenance"]["data_sha256"]!=prov["data_sha256"] {return Err(Fail::Check("campaign data does not match the frozen manifest's selected snapshot".into()));}
     let payload = json!({"schema_version": "1.0", "kind": "portfolio", "provenance": prov,
                          "cases": portfolio::cases(&M, &names).map_err(Fail::Check)?,
                          "evidence": portfolio::evidence(&R, &M, &names).map_err(Fail::Check)?});
-    let dest = root.join("site");
-    std::fs::create_dir_all(&dest).map_err(|e| e.to_string())?;
+    if prov["code_sha256"]!=portfolio::code_sha256(&root)?.as_str(){return Err(Fail::Check("Source changed during site computation".into()));}
+    let dest = generation.root();
+    std::fs::create_dir_all(dest).map_err(|e| e.to_string())?;
     let text = json::dumps(&payload, Style::Compact);
     std::fs::write(dest.join("data.js"), format!("window.DATA={text};\n")).map_err(|e| e.to_string())?;
     std::fs::write(dest.join("cases.json"), format!("{text}\n")).map_err(|e| e.to_string())?;
     std::fs::write(dest.join("document-1.0.json"), SCHEMA).map_err(|e| e.to_string())?;
+    generation.project()?;
     for c in payload["cases"].as_array().unwrap() {
         let m: Vec<String> = c["modes"].as_object().unwrap().iter()
             .map(|(k, m)| format!("k={k}: {} minimum {} count {}", m["status"].as_str().unwrap(), m["minimum_size"], m["count"])).collect();
@@ -483,8 +488,8 @@ fn now() -> String {
 
 /// Fetch every manifest source with curl into data/fetched; report whether each matches the
 /// frozen snapshot. Never writes data/raw.
-fn acquire() -> Result<Value, String> {
-    let frozen = json::loads(&data::bytes("manifest.json")?)?;
+fn acquire(dataset:&data::Dataset) -> Result<Value, String> {
+    let frozen = json::loads(&dataset.bytes("manifest.json")?)?;
     let dir = PathBuf::from("data/fetched");
     std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
     let mut got = Map::new();

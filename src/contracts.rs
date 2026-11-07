@@ -10,10 +10,17 @@ pub const SCHEMA_VERSION: &str = "1.0";
 pub const VERSION: &str = env!("CARGO_PKG_VERSION");
 pub const SCHEMA: &str = include_str!("../schema/document-1.0.json");
 
-fn labels(v: &Value, what: &str) -> Result<Vec<String>, String> {
+pub fn labels(v: &Value, what: &str) -> Result<Vec<String>, String> {
     v.as_array().ok_or(format!("{what} must be a list of labels"))?.iter()
         .map(|x| x.as_str().map(String::from).ok_or(format!("{what} must hold strings")))
         .collect()
+}
+
+/// An exact nonnegative count; decimal strings preserve values above JSON's u64.
+pub fn count(v:&Value)->Result<u128,String> {
+    if let Some(n)=v.as_u64(){return Ok(n as u128);}
+    if let Some(s)=v.as_str().filter(|s|!s.is_empty()&&s.bytes().all(|c|c.is_ascii_digit())) {return s.parse().map_err(|_|"Count exceeds u128".into());}
+    Err("Count must be a nonnegative integer".into())
 }
 
 fn sets(v: &Value, what: &str) -> Result<Vec<Vec<String>>, String> {
@@ -43,10 +50,10 @@ pub fn load(path: &Path) -> Result<(Map<String, Value>, Instance), String> {
 }
 
 /// Content hashes and versions used to interpret the matrix.
-pub fn provenance() -> Result<Map<String, Value>, String> {
+pub fn provenance(dataset:&data::Dataset) -> Result<Map<String, Value>, String> {
     let mut m = Map::new();
-    m.insert("data_sha256".into(), json!(data::sha256(&data::workbook()?)));
-    m.insert("mappings_sha256".into(), json!(data::sha256(&data::bytes("catalog/mappings.csv")?)));
+    m.insert("data_sha256".into(), json!(data::sha256(&dataset.workbook()?)));
+    m.insert("mappings_sha256".into(), json!(data::sha256(&dataset.bytes("catalog/mappings.csv")?)));
     m.insert("software_version".into(), json!(VERSION));
     m.insert("thesis_rev".into(), json!(THESIS_REV));
     Ok(m)
@@ -57,11 +64,11 @@ pub fn document(I: &Instance) -> Map<String, Value> {
     let mut m = Map::new();
     m.insert("schema_version".into(), json!(SCHEMA_VERSION));
     m.insert("kind".into(), json!("instance"));
-    m.insert("V".into(), json!(I.V));
-    m.insert("P".into(), json!(I.P));
-    m.insert("E".into(), json!(I.E.iter().map(|E| I.labels(E)).collect::<Vec<_>>()));
-    m.insert("k".into(), json!(I.k));
-    m.insert("F".into(), json!(I.F.iter().map(|F| I.labels(F)).collect::<Vec<_>>()));
+    m.insert("V".into(), json!(I.V()));
+    m.insert("P".into(), json!(I.P()));
+    m.insert("E".into(), json!(I.E().iter().map(|E| I.labels(E)).collect::<Vec<_>>()));
+    m.insert("k".into(), json!(I.k()));
+    m.insert("F".into(), json!(I.F().iter().map(|F| I.labels(F)).collect::<Vec<_>>()));
     m
 }
 
@@ -101,7 +108,7 @@ pub fn write(d: &Value, path: Option<&Path>) -> Result<(), String> {
             if let Some(dir) = p.parent().filter(|d| !d.as_os_str().is_empty()) {
                 std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
             }
-            std::fs::write(p, text).map_err(|e| format!("{}: {e}", p.display()))
+            atomic(p,text.as_bytes(),false)
         }
         None => {
             use std::io::Write;
@@ -109,3 +116,21 @@ pub fn write(d: &Value, path: Option<&Path>) -> Result<(), String> {
         }
     }
 }
+
+/// One cooperating writer per output file; operating-system ownership ends on process exit.
+pub fn claim(path:&Path)->Result<std::fs::File,String> {
+    if let Some(parent)=path.parent().filter(|p|!p.as_os_str().is_empty()){std::fs::create_dir_all(parent).map_err(|e|e.to_string())?;}
+    let lock=std::fs::OpenOptions::new().read(true).write(true).create(true).truncate(false).open(path.with_extension("writer.lock")).map_err(|e|e.to_string())?;
+    lock.try_lock().map_err(|e|format!("Output writer already active: {e}"))?;Ok(lock)
+}
+fn atomic(path:&Path,bytes:&[u8],once:bool)->Result<(),String> {
+    use std::io::Write;
+    if let Some(parent)=path.parent().filter(|p|!p.as_os_str().is_empty()){std::fs::create_dir_all(parent).map_err(|e|e.to_string())?;}
+    let candidate=path.with_extension(format!("{}-{}.candidate",std::process::id(),std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).unwrap().as_nanos()));
+    let mut file=std::fs::OpenOptions::new().write(true).create_new(true).open(&candidate).map_err(|e|e.to_string())?;
+    file.write_all(bytes).and_then(|()|file.sync_all()).map_err(|e|e.to_string())?;drop(file);
+    if once {std::fs::hard_link(&candidate,path).map_err(|e|e.to_string())?;std::fs::remove_file(candidate).map_err(|e|e.to_string())}
+    else {std::fs::rename(candidate,path).map_err(|e|e.to_string())}
+}
+/// Publish a complete campaign once; an existing filename is never replaced.
+pub fn write_once(d:&Value,path:&Path)->Result<(),String>{atomic(path,json::dumps(d,Style::Indent(1)).as_bytes(),true)}

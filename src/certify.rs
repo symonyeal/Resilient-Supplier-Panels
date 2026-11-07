@@ -15,7 +15,7 @@ use crate::instance::Instance;
 pub type Witness = (usize, Vec<usize>);
 
 fn mask(I: &Instance, T: &[usize]) -> Vec<bool> {
-    let mut m = vec![false; I.V.len()];
+    let mut m = vec![false; I.V().len()];
     for &v in T {
         m[v] = true;
     }
@@ -28,9 +28,10 @@ fn meet(m: &[bool], S: &[usize]) -> usize {
 
 /// T meets E_p minus F for every p and every F in the failure model (MODEL, Thm 2).
 pub fn feasible(I: &Instance, T: &[usize]) -> bool {
+    if T.iter().any(|&v|v>=I.V().len()) || T.windows(2).any(|w|w[0]>=w[1]) {return false;}
     let m = mask(I, T);
-    I.E.iter().all(|Ep| meet(&m, Ep) > I.k)
-        && I.E.iter().all(|Ep| I.F.iter().all(|F| Ep.iter().any(|v| m[*v] && !F.contains(v))))
+    I.E().iter().all(|Ep| meet(&m, Ep) > I.k())
+        && I.E().iter().all(|Ep| I.F().iter().all(|F| Ep.iter().any(|v| m[*v] && !F.contains(v))))
 }
 
 /// v -> (p, F) with T ∩ (E_p \ F) = {v}, or None when v is removable. The first product in
@@ -40,12 +41,12 @@ pub fn witnesses(I: &Instance, T: &[usize]) -> BTreeMap<usize, Option<Witness>> 
     let mut W = BTreeMap::new();
     for &v in T {
         let mut w = None;
-        for (p, Ep) in I.E.iter().enumerate() {
+        for (p, Ep) in I.E().iter().enumerate() {
             if !Ep.contains(&v) {
                 continue;
             }
             let S: Vec<usize> = Ep.iter().copied().filter(|&u| m[u]).collect();
-            if S.len() == I.k + 1 {
+            if S.len() == I.k().saturating_add(1) {
                 w = Some((p, S.into_iter().filter(|&u| u != v).collect()));
                 break;
             }
@@ -53,7 +54,7 @@ pub fn witnesses(I: &Instance, T: &[usize]) -> BTreeMap<usize, Option<Witness>> 
                 let R: Vec<usize> = Ep.iter().copied().filter(|u| m[*u] && !F.contains(u)).collect();
                 R == [v]
             };
-            if let Some(F) = I.F.iter().find(|F| alone(F)) {
+            if let Some(F) = I.F().iter().find(|F| alone(F)) {
                 w = Some((p, F.clone()));
                 break;
             }
@@ -70,11 +71,11 @@ pub fn minimal(I: &Instance, T: &[usize]) -> bool {
 
 /// (p, F) with E_p \ F = ∅, F in the failure model; None if V is feasible.
 pub fn infeasibility(I: &Instance) -> Option<Witness> {
-    for (p, Ep) in I.E.iter().enumerate() {
-        if Ep.len() <= I.k {
+    for (p, Ep) in I.E().iter().enumerate() {
+        if Ep.len() <= I.k() {
             return Some((p, Ep.clone()));
         }
-        if let Some(F) = I.F.iter().find(|F| Ep.iter().all(|v| F.contains(v))) {
+        if let Some(F) = I.F().iter().find(|F| Ep.iter().all(|v| F.contains(v))) {
             return Some((p, F.clone()));
         }
     }
@@ -88,13 +89,13 @@ pub fn essential(I: &Instance) -> Option<BTreeMap<usize, Witness>> {
         return None;
     }
     let mut W = BTreeMap::new();
-    for (p, Ep) in I.E.iter().enumerate() {
-        if Ep.len() == I.k + 1 {
+    for (p, Ep) in I.E().iter().enumerate() {
+        if Ep.len() == I.k().saturating_add(1) {
             for &v in Ep {
                 W.entry(v).or_insert_with(|| (p, Ep.iter().copied().filter(|&u| u != v).collect()));
             }
         }
-        for F in &I.F {
+        for F in I.F() {
             let R: Vec<usize> = Ep.iter().copied().filter(|v| !F.contains(v)).collect();
             if let [v] = R[..] {
                 W.entry(v).or_insert_with(|| (p, F.clone()));
@@ -125,20 +126,20 @@ pub fn complete(I: &Instance, family: &[Vec<usize>]) -> Completeness {
     }
     // rows: (members, demand); demand k + 1 for E_p, 1 for each E_p \ F
     let mut rows: Vec<(Vec<usize>, usize)> = Vec::new();
-    for Ep in &I.E {
-        rows.push((Ep.clone(), I.k + 1));
-        for F in &I.F {
+    for Ep in I.E() {
+        rows.push((Ep.clone(), I.k().saturating_add(1)));
+        for F in I.F() {
             rows.push((Ep.iter().copied().filter(|v| !F.contains(v)).collect(), 1));
         }
     }
-    let mut by_v: Vec<Vec<usize>> = vec![Vec::new(); I.V.len()];
+    let mut by_v: Vec<Vec<usize>> = vec![Vec::new(); I.V().len()];
     for (j, S) in family.iter().enumerate() {
         for &v in S {
             by_v[v].push(j);
         }
     }
-    let mut s = Search { rows, family, by_v, held: vec![0; family.len()], T: vec![false; I.V.len()],
-                         barred: vec![false; I.V.len()] };
+    let mut s = Search { rows, family, by_v, held: vec![0; family.len()], T: vec![false; I.V().len()],
+                         barred: vec![false; I.V().len()] };
     if family.iter().any(|S| S.is_empty()) {
         return Completeness::Complete;
     }

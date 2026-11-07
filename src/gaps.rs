@@ -11,10 +11,10 @@
 use std::collections::BTreeMap;
 
 use crate::audit::{self, Matrix};
-use crate::bench::{self, CLASSES, SIZES};
+use crate::bench::{self, SIZES};
+use crate::catalog::CLASSES;
 use crate::certify;
 use crate::json::{json, Map, Value};
-use crate::quotient::binom;
 
 /// The blockers of each primary basket of seeds 1..=n at level k.
 fn population(M: &Matrix, n: u64, k: usize) -> Vec<Vec<String>> {
@@ -84,7 +84,8 @@ pub fn gaps(M: &Matrix, n: u64, k: usize) -> Value {
         let ps: Vec<&String> = M.iter().filter(|(_, (cl, _))| cl == c).map(|(p, _)| p).collect();
         let u = ps.iter().filter(|p| M[**p].1.len() <= k).count();
         let share: Map<String, Value> = SIZES.iter().filter(|&&s| s <= ps.len()).map(|&s| {
-            (s.to_string(), json!(audit::round(binom(ps.len() - u, s) as f64 / binom(ps.len(), s) as f64, 6)))
+            let share=if s>ps.len()-u {0.0}else{(0..s).map(|i|(ps.len()-u-i) as f64/(ps.len()-i) as f64).product()};
+            (s.to_string(), json!(audit::round(share, 6)))
         }).collect();
         json!({"class": c, "products": ps.len(), "blockers": u, "share": share})
     }).collect();

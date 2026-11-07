@@ -62,14 +62,14 @@ pub fn record(I: &Instance, deep: bool, fkb_cap: usize, rec: &Value) -> Value {
         let S = hypergraph::<W>(I);
         let H: Vec<Value> = S.H.edges.iter().zip(&S.prov).map(|(e, pv)| json!([
             I.labels(&decode(&S.labels, e)),
-            pv.iter().map(|(p, F)| json!([I.P[*p], I.labels(F)])).collect::<Vec<_>>()])).collect();
+            pv.iter().map(|(p, F)| json!([I.P()[*p], I.labels(F)])).collect::<Vec<_>>()])).collect();
         let (st, sig) = bench::stats(I);
         let m = solve::minimum(I, &[], &Clock::unlimited());
         let mut sig: Vec<Vec<String>> = sig.iter().map(|c| I.labels(c)).collect();
         sig.sort();
-        let mut r = json!({"V": I.V, "P": I.P, "E": I.E.iter().map(|E| I.labels(E)).collect::<Vec<_>>(),
-            "k": I.k, "F": I.F.iter().map(|F| I.labels(F)).collect::<Vec<_>>(),
-            "support": I.support().iter().map(|&v| I.V[v].clone()).collect::<Vec<_>>(),
+        let mut r = json!({"V": I.V(), "P": I.P(), "E": I.E().iter().map(|E| I.labels(E)).collect::<Vec<_>>(),
+            "k": I.k(), "F": I.F().iter().map(|F| I.labels(F)).collect::<Vec<_>>(),
+            "support": I.support().iter().map(|&v| I.V()[v].clone()).collect::<Vec<_>>(),
             "H": H, "stats": st, "sig": sig, "infeasibility": infeasibility_json(I),
             "essential": essential_json(I), "min_status": bench::minimum_status(&m),
             "min_size": match &m { solve::Minimum::Optimal(T) => json!(T.len()), _ => Value::Null }});
@@ -82,7 +82,7 @@ pub fn record(I: &Instance, deep: bool, fkb_cap: usize, rec: &Value) -> Value {
             Cs.sort_by(|a, b| a.len().cmp(&b.len()).then(I.labels(a).cmp(&I.labels(b))));
             r["witnesses"] = json!(Cs.iter().take(50).map(|T| {
                 let wit: serde_json::Map<String, Value> = certify::witnesses(I, T).iter().map(|(v, w)|
-                    (I.V[*v].clone(), w.as_ref().map_or(Value::Null, |w| bench::witness(I, w)))).collect();
+                    (I.V()[*v].clone(), w.as_ref().map_or(Value::Null, |w| bench::witness(I, w)))).collect();
                 Value::Object(wit)
             }).collect::<Vec<_>>());
             r["orbits"] = json!(bench::orbits(&C, &bench::stats(I).1));

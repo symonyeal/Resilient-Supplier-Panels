@@ -133,7 +133,7 @@ pub fn loads(b: &[u8]) -> Result<Value, String> {
 }
 
 fn utf16(b: &[u8], f: fn([u8; 2]) -> u16) -> Result<String, String> {
-    let u: Vec<u16> = b.chunks_exact(2).map(|c| f([c[0], c[1]])).collect();
+    let u: Vec<u16> = b.as_chunks::<2>().0.iter().map(|c| f(*c)).collect();
     String::from_utf16(&u).map_err(|e| e.to_string())
 }
 

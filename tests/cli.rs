@@ -12,7 +12,8 @@ fn root() -> &'static Path {
 }
 
 fn tmp(name: &str) -> PathBuf {
-    let d = std::env::temp_dir().join(format!("srl-cli-{}-{name}", std::process::id()));
+    let base=std::env::var_os("SRL_TEST_ROOT").map(PathBuf::from).unwrap_or_else(||root().join("target/test-files"));
+    let d = base.join(format!("srl-cli-{}-{name}", std::process::id()));
     std::fs::create_dir_all(&d).unwrap();
     d
 }
@@ -187,6 +188,28 @@ fn schema_is_the_published_one() {
     assert!(o.status.success());
     assert_eq!(json::loads(&o.stdout).unwrap(), read(&root().join("schema/document-1.0.json")));
     assert_eq!(read(&root().join("schema/document-1.0.json")), read(&root().join("site/document-1.0.json")));
+}
+
+#[test]
+fn verifier_rejects_malformed_members_and_false_count_claims() {
+    let path=tmp("admission").join("family.json");
+    let base=json!({"V":["a","b"],"P":["p"],"E":[["a","b"]],"k":0,
+        "panels":[["a"]],"run":{"method":"berge","status":"complete","count":2,"stored":1}});
+    write(&path,&base);
+    let good=srl(&["verify",path.to_str().unwrap()]);assert!(good.status.success());
+    assert_eq!(json::loads(&good.stdout).unwrap()["exhaustion"],"stored subset");
+    let mut bad=base.clone();bad["panels"]=json!([["a",123]]);write(&path,&bad);
+    assert_eq!(srl(&["verify",path.to_str().unwrap()]).status.code(),Some(2));
+    let mut bad=base.clone();bad["run"]["status"]=json!("unknown");write(&path,&bad);
+    assert_eq!(srl(&["verify",path.to_str().unwrap()]).status.code(),Some(2));
+    let mut bad=base.clone();bad["run"]["count"]=json!(999);write(&path,&bad);
+    assert_eq!(srl(&["verify",path.to_str().unwrap()]).status.code(),Some(1));
+    let mut bad=base.clone();bad["run"]["stored"]=json!(0);write(&path,&bad);
+    assert_eq!(srl(&["verify",path.to_str().unwrap()]).status.code(),Some(2));
+    let mut bad=base.clone();bad["panels"]=json!([["a","a"]]);write(&path,&bad);
+    assert_eq!(srl(&["verify",path.to_str().unwrap()]).status.code(),Some(1));
+    let mut bad=base;bad["schema_version"]=json!("1.0");bad["run"].as_object_mut().unwrap().remove("stored");write(&path,&bad);
+    assert_eq!(srl(&["verify",path.to_str().unwrap()]).status.code(),Some(2));
 }
 
 #[test]

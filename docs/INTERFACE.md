@@ -65,11 +65,14 @@ integer k, and qualification/failure sets contained in V.
   `memory` means Berge's working family reached its limit.
 - `error`: a failed route, not a censored measurement.
 
-`verify` certifies each stored panel. It runs the independent exhaustion search only for a
+`verify` checks every stored panel and the status, emitted count and stored count. It runs the independent exhaustion search only for a
 claimed complete family that is entirely stored, and reports it as `exhaustion`
 (`complete`, `missing` or `invalid`). Invalid, duplicate or missing panels produce exit
 status 1. Input and argument errors produce status 2; mathematical outcomes are reported in
-JSON. A partial verification does not establish a complete count; `srl count` does.
+JSON. Complete counts with only a stored subset are checked against the independent
+class count and labelled `stored subset`. Partial counts remain lower bounds; they
+cannot establish exhaustion. Counts above `u64` use decimal strings, and counts above
+`u128` report `overflow` rather than a wrapped value.
 
 Changes from 0.2: `verify` reports `exhaustion` where 0.2 reported `milp_exhaustion`;
 `--method milp` is now `--method cuts`; `count` and `--method mmcs` are new; `bench` needs

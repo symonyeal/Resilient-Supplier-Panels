@@ -27,7 +27,7 @@ fn random_instances() {
 #[test]
 fn seed1_instances() {
     let (_, s) = snapshot();
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let R = reference("suite-seed1.json");
     let X = R["instances"].as_array().unwrap();
     let mut d = Vec::new();

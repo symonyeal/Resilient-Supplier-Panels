@@ -9,6 +9,11 @@
 //! Strict product = the token itself unless a mapping says otherwise.
 
 use std::collections::{BTreeMap, HashMap};
+pub const CLASSES:[&str;4]=["description","program","naics","material"];
+
+#[derive(Clone,Copy,Debug,PartialEq,Eq)]
+pub enum Variant { Strict,Merged }
+impl Variant {pub fn parse(s:&str)->Option<Self>{match s {"strict"=>Some(Self::Strict),"merged"=>Some(Self::Merged),_=>None}}}
 
 pub const PACK: [&str; 24] = ["can", "cans", "pkg", "ctn", "carton", "bag", "bags", "box", "pouch",
                               "bulk", "lb", "lbs", "oz", "dozen", "jug", "bottle", "frz", "iqf",

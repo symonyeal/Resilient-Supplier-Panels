@@ -8,7 +8,8 @@
 use std::collections::{BTreeMap, BTreeSet};
 
 use crate::audit::{self, Matrix, Snapshot};
-use crate::bench::{self, CLASSES};
+use crate::bench;
+use crate::catalog::CLASSES;
 use crate::certify;
 use crate::json::{json, Value};
 use crate::qbl::{self, Supplier};
@@ -22,7 +23,7 @@ pub fn key(s: &Supplier) -> Key {
 
 /// Precise product -> its suppliers' keys (strict variant).
 fn supply(s: &Snapshot) -> BTreeMap<String, BTreeSet<Key>> {
-    audit::matrix(s, "strict").into_iter()
+    audit::matrix(s, crate::catalog::Variant::Strict).into_iter()
         .filter(|(_, (c, _))| CLASSES.contains(&c.as_str()))
         .map(|(p, (_, E))| (p, E.iter().map(|v| key(&s.S[v])).collect()))
         .collect()
@@ -83,7 +84,7 @@ fn primary(M: &Matrix, seed: u64) -> Vec<Vec<String>> {
 ///
 /// INPUT  W .... [(name, date, snapshot)] in date order
 pub fn series(W: &[(String, String, Snapshot)], seed: u64) -> Value {
-    let M: Vec<Matrix> = W.iter().map(|w| audit::matrix(&w.2, "strict")).collect();
+    let M: Vec<Matrix> = W.iter().map(|w| audit::matrix(&w.2, crate::catalog::Variant::Strict)).collect();
     let fixed = primary(M.last().expect("a snapshot"), seed);
     let tally = |m: &Matrix, B: &[Vec<String>]| {
         let s: Vec<&str> = B.iter().map(|P| status(m, P, 1)).collect();

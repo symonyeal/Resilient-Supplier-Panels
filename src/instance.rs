@@ -14,19 +14,30 @@ use crate::thesis::{minimal, Mbf};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Instance {
-    pub V: Vec<String>,
-    pub P: Vec<String>,
+    V: Vec<String>,
+    P: Vec<String>,
     /// E[p] ⊆ V, ascending indices.
-    pub E: Vec<Vec<usize>>,
-    pub k: usize,
+    E: Vec<Vec<usize>>,
+    k: usize,
     /// Explicit failure scenarios, ascending indices.
-    pub F: Vec<Vec<usize>>,
+    F: Vec<Vec<usize>>,
 }
 
 /// A failure scenario relevant to product p: (p, the failed suppliers).
 pub type Scenario = (usize, Vec<usize>);
 
 impl Instance {
+    pub fn V(&self)->&Vec<String> {&self.V}
+    pub fn P(&self)->&Vec<String> {&self.P}
+    pub fn E(&self)->&Vec<Vec<usize>> {&self.E}
+    pub fn F(&self)->&Vec<Vec<usize>> {&self.F}
+    pub fn k(&self)->usize {self.k}
+    /// Restrict qualification and failure sets while preserving their common index space.
+    pub fn restrict(&self, keep:&[usize])->Result<Self,String> {
+        if keep.iter().any(|&v|v>=self.V.len()) || keep.iter().collect::<std::collections::HashSet<_>>().len()!=keep.len(){return Err("Invalid support restriction".into());}
+        let sub=|S:&Vec<usize>|S.iter().copied().filter(|v|keep.contains(v)).collect();
+        Ok(Self{V:self.V.clone(),P:self.P.clone(),E:self.E.iter().map(sub).collect(),k:self.k,F:self.F.iter().map(sub).collect()})
+    }
     /// The instance, or the invariant it violates: distinct labels, one supplier set per
     /// product, qualification and failure sets inside V, k ≥ 0.
     pub fn new(V: Vec<String>, P: Vec<String>, E: Vec<Vec<String>>, k: i64, F: Vec<Vec<String>>)
@@ -36,7 +47,7 @@ impl Instance {
         }
         let idx: HashMap<&str, usize> = V.iter().enumerate().map(|(i, v)| (v.as_str(), i)).collect();
         let mut seen = std::collections::HashSet::new();
-        if idx.len() != V.len() || !P.iter().all(|p| seen.insert(p)) {
+        if V.iter().chain(&P).any(|x|x.trim().is_empty()) || idx.len() != V.len() || !P.iter().all(|p| seen.insert(p)) {
             return Err("V and P must have distinct labels".into());
         }
         if P.len() != E.len() {
@@ -47,7 +58,7 @@ impl Instance {
                 .collect::<Option<_>>()
                 .ok_or("qualification and failure sets must be subsets of V")?;
             s.sort_unstable();
-            s.dedup();
+            if s.windows(2).any(|w|w[0]==w[1]){return Err("Sets must not repeat suppliers".into());}
             Ok(s)
         };
         let E = E.iter().map(index).collect::<Result<_, _>>()?;
@@ -82,6 +93,7 @@ impl Instance {
         let mut s: Vec<usize> = S.iter().map(|x| self.V.iter().position(|v| v == x))
             .collect::<Option<_>>()?;
         s.sort_unstable();
+        if s.windows(2).any(|w|w[0]==w[1]) {return None;}
         Some(s)
     }
 

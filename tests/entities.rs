@@ -60,8 +60,8 @@ fn same_pairs_merge_but_site_pairs_remain_distinct_in_the_identity_variant() {
 
     let merged = entities::merge(&I, &rep);
 
-    assert_eq!(merged.V, ["r0001", "r0003"]);
-    assert_eq!(merged.E[0], [0, 1]);
+    assert_eq!(merged.V().as_slice(), ["r0001", "r0003"]);
+    assert_eq!(merged.E()[0], [0, 1]);
 }
 
 #[test]
@@ -75,13 +75,13 @@ fn owner_scenario_has_an_explicit_infeasibility_certificate() {
         &s,
     )
     .unwrap();
-    let M = audit::matrix(&s, "strict");
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let I = entities::with_owners(&M, &["beans pinto can".into()], 0, &owners);
 
     let (p, failed) = certify::infeasibility(&I).expect("the group scenario removes every supplier");
 
     assert_eq!(p, 0);
-    assert_eq!(failed.iter().map(|&v| I.V[v].as_str()).collect::<Vec<_>>(), ["r0002", "r0003"]);
+    assert_eq!(failed.iter().map(|&v| I.V()[v].as_str()).collect::<Vec<_>>(), ["r0002", "r0003"]);
 }
 
 #[test]

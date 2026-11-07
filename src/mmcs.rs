@@ -56,7 +56,7 @@ impl<const W: usize> Mmcs<'_, W> {
 
     fn go(&mut self, cand: &mut Bits<W>, emit: &mut dyn FnMut(Bits<W>) -> bool) -> Result<(), Stop> {
         self.nodes += 1;
-        if self.nodes % 4096 == 0 && self.clock.expired() {
+        if self.nodes.is_multiple_of(4096) && self.clock.expired() {
             return Err(Stop::Timeout);
         }
         let e = (0..self.H.len()).filter(|&e| self.hit[e] == 0)

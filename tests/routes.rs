@@ -92,7 +92,7 @@ fn hand_example() {
     let W = certify::witnesses(&I, &[1, 3]);
     assert!(W.iter().all(|(v, w)| {
         let (p, F) = w.as_ref().unwrap();
-        F.is_empty() && I.E[*p].iter().filter(|u| [1, 3].contains(u)).collect::<Vec<_>>() == [v]
+        F.is_empty() && I.E()[*p].iter().filter(|u| [1, 3].contains(u)).collect::<Vec<_>>() == [v]
     }));
 }
 
@@ -130,10 +130,10 @@ fn random_agreement_certificates_and_permutation_invariance() {
         let Tr = all_routes(&I);
         certificates(&I, &Tr);
         // suppliers and products reordered
-        let mut pi = I.V.clone();
+        let mut pi = I.V().clone();
         rng.shuffle(&mut pi);
-        let E: Vec<Vec<String>> = I.E.iter().rev().map(|E| I.labels(E)).collect();
-        let J = Instance::new(pi, I.P.iter().rev().cloned().collect(), E, I.k as i64, vec![]).unwrap();
+        let E: Vec<Vec<String>> = I.E().iter().rev().map(|E| I.labels(E)).collect();
+        let J = Instance::new(pi, I.P().iter().rev().cloned().collect(), E, I.k() as i64, vec![]).unwrap();
         let TJ: BTreeSet<Vec<String>> = all_routes(&J).iter().map(|T| J.labels(T)).collect();
         assert_eq!(TJ, Tr.iter().map(|T| I.labels(T)).collect());
     }

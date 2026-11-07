@@ -2,7 +2,7 @@
 name = "srl"
 version = "0.4.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.89"
 description = "Certified resilient qualified-supplier panels from the USDA AMS Qualified Bidders List"
 license = "GPL-3.0-or-later"
 authors = ["Saimon Y. Islam"]

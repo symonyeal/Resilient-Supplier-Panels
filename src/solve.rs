@@ -13,9 +13,9 @@ use crate::run::{Clock, Stop};
 /// Rows R x ≥ d over support positions.
 fn rows<const W: usize>(I: &Instance, labels: &[usize]) -> Vec<(Bits<W>, usize)> {
     let mut A = Vec::new();
-    for Ep in &I.E {
-        A.push((encode(labels, Ep), I.k + 1));
-        for F in &I.F {
+    for Ep in I.E() {
+        A.push((encode(labels, Ep), I.k().saturating_add(1)));
+        for F in I.F() {
             let R: Vec<usize> = Ep.iter().copied().filter(|v| !F.contains(v)).collect();
             A.push((encode(labels, &R), 1));
         }
@@ -37,7 +37,7 @@ impl<const W: usize> Bnb<'_, W> {
     /// on the free member of the tightest deficient row that meets most deficient rows.
     fn go(&mut self, mut inn: Bits<W>, mut out: Bits<W>) {
         self.nodes += 1;
-        if self.nodes % 64 == 0 && self.clock.expired() {
+        if self.nodes.is_multiple_of(64) && self.clock.expired() {
             self.stopped = true;
         }
         if self.stopped {
@@ -107,6 +107,7 @@ pub enum Minimum {
     Infeasible,
     Stopped(Stop),
 }
+impl Minimum {pub fn status(&self)->&'static str{match self {Self::Optimal(_)=>"optimal",Self::Infeasible=>"infeasible",Self::Stopped(s)=>s.name()}}}
 
 /// Minimum-cardinality feasible panel containing no S ∈ cuts (supplier indices).
 pub fn minimum(I: &Instance, cuts: &[Vec<usize>], clock: &Clock) -> Minimum {
