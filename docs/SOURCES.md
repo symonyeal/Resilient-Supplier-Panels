@@ -28,7 +28,7 @@ Additional data inspected on 2026-10-25:
   fields: award identifier, recipient name/UEI/address, performance ZIP, Award Amount,
   parent name/UEI. Frozen collection: AMS awarding subtier, contract types A-D, three
   FY2024-FY2026 activity windows. All raw awards and extracted profiles are retained
-  in `data/evidence`; hashes and reconciliation are checked by `analysis/check_evidence.py`.
+  in `data/evidence`; hashes and internal reconciliation (raw awards against the catalog totals and links, all from the one fetch) are checked by `analysis/check_evidence.py`; no record is re-queried from USAspending.
   Name-core/ZIP linkage is an inference. No comparable unit price or capacity was found.
 - [National Beef, Our Businesses](https://www.nationalbeef.com/about-us/we-know-beef/our-businesses/),
   inspected 2026-10-25: Liberal and Dodge City facilities. Used for a scenario;

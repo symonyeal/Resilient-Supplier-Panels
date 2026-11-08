@@ -205,7 +205,7 @@ pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
     out.insert("V".into(), json!(I.V().len()));
     out.insert("E_p".into(), json!(I.E().iter().map(Vec::len).collect::<Vec<_>>()));
     out.insert("count_lower_bound".into(), bench::count_json(lower));
-    out.insert("admission".into(),json!({"minimum":"independently verified","exact_count":bench::count_json(exact),"count_method":"signature_classes"}));
+    out.insert("admission".into(),json!({"minimum":"re-solved and certified minimal","exact_count":bench::count_json(exact),"count_method":"signature_classes"}));
     Ok(Value::Object(out))
 }
 

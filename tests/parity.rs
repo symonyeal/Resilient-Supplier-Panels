@@ -152,7 +152,7 @@ fn verdicts_and_site_from_the_saved_campaign() {
     let mut evidence = srl::portfolio::evidence(&R, &M, &names).unwrap();
     // Admission receipts are new; every historical evidence value remains comparable.
     for record in evidence["records"].as_array_mut().unwrap() {
-        assert_eq!(record["admission"]["minimum"], "independently verified");
+        assert_eq!(record["admission"]["minimum"], "re-solved and certified minimal");
         record.as_object_mut().unwrap().remove("admission");
     }
     check("evidence", &evidence, &site["evidence"]);
