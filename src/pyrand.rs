@@ -90,6 +90,7 @@ impl Random {
 
     /// Uniform on 0..n, n > 0, by rejection on n.bit_length() bits.
     pub fn below(&mut self, n: usize) -> usize {
+        assert!(n > 0, "below(0): the range is empty");
         let k = usize::BITS - n.leading_zeros();
         loop {
             let r = self.getrandbits(k) as usize;

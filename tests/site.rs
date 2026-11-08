@@ -31,33 +31,31 @@ fn snapshot() -> (Vec<qbl::Row>, audit::Snapshot) {
     (rows, s)
 }
 
-const CAMPAIGNS: [&str; 2] = ["results/suite-seed1.json", "results/suite-seed1-v0.3.json"];
+const CAMPAIGN: &str = "results/suite-seed1-v0.3.json";
 
 #[test]
 fn saved_minima_and_matrix_certificates() {
     let (_, s) = snapshot();
     let M = audit::matrix(&s, srl::catalog::Variant::Strict);
-    for c in CAMPAIGNS {
-        for r in read(c)["instances"].as_array().unwrap() {
-            let I = audit::basket(&M, &strs(&r["P"]), r["k"].as_u64().unwrap() as usize);
-            let m = solve::minimum(&I, &[], &Clock::unlimited());
-            assert_eq!(
-                bench::minimum_status(&m),
-                r["min"]["status"].as_str().unwrap()
-            );
-            match m {
-                Minimum::Optimal(T) => {
-                    assert_eq!(Some(T.len() as u64), r["min"]["size"].as_u64());
-                    assert!(
-                        certify::minimal(&I, &T)
-                            && certify::minimal(&I, &I.index(&strs(&r["min"]["panel"])).unwrap())
-                    );
-                }
-                _ => assert!(r["min"]["size"].is_null()),
+    for r in read(CAMPAIGN)["instances"].as_array().unwrap() {
+        let I = audit::basket(&M, &strs(&r["P"]), r["k"].as_u64().unwrap() as usize);
+        let m = solve::minimum(&I, &[], &Clock::unlimited());
+        assert_eq!(
+            bench::minimum_status(&m),
+            r["min"]["status"].as_str().unwrap()
+        );
+        match m {
+            Minimum::Optimal(T) => {
+                assert_eq!(Some(T.len() as u64), r["min"]["size"].as_u64());
+                assert!(
+                    certify::minimal(&I, &T)
+                        && certify::minimal(&I, &I.index(&strs(&r["min"]["panel"])).unwrap())
+                );
             }
-            assert_eq!(bench::infeasibility_json(&I), r["infeasibility"]);
-            assert_eq!(bench::essential_json(&I), r["essential"]);
+            _ => assert!(r["min"]["size"].is_null()),
         }
+        assert_eq!(bench::infeasibility_json(&I), r["infeasibility"]);
+        assert_eq!(bench::essential_json(&I), r["essential"]);
     }
 }
 
@@ -65,18 +63,14 @@ fn saved_minima_and_matrix_certificates() {
 fn saved_reports_rebuild_without_changes() {
     let (rows, s) = snapshot();
     let A = audit::audit(&rows, &s);
-    for (c, md) in [
-        (CAMPAIGNS[0], "docs/findings/results-seed1.md"),
-        (CAMPAIGNS[1], "docs/findings/results-seed1-v0.3.md"),
-    ] {
-        let R = read(c);
-        let name = Path::new(c).file_name().unwrap().to_string_lossy();
-        let text = report::markdown(&R, &name, verdicts::score(&R, &A));
-        let saved = std::fs::read_to_string(root().join(md))
-            .unwrap()
-            .replace("\r\n", "\n");
-        assert!(text == saved, "{md} differs from its rebuild");
-    }
+    let md = "docs/findings/results-seed1-v0.3.md";
+    let R = read(CAMPAIGN);
+    let name = Path::new(CAMPAIGN).file_name().unwrap().to_string_lossy();
+    let text = report::markdown(&R, &name, verdicts::score(&R, &A));
+    let saved = std::fs::read_to_string(root().join(md))
+        .unwrap()
+        .replace("\r\n", "\n");
+    assert!(text == saved, "{md} differs from its rebuild");
 }
 
 #[test]
@@ -165,7 +159,7 @@ fn published_data_matches_files_source_and_campaign() {
     assert_eq!(json::loads(js.as_bytes()).unwrap(), D);
     let (_, s) = snapshot();
     let E = portfolio::evidence(
-        &read(CAMPAIGNS[1]),
+        &read(CAMPAIGN),
         &audit::matrix(&s, srl::catalog::Variant::Strict),
         &portfolio::names(&s),
     )
@@ -184,7 +178,7 @@ fn published_data_matches_files_source_and_campaign() {
 fn evidence_keeps_every_record_and_honest_partial_counts() {
     let (_, s) = snapshot();
     let M = audit::matrix(&s, srl::catalog::Variant::Strict);
-    let R = read(CAMPAIGNS[0]);
+    let R = read(CAMPAIGN);
     let E = portfolio::evidence(&R, &M, &portfolio::names(&s)).unwrap();
     let (a, b) = (
         E["records"].as_array().unwrap(),
@@ -217,13 +211,8 @@ fn evidence_keeps_every_record_and_honest_partial_counts() {
         );
         assert!(x.get("H_edges_before_reduction").is_none());
     }
-    let partial: Vec<&Value> = a.iter().filter(|x| x["count_exact"].is_null()).collect();
-    assert!(
-        partial.len() == 4
-            && partial
-                .iter()
-                .all(|x| x["count_lower_bound"].as_u64() > Some(0))
-    );
+    // The 0.3 campaign finished every enumeration: no record is partial.
+    assert!(a.iter().all(|x| !x["count_exact"].is_null()));
     let mut bad = R.clone();
     bad["instances"][0]["min"]["panel"] = serde_json::json!([]);
     assert!(

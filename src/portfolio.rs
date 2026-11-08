@@ -133,7 +133,7 @@ fn witnesses(I: &Instance, S: &[usize]) -> Value {
 
 /// A complete small case: optimum, certified family and an independent exhaustion search.
 pub fn analyse(I: &Instance) -> Result<Value, String> {
-    let (C, run) = bench::run("berge", I, 10.0, 10_000, &LIMITS);
+    let (C, mut run) = bench::run("berge", I, 10.0, 10_000, &LIMITS);
     if run["status"] != "complete" || run["count"].as_u64() != Some(C.len() as u64) {
         return Err(format!(
             "public case was not fully stored: {}",
@@ -143,6 +143,10 @@ pub fn analyse(I: &Instance) -> Result<Value, String> {
     if !C.iter().all(|T| certify::minimal(I, T)) {
         return Err("public case contains an uncertified panel".into());
     }
+    // Wall-clock fields are measurements, not case data: leaving them out keeps `srl site` byte-stable.
+    run.as_object_mut()
+        .unwrap()
+        .retain(|k, _| !k.starts_with("t_"));
     let C = sorted(I, &C);
     let exhaustion = certify::complete(I, &C);
     let m = solve::minimum(I, &[], &Clock::limit(10.0));
@@ -287,7 +291,6 @@ fn keep(x: &Value) -> &'static [&'static str] {
             "runs",
             "count_exact",
             "complete_routes_agree",
-            "milp_exhaustion",
             "orbits",
             "sensitivity",
         ]
@@ -362,12 +365,10 @@ pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
             .as_str()
             .and_then(crate::run::Status::parse)
             .ok_or("Unknown saved run status")?;
-        let legacy_milp = run["method"] == "milp"; // Archived Python producer; never a current dispatch route.
-        if !legacy_milp
-            && run["method"]
-                .as_str()
-                .and_then(crate::run::Method::parse)
-                .is_none()
+        if run["method"]
+            .as_str()
+            .and_then(crate::run::Method::parse)
+            .is_none()
         {
             return Err("Unknown saved enumeration method".into());
         }

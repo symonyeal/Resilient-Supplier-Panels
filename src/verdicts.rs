@@ -97,19 +97,9 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
         .iter()
         .filter(|r| ["timeout", "cap"].contains(&r["status"].as_str().unwrap()))
         .count();
-    let old = X[0]["runs"]
-        .as_array()
-        .unwrap()
-        .iter()
-        .any(|r| r["method"] == "milp");
-    let (cut, cut_name) = if old {
-        ("milp", "MILP")
-    } else {
-        ("cuts", "the cut route")
-    };
     let fkb_slowest = X
         .iter()
-        .filter(|x| total(x, "fkb") > total(x, "berge").min(total(x, cut)))
+        .filter(|x| total(x, "fkb") > total(x, "berge").min(total(x, "cuts")))
         .count();
     let beats: Vec<&&Value> = X
         .iter()
@@ -164,18 +154,8 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
             ),
         );
     }
-    let tmin: Vec<Num> = X
-        .iter()
-        .map(|x| {
-            Num::of(if x.get("t_min").is_some() {
-                &x["t_min"]
-            } else {
-                &x["t_milp_min"]
-            })
-        })
-        .collect();
+    let tmin: Vec<Num> = X.iter().map(|x| Num::of(&x["t_min"])).collect();
     let tmax = tmin.iter().map(|t| t.f()).fold(f64::NEG_INFINITY, f64::max);
-    let rival = if old { "MILP minimum" } else { "minimum" };
     let num = |x: Num| match x {
         Num::I(i) => json!(i),
         Num::F(f) => json!(f),
@@ -265,7 +245,8 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
             json!(format!("{stopped}/{}", runs.len())),
         ),
         (
-            format!("K6 instances where FK-B is slower than the faster of Berge and {cut_name}"),
+            "K6 instances where FK-B is slower than the faster of Berge and the cut route"
+                .to_string(),
             json!(format!("{fkb_slowest}/{}", X.len())),
         ),
         (
@@ -294,22 +275,10 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
                 late.len()
             )),
         ),
-        // 0.2 printed seconds to 4 places; exact minima take microseconds, so 0.3 prints 3 figures
         (
-            format!("rival: median {rival} time (s)"),
-            if old {
-                json!(round(median(tmin).f(), 4))
-            } else {
-                json!(g(median(tmin).f(), 3))
-            },
+            "rival: median minimum time (s)".to_string(),
+            json!(g(median(tmin).f(), 3)),
         ),
-        (
-            format!("rival: max {rival} time (s)"),
-            if old {
-                json!(round(tmax, 4))
-            } else {
-                json!(g(tmax, 3))
-            },
-        ),
+        ("rival: max minimum time (s)".to_string(), json!(g(tmax, 3))),
     ]
 }

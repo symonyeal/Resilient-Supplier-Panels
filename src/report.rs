@@ -1,7 +1,6 @@
 //! Findings tables, rebuilt from saved result JSON only (never from a live run).
 //!
-//! Reads both the 0.2 Python campaigns (route `milp`, keys `milp_exhaustion`, `t_milp_min`)
-//! and the 0.3 Rust campaigns (routes `cuts`, `mmcs`, keys `exhaustion`, `t_min`, `quotient`).
+//! Reads the Rust campaigns (routes `cuts`, `mmcs`, keys `exhaustion`, `t_min`, `quotient`).
 //! Numbers are formatted as Python formatted them, so a saved report rebuilds byte for byte.
 
 use crate::json::{self, Value};

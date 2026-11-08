@@ -57,7 +57,7 @@ differences, and a planted change of FK-A's tie-break is detected.
 | Berge family, member witnesses, orbits, first 300 FK-B panels in order | 88 seed-1 instances | equal |
 | FK-A tree and DAG nodes; with one panel removed, tree and DAG nodes and the conflicting assignment | 46 families of at most 2,000 (40 with two or more panels) | equal |
 | all of the above, FK-B node counts per dualisation pass (130 instances), exhaustive family | 300 random instances, k ∈ {0, 1, 2}, a quarter with explicit scenarios | equal |
-| pre-registered scores; site evidence of the 0.2 campaign | `results/suite-seed1.json` | equal |
+| pre-registered scores; site evidence of the 0.2 campaign | archived 0.2 campaign `suite-seed1.json` | equal |
 | site cases (families, certificates, outages, shortlists) | 3 cases × 2 failure budgets | equal with the 0.2 optimum as the shortlist's first panel; see DECISIONS for the deterministic choice |
 | `results-seed1.md` rebuilt from the saved 0.2 campaign | whole file | equal except the line naming the command |
 | common-owner instances and complete families | 4 cases | equal: 32, 168, 21 and 168 panels |
@@ -255,7 +255,7 @@ labelled hypothetical stress tests. There is no claim of procurement adoption.
 ## Outcome explorer (2026-10-15)
 
 Source: `python analysis/build_site.py` at `4a4b4ca` (clean source), frozen QBL and strict
-mappings, `results/suite-seed1.json`. All 88 saved records were rebuilt from the matrix:
+mappings, the 0.2 campaign (archived). All 88 saved records were rebuilt from the matrix:
 every saved minimum is certified minimal at its saved size, and every essential set and
 infeasibility witness equals its recomputation. 84 records carry exact counts; 4 carry
 lower bounds (every route stopped at 10 s). Spearman rank correlation between eligible

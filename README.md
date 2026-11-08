@@ -23,7 +23,7 @@ The [release 0.4 analysis](docs/findings/2026-10-25-open-work.md) adds three dat
 observations, ranked qualification gaps, entity scenarios and whole-class baskets. Across
 40,000 seeded basket draws, 11,256 have one-supplier backup. One whole-class basket has
 75,180,897,792 minimal panels. These draws are not a demand sample.
-[Remaining evidence requirements](docs/OPEN.md) include 12 unresolved identity pairs and
+[Remaining evidence requirements](docs/OPEN.md) include the 12 unresolved identity candidates (of 31) and
 comparable price and capacity data. The 40-basket result above is from the October seed-1
 campaign.
 
@@ -149,7 +149,7 @@ python analysis/check_browser.py     # needs playwright; uses Edge on Windows
 ```
 
 The site opens from `site/index.html` with no server or network; Plotly basic 4.1.1 (MIT) is
-vendored. Supplier IDs are snapshot rows; 31 possible duplicate identities are unresolved.
+vendored. Supplier IDs are snapshot rows; 31 candidate duplicate identities are listed: 6 are supported duplicate-row sensitivities, 13 distinct-row scenarios and 12 stay unresolved.
 [Interface](docs/INTERFACE.md) · [Data](docs/DATA.md) · [Decisions](docs/DECISIONS.md) ·
 [Open work](docs/OPEN.md) · [Sources](docs/SOURCES.md) · [Glossary](GLOSSARY.md) ·
 [Changelog](CHANGELOG.md)

@@ -178,15 +178,13 @@ function report() {
     + `<p>USDA QBL retrieved ${e(D.provenance.snapshot.retrieved_utc)}. <a href="${e(D.provenance.snapshot.url)}">Source</a> · <a href="${repo}">Code</a>.</p><dl>${provenance}</dl></html>`;
 }
 
-const ROUTES = { berge: "Berge", fkb: "FK-B", cuts: "Cut enumeration", mmcs: "MMCS",
-  milp: "MILP enumeration" };
+const ROUTES = { berge: "Berge", fkb: "FK-B", cuts: "Cut enumeration", mmcs: "MMCS" };
 const O = { class: "", rule: "", k: "", outcome: "", product: "", i: 0 };
 const kind = x => x.min.status !== "optimal" ? "infeasible" : x.count_exact === null ? "bound" : "exact";
 const kinds = { exact: "Exact count", bound: "Lower bound", infeasible: "Infeasible" };
 const count = x => kind(x) === "infeasible" ? "0" : x.count_exact !== null ? number(x.count_exact) : `≥ ${number(x.count_lower_bound)}`;
 const basket = x => `${x.class} · ${x.rule} · ${x.size} products`;
 const supplier = v => D.evidence.names[v] || v;
-const seconds = t => t === null ? "—" : t < 1 ? `${Number((t * 1000).toPrecision(2))} ms` : `${t.toFixed(2)} s`;
 const token = name => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 
 function matches(x) {
@@ -263,19 +261,19 @@ function renderRecord(R) {
   }
   const table = node("table");
   const tr = node("tr");
-  for (const h of ["Route", "Status", "Panels", "First", "Total"]) { const th = node("th", h); th.scope = "col"; tr.append(th); }
+  for (const h of ["Route", "Status", "Panels"]) { const th = node("th", h); th.scope = "col"; tr.append(th); }
   table.append(node("thead"), node("tbody"));
   table.tHead.append(tr);
   table.tBodies[0].append(...x.runs.map(r => {
     const row = node("tr");
-    row.append(node("td", ROUTES[r.method]), node("td", r.status), node("td", number(r.count)), node("td", seconds(r.t_first)), node("td", seconds(r.t_total)));
+    row.append(node("td", ROUTES[r.method]), node("td", r.status), node("td", number(r.count)));
     return row;
   }));
   const scroll = node("div", undefined, "table-scroll");
   scroll.append(table);
   const s = x.sensitivity;
   parts.push(node("h4", "Runs"), scroll, node("p",
-    `Exhaustion check: ${x.exhaustion || x.milp_exhaustion || "not run"}. Routes agree: ${x.complete_routes_agree === null ? "n/a" : x.complete_routes_agree ? "yes" : "no"}.`
+    `Exhaustion check: ${x.exhaustion || "not run"}. Routes agree: ${x.complete_routes_agree === null ? "n/a" : x.complete_routes_agree ? "yes" : "no"}.`
     + (s ? ` Minimum with merged mappings: ${number(s.merged.min)}.` : ""), "fine"));
   $("record").replaceChildren(...parts);
 }

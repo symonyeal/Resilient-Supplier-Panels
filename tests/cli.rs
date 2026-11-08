@@ -452,7 +452,10 @@ fn bench_never_overwrites_a_saved_campaign() {
         "--seed",
         "1",
         "-o",
-        root().join("results/suite-seed1.json").to_str().unwrap(),
+        root()
+            .join("results/suite-seed1-v0.3.json")
+            .to_str()
+            .unwrap(),
     ]);
     assert_eq!(o.status.code(), Some(2));
     assert_eq!(srl(&["bench", "--seed", "1"]).status.code(), Some(2));

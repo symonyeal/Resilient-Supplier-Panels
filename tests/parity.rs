@@ -1,5 +1,5 @@
 //! Two-way agreement with reference outputs of the Python 0.2 release on the thesis code at
-//! 1bb9de4. The reference directory is named by SRL_REF; without it these tests are skipped.
+//! 1bb9de4. The reference directory is named by SRL_REF; the tests are ignored by default and fail without it.
 //! Each test reports every differing path, not only the first.
 
 use std::path::PathBuf;
@@ -11,12 +11,14 @@ use srl::json::{Value, json};
 use srl::pyrand::Random;
 use srl::{audit, bench, catalog};
 
-fn reference() -> Option<PathBuf> {
-    std::env::var_os("SRL_REF").map(PathBuf::from)
+fn reference() -> PathBuf {
+    std::env::var_os("SRL_REF")
+        .map(PathBuf::from)
+        .expect("SRL_REF must name the captured reference directory")
 }
 
 fn load(name: &str) -> Value {
-    let p = reference().unwrap().join(name);
+    let p = reference().join(name);
     srl::json::loads(&std::fs::read(&p).unwrap()).unwrap()
 }
 
@@ -40,10 +42,8 @@ fn comparator_detects_planted_differences() {
 }
 
 #[test]
+#[ignore = "needs SRL_REF, the captured 0.2 reference directory"]
 fn data_layer() {
-    if reference().is_none() {
-        return;
-    }
     let (rows, s) = snapshot();
     let R: Vec<Value> = rows
         .iter()
@@ -103,10 +103,8 @@ fn data_layer() {
 }
 
 #[test]
+#[ignore = "needs SRL_REF, the captured 0.2 reference directory"]
 fn python_random_and_baskets() {
-    if reference().is_none() {
-        return;
-    }
     let mut got = serde_json::Map::new();
     for seed in [0u64, 1, 2, 12345, (1 << 40) + 7] {
         let mut xs: Vec<usize> = (0..30).collect();
@@ -145,10 +143,8 @@ fn python_random_and_baskets() {
 }
 
 #[test]
+#[ignore = "needs SRL_REF, the captured 0.2 reference directory"]
 fn suite_seed1_instances() {
-    if reference().is_none() {
-        return;
-    }
     let (_, s) = snapshot();
     let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let ref_suite = load("suite1.json");
@@ -197,10 +193,8 @@ fn suite_seed1_instances() {
 }
 
 #[test]
+#[ignore = "needs SRL_REF, the captured 0.2 reference directory"]
 fn random_instances() {
-    if reference().is_none() || !reference().unwrap().join("random.json").exists() {
-        return;
-    }
     let mut d = Vec::new();
     for (i, x) in load("random.json").as_array().unwrap().iter().enumerate() {
         let I = instance(x);
@@ -216,120 +210,5 @@ fn random_instances() {
         "{} differences:\n{}",
         d.len(),
         d[..d.len().min(40)].join("\n")
-    );
-}
-
-#[test]
-fn verdicts_and_site_from_the_saved_campaign() {
-    if reference().is_none() || !reference().unwrap().join("site/cases.json").exists() {
-        return;
-    }
-    let (rows, s) = snapshot();
-    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR"));
-    let R =
-        srl::json::loads(&std::fs::read(root.join("results/suite-seed1.json")).unwrap()).unwrap();
-    let V: serde_json::Map<String, Value> = srl::verdicts::score(&R, &audit::audit(&rows, &s))
-        .into_iter()
-        .collect();
-    check("verdicts", &Value::Object(V), &load("verdicts.json"));
-    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
-    let names = srl::portfolio::names(&s);
-    let site = load("site/cases.json");
-    let mut evidence = srl::portfolio::evidence(&R, &M, &names).unwrap();
-    // Admission receipts are new; every historical evidence value remains comparable.
-    for record in evidence["records"].as_array_mut().unwrap() {
-        assert_eq!(
-            record["admission"]["minimum"],
-            "re-solved and certified minimal"
-        );
-        record.as_object_mut().unwrap().remove("admission");
-    }
-    check("evidence", &evidence, &site["evidence"]);
-    // cases: the run timings are new measurements and the exhaustion key is renamed
-    let strip = |mut c: Value| {
-        for m in c["modes"].as_object_mut().unwrap().values_mut() {
-            for k in ["t_first", "t_K", "t_total", "exitcode"] {
-                m["family"]["run"].as_object_mut().unwrap().remove(k);
-            }
-            let ch = m["checks"].as_object_mut().unwrap();
-            if let Some(e) = ch.remove("milp_exhaustion") {
-                ch.insert("exhaustion".into(), e);
-            }
-        }
-        c
-    };
-    // the shortlist starts from an optimum: HiGHS's choice in Python, the first in label order
-    // here. With Python's optimum the shortlist is reproduced; the rest is compared without it.
-    let rust: Vec<Value> = srl::portfolio::cases(&M, &names).unwrap();
-    let python: Vec<Value> = site["cases"].as_array().unwrap().clone();
-    let mut changed = Vec::new();
-    for (r, p) in rust.iter().zip(&python) {
-        let P: Vec<String> = p["products"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|x| x.as_str().unwrap().into())
-            .collect();
-        for (k, m) in p["modes"].as_object().unwrap() {
-            let I = audit::basket(&M, &P, k.parse().unwrap());
-            let ix = |v: &Value| {
-                I.index(
-                    &v.as_array()
-                        .unwrap()
-                        .iter()
-                        .map(|x| x.as_str().unwrap().into())
-                        .collect::<Vec<_>>(),
-                )
-                .unwrap()
-            };
-            let C: Vec<Vec<usize>> = m["family"]["panels"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .map(ix)
-                .collect();
-            let T = m["panels"]
-                .as_array()
-                .unwrap()
-                .first()
-                .map(|x| ix(&x["members"]));
-            let got: Vec<Value> = srl::portfolio::shortlist(&I, &C, T.as_ref(), 6)
-                .iter()
-                .map(|S| json!(I.labels(S)))
-                .collect();
-            let want: Vec<Value> = m["panels"]
-                .as_array()
-                .unwrap()
-                .iter()
-                .map(|x| x["members"].clone())
-                .collect();
-            check(
-                &format!("shortlist {} k={k}", p["id"]),
-                &json!(got),
-                &json!(want),
-            );
-            if r["modes"][k]["panels"] != m["panels"] {
-                changed.push(format!(
-                    "{} k={k}: first panel {} -> {}",
-                    p["id"], m["panels"][0]["members"], r["modes"][k]["panels"][0]["members"]
-                ));
-            }
-        }
-    }
-    println!("shortlists changed by the deterministic optimum: {changed:?}");
-    let drop = |mut c: Value| {
-        for m in c["modes"].as_object_mut().unwrap().values_mut() {
-            m.as_object_mut().unwrap().remove("panels");
-        }
-        c["outages"]
-            .as_array_mut()
-            .unwrap()
-            .retain(|o| o["id"] != "pair");
-        strip(c)
-    };
-    check(
-        "cases",
-        &json!(rust.into_iter().map(drop).collect::<Vec<_>>()),
-        &json!(python.into_iter().map(drop).collect::<Vec<_>>()),
     );
 }
