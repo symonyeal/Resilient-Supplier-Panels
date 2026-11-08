@@ -6,10 +6,10 @@ use srl::audit::{self, Snapshot};
 use srl::bench::{self, essential_json, infeasibility_json};
 use srl::bits::Bits;
 use srl::certify;
-use srl::instance::{decode, encode, hypergraph, Instance};
-use srl::json::{json, Value};
+use srl::instance::{Instance, decode, encode, hypergraph};
+use srl::json::{Value, json};
 use srl::run::Clock;
-use srl::thesis::{berge, fka, fkb, Mbf};
+use srl::thesis::{Mbf, berge, fka, fkb};
 use srl::{data, qbl, quotient, solve};
 
 /// Paths at which a and b differ (object key order ignored; numbers by value).
@@ -19,7 +19,10 @@ pub fn diff(path: &str, a: &Value, b: &Value, out: &mut Vec<String>) {
             for k in x.keys().chain(y.keys().filter(|k| !x.contains_key(*k))) {
                 match (x.get(k), y.get(k)) {
                     (Some(u), Some(v)) => diff(&format!("{path}.{k}"), u, v, out),
-                    (u, _) => out.push(format!("{path}.{k}: only {}", if u.is_some() { "rust" } else { "python" })),
+                    (u, _) => out.push(format!(
+                        "{path}.{k}: only {}",
+                        if u.is_some() { "rust" } else { "python" }
+                    )),
                 }
             }
         }
@@ -31,7 +34,14 @@ pub fn diff(path: &str, a: &Value, b: &Value, out: &mut Vec<String>) {
         (Value::Number(x), Value::Number(y)) if x.as_f64() == y.as_f64() => {}
         _ if a == b => {}
         _ => {
-            let s = |v: &Value| { let s = v.to_string(); if s.len() > 160 { format!("{}…", &s[..160]) } else { s } };
+            let s = |v: &Value| {
+                let s = v.to_string();
+                if s.len() > 160 {
+                    format!("{}…", &s[..160])
+                } else {
+                    s
+                }
+            };
             out.push(format!("{path}: rust {} python {}", s(a), s(b)));
         }
     }
@@ -40,7 +50,12 @@ pub fn diff(path: &str, a: &Value, b: &Value, out: &mut Vec<String>) {
 pub fn check(name: &str, rust: &Value, python: &Value) {
     let mut d = Vec::new();
     diff(name, rust, python, &mut d);
-    assert!(d.is_empty(), "{} differences, first ones:\n{}", d.len(), d[..d.len().min(40)].join("\n"));
+    assert!(
+        d.is_empty(),
+        "{} differences, first ones:\n{}",
+        d.len(),
+        d[..d.len().min(40)].join("\n")
+    );
 }
 
 pub fn snapshot() -> (Vec<qbl::Row>, Snapshot) {
@@ -145,7 +160,20 @@ pub fn record(I: &Instance, deep: bool, fkb_cap: usize, rec: &Value) -> Value {
 }
 
 pub fn instance(r: &Value) -> Instance {
-    let s = |v: &Value| v.as_array().unwrap().iter().map(|x| x.as_str().unwrap().to_string()).collect::<Vec<_>>();
+    let s = |v: &Value| {
+        v.as_array()
+            .unwrap()
+            .iter()
+            .map(|x| x.as_str().unwrap().to_string())
+            .collect::<Vec<_>>()
+    };
     let ss = |v: &Value| v.as_array().unwrap().iter().map(s).collect::<Vec<_>>();
-    Instance::new(s(&r["V"]), s(&r["P"]), ss(&r["E"]), r["k"].as_i64().unwrap(), ss(&r["F"])).unwrap()
+    Instance::new(
+        s(&r["V"]),
+        s(&r["P"]),
+        ss(&r["E"]),
+        r["k"].as_i64().unwrap(),
+        ss(&r["F"]),
+    )
+    .unwrap()
 }

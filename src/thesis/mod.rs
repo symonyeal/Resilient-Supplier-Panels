@@ -54,12 +54,22 @@ impl<const W: usize> Mbf<W> {
 
     /// φ_{x,1}: the terms without x.
     pub fn phi1(&self, x: usize) -> Self {
-        Mbf::new(self.n, self.edges.iter().filter(|t| !t.has(x)).copied().collect())
+        Mbf::new(
+            self.n,
+            self.edges.iter().filter(|t| !t.has(x)).copied().collect(),
+        )
     }
 
     /// φ_{x,0}: the terms with x, x deleted; a term {x} becomes the empty term and is kept.
     pub fn phi0(&self, x: usize) -> Self {
-        Mbf::new(self.n, self.edges.iter().filter(|t| t.has(x)).map(|t| t.without(x)).collect())
+        Mbf::new(
+            self.n,
+            self.edges
+                .iter()
+                .filter(|t| t.has(x))
+                .map(|t| t.without(x))
+                .collect(),
+        )
     }
 
     /// The variables of c set FALSE (A_c_x): a CNF loses them from every clause, a DNF loses
@@ -85,7 +95,10 @@ impl<const W: usize> Mbf<W> {
 
     /// The minimal terms (fka `irredundant(...).reduced`).
     pub fn irredundant(&self) -> Self {
-        Mbf { n: self.n, edges: minimal(self.edges.clone()) }
+        Mbf {
+            n: self.n,
+            edges: minimal(self.edges.clone()),
+        }
     }
 }
 

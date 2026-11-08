@@ -11,7 +11,7 @@ use crate::audit::{self, Matrix, Snapshot};
 use crate::bench;
 use crate::catalog::CLASSES;
 use crate::certify;
-use crate::json::{json, Value};
+use crate::json::{Value, json};
 use crate::qbl::{self, Supplier};
 
 /// Identity key of a supplier: (name, billing address, ZIP5), as `qbl::records` forms it.
@@ -23,7 +23,8 @@ pub fn key(s: &Supplier) -> Key {
 
 /// Precise product -> its suppliers' keys (strict variant).
 fn supply(s: &Snapshot) -> BTreeMap<String, BTreeSet<Key>> {
-    audit::matrix(s, crate::catalog::Variant::Strict).into_iter()
+    audit::matrix(s, crate::catalog::Variant::Strict)
+        .into_iter()
         .filter(|(_, (c, _))| CLASSES.contains(&c.as_str()))
         .map(|(p, (_, E))| (p, E.iter().map(|v| key(&s.S[v])).collect()))
         .collect()
@@ -43,7 +44,8 @@ fn split<T: Ord + Clone>(a: &BTreeSet<T>, b: &BTreeSet<T>) -> Value {
 pub fn step(a: &Snapshot, b: &Snapshot) -> Value {
     let (Sa, Sb) = (supply(a), supply(b));
     let ids = |s: &Snapshot| -> BTreeSet<Key> { s.S.values().map(key).collect() };
-    let names = |S: &BTreeMap<String, BTreeSet<Key>>| -> BTreeSet<String> { S.keys().cloned().collect() };
+    let names =
+        |S: &BTreeMap<String, BTreeSet<Key>>| -> BTreeSet<String> { S.keys().cloned().collect() };
     let single = |S: &BTreeMap<String, BTreeSet<Key>>| S.values().filter(|E| E.len() == 1).count();
     let (mut gained, mut lost, mut added, mut removed) = (Vec::new(), Vec::new(), 0, 0);
     for (p, Ea) in &Sa {
@@ -75,7 +77,11 @@ pub fn status(M: &Matrix, P: &[String], k: usize) -> &'static str {
 
 /// Primary baskets (uniform ∪ overlap) of a seed on a matrix.
 fn primary(M: &Matrix, seed: u64) -> Vec<Vec<String>> {
-    bench::baskets(M, seed).into_iter().filter(|b| b.1 != "scarce").map(|b| b.3).collect()
+    bench::baskets(M, seed)
+        .into_iter()
+        .filter(|b| b.1 != "scarce")
+        .map(|b| b.3)
+        .collect()
 }
 
 /// The snapshot series: per snapshot its size and the k = 1 status of (a) the primary baskets
@@ -84,29 +90,44 @@ fn primary(M: &Matrix, seed: u64) -> Vec<Vec<String>> {
 ///
 /// INPUT  W .... [(name, date, snapshot)] in date order
 pub fn series(W: &[(String, String, Snapshot)], seed: u64) -> Value {
-    let M: Vec<Matrix> = W.iter().map(|w| audit::matrix(&w.2, crate::catalog::Variant::Strict)).collect();
+    let M: Vec<Matrix> = W
+        .iter()
+        .map(|w| audit::matrix(&w.2, crate::catalog::Variant::Strict))
+        .collect();
     let fixed = primary(M.last().expect("a snapshot"), seed);
     let tally = |m: &Matrix, B: &[Vec<String>]| {
         let s: Vec<&str> = B.iter().map(|P| status(m, P, 1)).collect();
         json!({"baskets": B.len(), "absent": s.iter().filter(|x| **x == "absent").count(),
                "feasible": s.iter().filter(|x| **x == "feasible").count()})
     };
-    let snaps: Vec<Value> = W.iter().zip(&M).map(|((name, date, s), m)| {
-        let precise = m.values().filter(|(c, _)| CLASSES.contains(&c.as_str()));
-        json!({"name": name, "date": date, "suppliers": s.S.len(),
+    let snaps: Vec<Value> = W
+        .iter()
+        .zip(&M)
+        .map(|((name, date, s), m)| {
+            let precise = m.values().filter(|(c, _)| CLASSES.contains(&c.as_str()));
+            json!({"name": name, "date": date, "suppliers": s.S.len(),
                "precise_products": precise.clone().count(),
                "single": precise.filter(|(_, E)| E.len() == 1).count(),
                "campaign_baskets": tally(m, &fixed), "own_baskets": tally(m, &primary(m, seed))})
-    }).collect();
-    let changed: Vec<Value> = fixed.iter().filter_map(|P| {
-        let s: Vec<&str> = M.iter().map(|m| status(m, P, 1)).collect();
-        s.windows(2).any(|w| w[0] != w[1]).then(|| json!({"P": P, "status": s}))
-    }).collect();
-    let steps: Vec<Value> = W.windows(2).map(|w| {
-        let mut d = step(&w[0].2, &w[1].2);
-        d["from"] = json!(w[0].0);
-        d["to"] = json!(w[1].0);
-        d
-    }).collect();
+        })
+        .collect();
+    let changed: Vec<Value> = fixed
+        .iter()
+        .filter_map(|P| {
+            let s: Vec<&str> = M.iter().map(|m| status(m, P, 1)).collect();
+            s.windows(2)
+                .any(|w| w[0] != w[1])
+                .then(|| json!({"P": P, "status": s}))
+        })
+        .collect();
+    let steps: Vec<Value> = W
+        .windows(2)
+        .map(|w| {
+            let mut d = step(&w[0].2, &w[1].2);
+            d["from"] = json!(w[0].0);
+            d["to"] = json!(w[1].0);
+            d
+        })
+        .collect();
     json!({"seed": seed, "k": 1, "snapshots": snaps, "steps": steps, "campaign_baskets_changed": changed})
 }

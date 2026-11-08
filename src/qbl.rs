@@ -11,8 +11,21 @@ use std::collections::{BTreeMap, HashMap};
 
 use crate::xlsx;
 
-pub const SUFFIX: [&str; 13] = ["inc", "llc", "llp", "lp", "co", "company", "corp", "corporation",
-                                "ltd", "the", "incorporated", "and", "of"];
+pub const SUFFIX: [&str; 13] = [
+    "inc",
+    "llc",
+    "llp",
+    "lp",
+    "co",
+    "company",
+    "corp",
+    "corporation",
+    "ltd",
+    "the",
+    "incorporated",
+    "and",
+    "of",
+];
 pub const STALE_DAYS: i64 = 90;
 
 /// A data row: header -> text, and its sheet row number.
@@ -31,12 +44,17 @@ impl Row {
 /// Rows of the first sheet keyed by the header row, blank rows dropped.
 pub fn read(workbook: &[u8]) -> Result<Vec<Row>, String> {
     let table = xlsx::sheet(workbook)?;
-    let Some(((_, head), body)) = table.split_first() else { return Ok(Vec::new()) };
-    Ok(body.iter()
+    let Some(((_, head), body)) = table.split_first() else {
+        return Ok(Vec::new());
+    };
+    Ok(body
+        .iter()
         .filter(|(_, cells)| cells.values().any(|x| !strip(x).is_empty()))
         .map(|(n, cells)| Row {
             row: *n,
-            f: head.iter().map(|(c, h)| (h.clone(), cells.get(c).cloned().unwrap_or_default()))
+            f: head
+                .iter()
+                .map(|(c, h)| (h.clone(), cells.get(c).cloned().unwrap_or_default()))
                 .collect(),
         })
         .collect())
@@ -90,15 +108,29 @@ fn zfill(s: &str, w: usize) -> String {
 /// The 5-digit ZIP: the part before '-', zero-padded (Excel stored ZIPs as numbers).
 pub fn zip5(s: &str) -> String {
     let d = strip(s).split('-').next().unwrap_or("");
-    if d.chars().count() <= 5 { zfill(d, 5) } else { zfill(d, 9).chars().take(5).collect() }
+    if d.chars().count() <= 5 {
+        zfill(d, 5)
+    } else {
+        zfill(d, 9).chars().take(5).collect()
+    }
 }
 
 /// Name with punctuation and legal suffixes removed: a review key, never a merge key.
 pub fn core(name: &str) -> String {
-    let s: String = clean(name).chars()
-        .map(|c| if c.is_alphanumeric() || c == '_' || space(c) { c } else { ' ' })
+    let s: String = clean(name)
+        .chars()
+        .map(|c| {
+            if c.is_alphanumeric() || c == '_' || space(c) {
+                c
+            } else {
+                ' '
+            }
+        })
         .collect();
-    words(&s).filter(|w| !SUFFIX.contains(w)).collect::<Vec<_>>().join(" ")
+    words(&s)
+        .filter(|w| !SUFFIX.contains(w))
+        .collect::<Vec<_>>()
+        .join(" ")
 }
 
 #[derive(Clone, Debug)]
@@ -117,7 +149,11 @@ pub struct Supplier {
 pub type Issue = (usize, &'static str, String);
 
 /// (S, Q, issues) of `records`.
-pub type Records = (BTreeMap<String, Supplier>, Vec<(String, String, usize)>, Vec<Issue>);
+pub type Records = (
+    BTreeMap<String, Supplier>,
+    Vec<(String, String, usize)>,
+    Vec<Issue>,
+);
 
 /// Suppliers keyed by identity (name, address, ZIP5), qualifications with source rows.
 ///
@@ -130,13 +166,29 @@ pub fn records(rows: &[Row]) -> Records {
     let mut by_core: HashMap<String, String> = HashMap::new();
     for r in rows {
         let (n, name) = (r.row, clean(r.get("Vendor Name")));
-        let toks: Vec<String> = r.get("Product").split(['\r', '\n']).map(token)
-            .filter(|t| !t.is_empty()).collect();
+        let toks: Vec<String> = r
+            .get("Product")
+            .split(['\r', '\n'])
+            .map(token)
+            .filter(|t| !t.is_empty())
+            .collect();
         if name.is_empty() || toks.is_empty() {
-            issues.push((n, if name.is_empty() { "missing_name" } else { "missing_product" }, String::new()));
+            issues.push((
+                n,
+                if name.is_empty() {
+                    "missing_name"
+                } else {
+                    "missing_product"
+                },
+                String::new(),
+            ));
             continue;
         }
-        let key = (name.clone(), clean(r.get("Billing Address")), zip5(r.get("ZIP Code")));
+        let key = (
+            name.clone(),
+            clean(r.get("Billing Address")),
+            zip5(r.get("ZIP Code")),
+        );
         let sid = if let Some(sid) = by_key.get(&key) {
             if let Some(s) = S.get_mut(sid) {
                 s.rows.push(n);
@@ -151,10 +203,18 @@ pub fn records(rows: &[Row]) -> Records {
                 issues.push((n, "identity_candidate", first.clone()));
             }
             by_core.entry(c).or_insert_with(|| sid.clone());
-            S.insert(sid.clone(), Supplier {
-                name: words(r.get("Vendor Name")).collect::<Vec<_>>().join(" "),
-                address: key.1, city: clean(r.get("City")), state: clean(r.get("State")).to_uppercase(),
-                zip5: key.2, size: clean(r.get("Size")), rows: vec![n] });
+            S.insert(
+                sid.clone(),
+                Supplier {
+                    name: words(r.get("Vendor Name")).collect::<Vec<_>>().join(" "),
+                    address: key.1,
+                    city: clean(r.get("City")),
+                    state: clean(r.get("State")).to_uppercase(),
+                    zip5: key.2,
+                    size: clean(r.get("Size")),
+                    rows: vec![n],
+                },
+            );
             sid
         };
         Q.extend(toks.into_iter().map(|t| (sid.clone(), t, n)));

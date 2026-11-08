@@ -27,8 +27,18 @@ fn snapshot(rows: &[qbl::Row]) -> audit::Snapshot {
 #[test]
 fn entity_groups_close_identity_and_owner_edges_transitively() {
     let pairs: Vec<entities::Pair> = vec![
-        ("r0001".into(), "r0002".into(), "same".into(), "evidence".into()),
-        ("r0002".into(), "r0003".into(), "site".into(), "evidence".into()),
+        (
+            "r0001".into(),
+            "r0002".into(),
+            "same".into(),
+            "evidence".into(),
+        ),
+        (
+            "r0002".into(),
+            "r0003".into(),
+            "site".into(),
+            "evidence".into(),
+        ),
     ];
     let owners = BTreeMap::from([("parent".into(), vec!["r0003".into(), "r0004".into()])]);
 
@@ -49,8 +59,18 @@ fn same_pairs_merge_but_site_pairs_remain_distinct_in_the_identity_variant() {
     )
     .unwrap();
     let pairs: Vec<entities::Pair> = vec![
-        ("r0001".into(), "r0002".into(), "same".into(), "evidence".into()),
-        ("r0002".into(), "r0003".into(), "site".into(), "evidence".into()),
+        (
+            "r0001".into(),
+            "r0002".into(),
+            "same".into(),
+            "evidence".into(),
+        ),
+        (
+            "r0002".into(),
+            "r0003".into(),
+            "site".into(),
+            "evidence".into(),
+        ),
     ];
     let rep: HashMap<&String, &String> = pairs
         .iter()
@@ -78,10 +98,17 @@ fn owner_scenario_has_an_explicit_infeasibility_certificate() {
     let M = audit::matrix(&s, srl::catalog::Variant::Strict);
     let I = entities::with_owners(&M, &["beans pinto can".into()], 0, &owners);
 
-    let (p, failed) = certify::infeasibility(&I).expect("the group scenario removes every supplier");
+    let (p, failed) =
+        certify::infeasibility(&I).expect("the group scenario removes every supplier");
 
     assert_eq!(p, 0);
-    assert_eq!(failed.iter().map(|&v| I.V()[v].as_str()).collect::<Vec<_>>(), ["r0002", "r0003"]);
+    assert_eq!(
+        failed
+            .iter()
+            .map(|&v| I.V()[v].as_str())
+            .collect::<Vec<_>>(),
+        ["r0002", "r0003"]
+    );
 }
 
 #[test]
@@ -110,7 +137,8 @@ fn identity_candidate_without_evidence_is_rejected() {
 fn frozen_default_snapshot_identity_and_owner_catalogs_validate() {
     let rows = qbl::read(&data::bytes("raw/QBL.xlsx").unwrap()).unwrap();
     let s = snapshot(&rows);
-    let identities = entities::identities(&data::text("catalog/identities.csv").unwrap(), &s).unwrap();
+    let identities =
+        entities::identities(&data::text("catalog/identities.csv").unwrap(), &s).unwrap();
     let owners = entities::owners(&data::text("catalog/owners.csv").unwrap(), &s).unwrap();
 
     assert!(!identities.is_empty());

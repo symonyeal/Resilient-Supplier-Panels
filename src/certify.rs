@@ -28,10 +28,16 @@ fn meet(m: &[bool], S: &[usize]) -> usize {
 
 /// T meets E_p minus F for every p and every F in the failure model (MODEL, Thm 2).
 pub fn feasible(I: &Instance, T: &[usize]) -> bool {
-    if T.iter().any(|&v|v>=I.V().len()) || T.windows(2).any(|w|w[0]>=w[1]) {return false;}
+    if T.iter().any(|&v| v >= I.V().len()) || T.windows(2).any(|w| w[0] >= w[1]) {
+        return false;
+    }
     let m = mask(I, T);
     I.E().iter().all(|Ep| meet(&m, Ep) > I.k())
-        && I.E().iter().all(|Ep| I.F().iter().all(|F| Ep.iter().any(|v| m[*v] && !F.contains(v))))
+        && I.E().iter().all(|Ep| {
+            I.F()
+                .iter()
+                .all(|F| Ep.iter().any(|v| m[*v] && !F.contains(v)))
+        })
 }
 
 /// v -> (p, F) with T ∩ (E_p \ F) = {v}, or None when v is removable. The first product in
@@ -51,7 +57,11 @@ pub fn witnesses(I: &Instance, T: &[usize]) -> BTreeMap<usize, Option<Witness>> 
                 break;
             }
             let alone = |F: &Vec<usize>| {
-                let R: Vec<usize> = Ep.iter().copied().filter(|u| m[*u] && !F.contains(u)).collect();
+                let R: Vec<usize> = Ep
+                    .iter()
+                    .copied()
+                    .filter(|u| m[*u] && !F.contains(u))
+                    .collect();
                 R == [v]
             };
             if let Some(F) = I.F().iter().find(|F| alone(F)) {
@@ -92,7 +102,8 @@ pub fn essential(I: &Instance) -> Option<BTreeMap<usize, Witness>> {
     for (p, Ep) in I.E().iter().enumerate() {
         if Ep.len() == I.k().saturating_add(1) {
             for &v in Ep {
-                W.entry(v).or_insert_with(|| (p, Ep.iter().copied().filter(|&u| u != v).collect()));
+                W.entry(v)
+                    .or_insert_with(|| (p, Ep.iter().copied().filter(|&u| u != v).collect()));
             }
         }
         for F in I.F() {
@@ -138,15 +149,22 @@ pub fn complete(I: &Instance, family: &[Vec<usize>]) -> Completeness {
             by_v[v].push(j);
         }
     }
-    let mut s = Search { rows, family, by_v, held: vec![0; family.len()], T: vec![false; I.V().len()],
-                         barred: vec![false; I.V().len()] };
+    let mut s = Search {
+        rows,
+        family,
+        by_v,
+        held: vec![0; family.len()],
+        T: vec![false; I.V().len()],
+        barred: vec![false; I.V().len()],
+    };
     if family.iter().any(|S| S.is_empty()) {
         return Completeness::Complete;
     }
     match s.go() {
         None => Completeness::Complete,
         Some(mut T) => {
-            for v in T.clone() {                         // shrink to a minimal panel
+            for v in T.clone() {
+                // shrink to a minimal panel
                 let U: Vec<usize> = T.iter().copied().filter(|&u| u != v).collect();
                 if feasible(I, &U) {
                     T = U;
@@ -193,7 +211,11 @@ impl Search<'_> {
             if have >= *d {
                 continue;
             }
-            let cand: Vec<usize> = R.iter().copied().filter(|&v| !self.T[v] && !self.barred[v]).collect();
+            let cand: Vec<usize> = R
+                .iter()
+                .copied()
+                .filter(|&v| !self.T[v] && !self.barred[v])
+                .collect();
             if cand.len() < d - have {
                 return None;
             }

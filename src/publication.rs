@@ -204,10 +204,12 @@ mod tests {
     }
     #[test]
     fn one_site_writer_accepts_an_immutable_inventory() {
-        let out=fixture().join("site");let generation=Generation::new(&out,"site").unwrap();
-        assert!(Generation::new(&out,"site").is_err());
-        fs::write(generation.root().join("data.js"),b"accepted").unwrap();generation.project().unwrap();
-        assert_eq!(fs::read(out.join("data.js")).unwrap(),b"accepted");
+        let out = fixture().join("site");
+        let generation = Generation::new(&out, "site").unwrap();
+        assert!(Generation::new(&out, "site").is_err());
+        fs::write(generation.root().join("data.js"), b"accepted").unwrap();
+        generation.project().unwrap();
+        assert_eq!(fs::read(out.join("data.js")).unwrap(), b"accepted");
     }
     #[test]
     fn an_unpublished_failed_producer_keeps_the_previous_generation() {

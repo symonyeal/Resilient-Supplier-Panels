@@ -16,21 +16,29 @@ use crate::catalog::CLASSES;
 use crate::catalog::csv;
 use crate::certify;
 use crate::instance::Instance;
-use crate::json::{json, Value};
+use crate::json::{Value, json};
 
 pub const VERDICTS: [&str; 3] = ["same", "site", "unresolved"];
 
 /// Reject incomplete recipient evidence instead of silently dropping dollars or links.
 pub fn awards(A: &Value, s: &Snapshot) -> Result<(), String> {
-    let links = A["links"].as_object().ok_or("award links must be an object")?;
-    let recipients = A["recipients"].as_object().ok_or("award recipients must be an object")?;
+    let links = A["links"]
+        .as_object()
+        .ok_or("award links must be an object")?;
+    let recipients = A["recipients"]
+        .as_object()
+        .ok_or("award recipients must be an object")?;
     for (v, U) in links {
         if !s.S.contains_key(v) {
             return Err(format!("award link: unknown supplier {v}"));
         }
         for u in U.as_array().ok_or("award links must be lists")? {
             let u = u.as_str().ok_or("award UEI must be a string")?;
-            if recipients.get(u).and_then(|r| r["amount"].as_f64()).is_none_or(|x| !x.is_finite()) {
+            if recipients
+                .get(u)
+                .and_then(|r| r["amount"].as_f64())
+                .is_none_or(|x| !x.is_finite())
+            {
                 return Err(format!("award recipient {u}: missing finite amount"));
             }
         }
@@ -50,25 +58,48 @@ fn table(text: &str, need: &[&str]) -> Result<Vec<HashMap<String, String>>, Stri
     if rows[1..].iter().any(|r| r.len() != head.len()) {
         return Err("catalog row has the wrong number of columns".into());
     }
-    Ok(rows[1..].iter().map(|r| head.iter().cloned().zip(r.iter().cloned()).collect()).collect())
+    Ok(rows[1..]
+        .iter()
+        .map(|r| head.iter().cloned().zip(r.iter().cloned()).collect())
+        .collect())
 }
 
 /// The verdicts, checked against the snapshot: exactly one row per identity candidate.
 pub fn identities(text: &str, s: &Snapshot) -> Result<Vec<Pair>, String> {
     let first: HashMap<usize, &String> = s.S.iter().map(|(sid, x)| (x.rows[0], sid)).collect();
-    let want: BTreeSet<(String, String)> = s.issues.iter().filter(|(_, k, _)| *k == "identity_candidate")
-        .map(|(r, _, d)| (d.clone(), first[r].clone())).collect();
-    let P: Vec<Pair> = table(text, &["first", "candidate", "verdict", "evidence"])?.into_iter()
-        .map(|r| (r["first"].clone(), r["candidate"].clone(), r["verdict"].clone(), r["evidence"].clone())).collect();
+    let want: BTreeSet<(String, String)> = s
+        .issues
+        .iter()
+        .filter(|(_, k, _)| *k == "identity_candidate")
+        .map(|(r, _, d)| (d.clone(), first[r].clone()))
+        .collect();
+    let P: Vec<Pair> = table(text, &["first", "candidate", "verdict", "evidence"])?
+        .into_iter()
+        .map(|r| {
+            (
+                r["first"].clone(),
+                r["candidate"].clone(),
+                r["verdict"].clone(),
+                r["evidence"].clone(),
+            )
+        })
+        .collect();
     if let Some(p) = P.iter().find(|p| !VERDICTS.contains(&p.2.as_str())) {
-        return Err(format!("identities.csv: verdict {:?} for {}/{}", p.2, p.0, p.1));
+        return Err(format!(
+            "identities.csv: verdict {:?} for {}/{}",
+            p.2, p.0, p.1
+        ));
     }
     if P.iter().any(|p| p.3.trim().is_empty()) {
         return Err("identities.csv: missing evidence".into());
     }
     let got: BTreeSet<(String, String)> = P.iter().map(|p| (p.0.clone(), p.1.clone())).collect();
     if got != want || got.len() != P.len() {
-        return Err(format!("identities.csv: {} rows for {} identity candidates, or pairs differ", P.len(), want.len()));
+        return Err(format!(
+            "identities.csv: {} rows for {} identity candidates, or pairs differ",
+            P.len(),
+            want.len()
+        ));
     }
     Ok(P)
 }
@@ -82,7 +113,12 @@ pub fn owners(text: &str, s: &Snapshot) -> Result<BTreeMap<String, Vec<String>>,
         let v = &r["supplier"];
         match s.S.get(v) {
             Some(x) if x.name == r["name"] => {}
-            _ => return Err(format!("owners.csv: {v} is not {:?} in this snapshot", r["name"])),
+            _ => {
+                return Err(format!(
+                    "owners.csv: {v} is not {:?} in this snapshot",
+                    r["name"]
+                ));
+            }
         }
         if r["source"].is_empty() || !seen.insert(v.clone()) {
             return Err(format!("owners.csv: {v} without a source or in two groups"));
@@ -97,29 +133,66 @@ pub fn owners(text: &str, s: &Snapshot) -> Result<BTreeMap<String, Vec<String>>,
 
 /// The instance with each supplier replaced by its representative (identity merge).
 pub fn merge(I: &Instance, rep: &HashMap<&String, &String>) -> Instance {
-    let E: Vec<Vec<String>> = I.E().iter().map(|E| {
-        let s: BTreeSet<String> = E.iter().map(|&v| {
-            let id = &I.V()[v];
-            rep.get(id).map_or(id.clone(), |d| (*d).clone())
-        }).collect();
-        s.into_iter().collect()
-    }).collect();
+    let E: Vec<Vec<String>> = I
+        .E()
+        .iter()
+        .map(|E| {
+            let s: BTreeSet<String> = E
+                .iter()
+                .map(|&v| {
+                    let id = &I.V()[v];
+                    rep.get(id).map_or(id.clone(), |d| (*d).clone())
+                })
+                .collect();
+            s.into_iter().collect()
+        })
+        .collect();
     let V: BTreeSet<String> = E.iter().flatten().cloned().collect();
-    let F: Vec<Vec<String>> = I.F().iter().map(|F| {
-        F.iter().map(|&v| rep.get(&I.V()[v]).map_or(I.V()[v].clone(), |d| (*d).clone()))
-            .filter(|v| V.contains(v)).collect::<BTreeSet<_>>().into_iter().collect()
-    }).collect();
-    Instance::new(V.into_iter().collect(), I.P().clone(), E, I.k() as i64, F).expect("merged instance")
+    let F: Vec<Vec<String>> = I
+        .F()
+        .iter()
+        .map(|F| {
+            F.iter()
+                .map(|&v| {
+                    rep.get(&I.V()[v])
+                        .map_or(I.V()[v].clone(), |d| (*d).clone())
+                })
+                .filter(|v| V.contains(v))
+                .collect::<BTreeSet<_>>()
+                .into_iter()
+                .collect()
+        })
+        .collect();
+    Instance::new(V.into_iter().collect(), I.P().clone(), E, I.k() as i64, F)
+        .expect("merged instance")
 }
 
 /// The basket at level k with every owner group meeting its support as a scenario.
-pub fn with_owners(M: &Matrix, P: &[String], k: usize, G: &BTreeMap<String, Vec<String>>) -> Instance {
+pub fn with_owners(
+    M: &Matrix,
+    P: &[String],
+    k: usize,
+    G: &BTreeMap<String, Vec<String>>,
+) -> Instance {
     let I = audit::basket(M, P, k);
-    let F: Vec<Vec<String>> = G.values()
-        .map(|m| m.iter().filter(|v| I.V().contains(v)).cloned().collect::<Vec<_>>())
-        .filter(|f| !f.is_empty()).collect();
-    Instance::new(I.V().clone(), I.P().clone(), P.iter().map(|p| M[p].1.iter().cloned().collect()).collect(), k as i64, F)
-        .expect("owner scenarios lie in V")
+    let F: Vec<Vec<String>> = G
+        .values()
+        .map(|m| {
+            m.iter()
+                .filter(|v| I.V().contains(v))
+                .cloned()
+                .collect::<Vec<_>>()
+        })
+        .filter(|f| !f.is_empty())
+        .collect();
+    Instance::new(
+        I.V().clone(),
+        I.P().clone(),
+        P.iter().map(|p| M[p].1.iter().cloned().collect()).collect(),
+        k as i64,
+        F,
+    )
+    .expect("owner scenarios lie in V")
 }
 
 /// Entity groups: the components of the owner groups joined with the `same` and `site`
@@ -158,10 +231,16 @@ pub fn groups(pairs: &[Pair], G: &BTreeMap<String, Vec<String>>) -> BTreeMap<Str
         let r = root(&mut up, &v);
         C.entry(r).or_default().push(v);
     }
-    C.into_values().filter(|m| m.len() >= 2).map(|m| {
-        let name = G.iter().find(|(_, g)| g.iter().any(|v| m.contains(v))).map_or_else(|| format!("entity {}", m[0]), |(g, _)| g.clone());
-        (name, m)
-    }).collect()
+    C.into_values()
+        .filter(|m| m.len() >= 2)
+        .map(|m| {
+            let name = G
+                .iter()
+                .find(|(_, g)| g.iter().any(|v| m.contains(v)))
+                .map_or_else(|| format!("entity {}", m[0]), |(g, _)| g.clone());
+            (name, m)
+        })
+        .collect()
 }
 
 /// Identity verdicts against the K7 sensitivity, owner exposure, and award dollars.
@@ -176,12 +255,27 @@ pub fn groups(pairs: &[Pair], G: &BTreeMap<String, Vec<String>>) -> BTreeMap<Str
 ///                        feasible at k = 1, those still feasible when each group may fail,
 ///                        and the groups that break them
 ///         awards ....... suppliers linked to a UEI, their distinct UEIs and award dollars
-pub fn report(s: &Snapshot, pairs: &[Pair], G: &BTreeMap<String, Vec<String>>, A: &Value, n: u64) -> Value {
+pub fn report(
+    s: &Snapshot,
+    pairs: &[Pair],
+    G: &BTreeMap<String, Vec<String>>,
+    A: &Value,
+    n: u64,
+) -> Value {
     let M = audit::matrix(s, crate::catalog::Variant::Strict);
     let all: HashMap<&String, &String> = pairs.iter().map(|p| (&p.1, &p.0)).collect();
-    let same: HashMap<&String, &String> = pairs.iter().filter(|p| p.2 == "same").map(|p| (&p.1, &p.0)).collect();
+    let same: HashMap<&String, &String> = pairs
+        .iter()
+        .filter(|p| p.2 == "same")
+        .map(|p| (&p.1, &p.0))
+        .collect();
     let feasible = |I: &Instance| certify::infeasibility(I).is_none();
-    let primary = |seed| bench::baskets(&M, seed).into_iter().filter(|b| b.1 != "scarce").map(|b| b.3);
+    let primary = |seed| {
+        bench::baskets(&M, seed)
+            .into_iter()
+            .filter(|b| b.1 != "scarce")
+            .map(|b| b.3)
+    };
     let mut flips = json!({"all_candidates": 0, "same_only": 0});
     let mut flipped = Vec::new();
     for P in primary(1) {
@@ -198,14 +292,29 @@ pub fn report(s: &Snapshot, pairs: &[Pair], G: &BTreeMap<String, Vec<String>>, A
             }
         }
     }
-    let verdicts: BTreeMap<&str, usize> = VERDICTS.iter().map(|v| (*v, pairs.iter().filter(|p| p.2 == *v).count())).collect();
+    let verdicts: BTreeMap<&str, usize> = VERDICTS
+        .iter()
+        .map(|v| (*v, pairs.iter().filter(|p| p.2 == *v).count()))
+        .collect();
 
     let links = |v: &String| -> Vec<String> {
-        A["links"][v.as_str()].as_array().map_or(Vec::new(), |u| u.iter().filter_map(|x| x.as_str().map(String::from)).collect())
+        A["links"][v.as_str()].as_array().map_or(Vec::new(), |u| {
+            u.iter()
+                .filter_map(|x| x.as_str().map(String::from))
+                .collect()
+        })
     };
-    let dollars = |U: &BTreeSet<String>| -> f64 { U.iter().filter_map(|u| A["recipients"][u.as_str()]["amount"].as_f64()).sum() };
+    let dollars = |U: &BTreeSet<String>| -> f64 {
+        U.iter()
+            .filter_map(|u| A["recipients"][u.as_str()]["amount"].as_f64())
+            .sum()
+    };
     let E = groups(pairs, G);
-    let inside = |P: &BTreeSet<String>| E.iter().find(|(_, m)| P.len() >= 2 && P.iter().all(|v| m.contains(v))).map(|(g, _)| g);
+    let inside = |P: &BTreeSet<String>| {
+        E.iter()
+            .find(|(_, m)| P.len() >= 2 && P.iter().all(|v| m.contains(v)))
+            .map(|(g, _)| g)
+    };
     let owners: Vec<Value> = E.iter().map(|(g, m)| {
         let held: Vec<&String> = M.iter().filter(|(_, (c, P))| CLASSES.contains(&c.as_str()) && inside(P) == Some(g))
             .map(|(p, _)| p).collect();
@@ -222,7 +331,11 @@ pub fn report(s: &Snapshot, pairs: &[Pair], G: &BTreeMap<String, Vec<String>>, A
             if feasible(&with_owners(&M, &P, 1, &E)) {
                 kept += 1;
             } else {
-                for g in P.iter().filter_map(|p| inside(&M[p].1)).collect::<BTreeSet<_>>() {
+                for g in P
+                    .iter()
+                    .filter_map(|p| inside(&M[p].1))
+                    .collect::<BTreeSet<_>>()
+                {
                     *breaks.entry(g).or_default() += 1;
                 }
             }

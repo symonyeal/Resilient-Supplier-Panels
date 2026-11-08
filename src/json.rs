@@ -1,7 +1,7 @@
 //! JSON text as Python's `json.dumps` writes it (ensure_ascii, float repr), so documents keep
 //! the bytes of the 0.2 Python release; parsing accepts UTF-8 (with or without BOM) and UTF-16.
 
-pub use serde_json::{json, Map, Value};
+pub use serde_json::{Map, Value, json};
 
 #[derive(Clone, Copy)]
 pub enum Style {
@@ -17,10 +17,18 @@ pub fn float(x: f64) -> String {
         return "NaN".into();
     }
     if x.is_infinite() {
-        return if x > 0.0 { "Infinity".into() } else { "-Infinity".into() };
+        return if x > 0.0 {
+            "Infinity".into()
+        } else {
+            "-Infinity".into()
+        };
     }
     if x == 0.0 {
-        return if x.is_sign_negative() { "-0.0".into() } else { "0.0".into() };
+        return if x.is_sign_negative() {
+            "-0.0".into()
+        } else {
+            "0.0".into()
+        };
     }
     let s = format!("{:e}", x.abs());
     let (m, e) = s.split_once('e').unwrap();
@@ -28,7 +36,11 @@ pub fn float(x: f64) -> String {
     let decpt = e.parse::<i32>().unwrap() + 1;
     let n = digits.len() as i32;
     let body = if decpt <= -4 || decpt > 16 {
-        let mant = if n == 1 { digits.clone() } else { format!("{}.{}", &digits[..1], &digits[1..]) };
+        let mant = if n == 1 {
+            digits.clone()
+        } else {
+            format!("{}.{}", &digits[..1], &digits[1..])
+        };
         let ex = decpt - 1;
         format!("{mant}e{}{:02}", if ex < 0 { '-' } else { '+' }, ex.abs())
     } else if decpt <= 0 {
@@ -36,7 +48,11 @@ pub fn float(x: f64) -> String {
     } else if decpt >= n {
         format!("{digits}{}.0", "0".repeat((decpt - n) as usize))
     } else {
-        format!("{}.{}", &digits[..decpt as usize], &digits[decpt as usize..])
+        format!(
+            "{}.{}",
+            &digits[..decpt as usize],
+            &digits[decpt as usize..]
+        )
     };
     if x < 0.0 { format!("-{body}") } else { body }
 }
@@ -123,9 +139,15 @@ pub fn loads(b: &[u8]) -> Result<Value, String> {
     let text = if b.starts_with(&[0xef, 0xbb, 0xbf]) {
         String::from_utf8(b[3..].to_vec()).map_err(|e| e.to_string())?
     } else if b.starts_with(&[0xff, 0xfe]) || (b.len() > 1 && b[1] == 0 && b[0] != 0) {
-        utf16(b.strip_prefix(&[0xff, 0xfe]).unwrap_or(b), u16::from_le_bytes)?
+        utf16(
+            b.strip_prefix(&[0xff, 0xfe]).unwrap_or(b),
+            u16::from_le_bytes,
+        )?
     } else if b.starts_with(&[0xfe, 0xff]) || (b.len() > 1 && b[0] == 0 && b[1] != 0) {
-        utf16(b.strip_prefix(&[0xfe, 0xff]).unwrap_or(b), u16::from_be_bytes)?
+        utf16(
+            b.strip_prefix(&[0xfe, 0xff]).unwrap_or(b),
+            u16::from_be_bytes,
+        )?
     } else {
         String::from_utf8(b.to_vec()).map_err(|e| e.to_string())?
     };
@@ -143,10 +165,18 @@ mod tests {
 
     #[test]
     fn python_float_repr() {
-        for (x, s) in [(0.1, "0.1"), (1.0, "1.0"), (1e-5, "1e-05"), (0.0001, "0.0001"),
-                       (1e16, "1e+16"), (1234567890123456.0, "1234567890123456.0"),
-                       (8.850009180605412e-05, "8.850009180605412e-05"), (-2.5, "-2.5"),
-                       (1.5e300, "1.5e+300"), (123.456, "123.456")] {
+        for (x, s) in [
+            (0.1, "0.1"),
+            (1.0, "1.0"),
+            (1e-5, "1e-05"),
+            (0.0001, "0.0001"),
+            (1e16, "1e+16"),
+            (1234567890123456.0, "1234567890123456.0"),
+            (8.850009180605412e-05, "8.850009180605412e-05"),
+            (-2.5, "-2.5"),
+            (1.5e300, "1.5e+300"),
+            (123.456, "123.456"),
+        ] {
             assert_eq!(float(x), s);
         }
     }
@@ -154,9 +184,14 @@ mod tests {
     #[test]
     fn python_layout() {
         let v = json!({"a": [1, 2.0, "é"], "b": {}, "c": []});
-        assert_eq!(dumps(&v, Style::Indent(1)),
-                   "{\n \"a\": [\n  1,\n  2.0,\n  \"\\u00e9\"\n ],\n \"b\": {},\n \"c\": []\n}");
-        assert_eq!(dumps(&v, Style::Compact), "{\"a\":[1,2.0,\"\\u00e9\"],\"b\":{},\"c\":[]}");
+        assert_eq!(
+            dumps(&v, Style::Indent(1)),
+            "{\n \"a\": [\n  1,\n  2.0,\n  \"\\u00e9\"\n ],\n \"b\": {},\n \"c\": []\n}"
+        );
+        assert_eq!(
+            dumps(&v, Style::Compact),
+            "{\"a\":[1,2.0,\"\\u00e9\"],\"b\":{},\"c\":[]}"
+        );
     }
 
     #[test]

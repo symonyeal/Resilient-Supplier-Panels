@@ -23,6 +23,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: rustup update stable && rustup default stable
       # The frozen snapshot is versioned, so the real-data tests run here without network.
+      - run: cargo fmt --check
       - run: cargo clippy --release --locked --all-targets -- -D warnings
       - run: cargo test --release --locked
       # The binary carries its data: exercise it outside the checkout.

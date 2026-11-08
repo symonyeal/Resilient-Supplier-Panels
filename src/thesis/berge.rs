@@ -13,17 +13,20 @@ use crate::run::{Clock, Stop};
 
 /// Tr(H) in canonical order, or the reason the fold stopped: the clock, or a working set
 /// above `cap` sets.
-pub fn transversal<const W: usize>(H: &Mbf<W>, clock: &Clock, cap: usize)
-                                   -> Result<Vec<Bits<W>>, Stop> {
+pub fn transversal<const W: usize>(
+    H: &Mbf<W>,
+    clock: &Clock,
+    cap: usize,
+) -> Result<Vec<Bits<W>>, Stop> {
     let mut order = H.edges.clone();
-    order.sort_by_key(|t| t.len());                      // stable: canonical within a size
+    order.sort_by_key(|t| t.len()); // stable: canonical within a size
     let mut Tr: Vec<Bits<W>> = vec![Bits::EMPTY];
     for t in &order {
         if t.is_empty() {
             return Ok(Vec::new());
         }
         let (K, rest): (Vec<_>, Vec<_>) = Tr.into_iter().partition(|s| s.meets(t));
-        let mut by_v: Vec<Vec<usize>> = vec![Vec::new(); H.n];   // v -> kept sets holding v
+        let mut by_v: Vec<Vec<usize>> = vec![Vec::new(); H.n]; // v -> kept sets holding v
         for (i, k) in K.iter().enumerate() {
             for v in k.and(t).iter() {
                 by_v[v].push(i);
@@ -61,14 +64,25 @@ mod tests {
     #[test]
     fn degenerate_conventions() {
         let c = Clock::unlimited();
-        assert_eq!(transversal(&h(2, &[]), &c, usize::MAX).unwrap(), vec![Bits::EMPTY]);
-        assert!(transversal(&h(2, &[&[]]), &c, usize::MAX).unwrap().is_empty());
+        assert_eq!(
+            transversal(&h(2, &[]), &c, usize::MAX).unwrap(),
+            vec![Bits::EMPTY]
+        );
+        assert!(
+            transversal(&h(2, &[&[]]), &c, usize::MAX)
+                .unwrap()
+                .is_empty()
+        );
     }
 
     #[test]
     fn path() {
         // ab, bc, cd -> ac, bc, bd
-        let T = transversal(&h(4, &[&[0, 1], &[1, 2], &[2, 3]]), &Clock::unlimited(), usize::MAX);
+        let T = transversal(
+            &h(4, &[&[0, 1], &[1, 2], &[2, 3]]),
+            &Clock::unlimited(),
+            usize::MAX,
+        );
         let T: Vec<Vec<usize>> = T.unwrap().iter().map(|t| t.to_vec()).collect();
         assert_eq!(T, vec![vec![0, 2], vec![1, 2], vec![1, 3]]);
     }

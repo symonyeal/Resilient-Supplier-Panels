@@ -29,7 +29,13 @@ impl<const W: usize> Bits<W> {
         let mut b = Self::EMPTY;
         for (j, w) in b.0.iter_mut().enumerate() {
             let lo = 64 * j;
-            *w = if n >= lo + 64 { !0 } else if n > lo { (1u64 << (n - lo)) - 1 } else { 0 };
+            *w = if n >= lo + 64 {
+                !0
+            } else if n > lo {
+                (1u64 << (n - lo)) - 1
+            } else {
+                0
+            };
         }
         b
     }
@@ -116,15 +122,22 @@ impl<const W: usize> Bits<W> {
 
     /// |self ∩ o|.
     pub fn meet_len(&self, o: &Self) -> usize {
-        (0..W).map(|j| (self.0[j] & o.0[j]).count_ones() as usize).sum()
+        (0..W)
+            .map(|j| (self.0[j] & o.0[j]).count_ones() as usize)
+            .sum()
     }
 
     pub fn lowest(&self) -> Option<usize> {
-        (0..W).find(|&j| self.0[j] != 0).map(|j| 64 * j + self.0[j].trailing_zeros() as usize)
+        (0..W)
+            .find(|&j| self.0[j] != 0)
+            .map(|j| 64 * j + self.0[j].trailing_zeros() as usize)
     }
 
     pub fn highest(&self) -> Option<usize> {
-        (0..W).rev().find(|&j| self.0[j] != 0).map(|j| 64 * j + 63 - self.0[j].leading_zeros() as usize)
+        (0..W)
+            .rev()
+            .find(|&j| self.0[j] != 0)
+            .map(|j| 64 * j + 63 - self.0[j].leading_zeros() as usize)
     }
 
     /// Members in ascending order (fka `verts`).
@@ -140,8 +153,14 @@ impl<const W: usize> Bits<W> {
     /// (`Hypergraph.from_bitsets` sorts by `verts`). With i the least element of a △ b:
     /// the set holding i is smaller iff the other set has an element above i.
     pub fn lex(&self, o: &Self) -> Ordering {
-        let Some(i) = self.xor(o).lowest() else { return Ordering::Equal };
-        let (a_has, other) = if self.has(i) { (true, o) } else { (false, self) };
+        let Some(i) = self.xor(o).lowest() else {
+            return Ordering::Equal;
+        };
+        let (a_has, other) = if self.has(i) {
+            (true, o)
+        } else {
+            (false, self)
+        };
         let above = other.highest().is_some_and(|h| h > i);
         match (a_has, above) {
             (true, true) | (false, false) => Ordering::Less,
@@ -227,8 +246,17 @@ mod tests {
 
     #[test]
     fn lex_is_tuple_order() {
-        let sets: Vec<Vec<usize>> = vec![vec![], vec![0], vec![0, 1], vec![0, 5], vec![1], vec![1, 70],
-                                         vec![4, 5], vec![64], vec![64, 65]];
+        let sets: Vec<Vec<usize>> = vec![
+            vec![],
+            vec![0],
+            vec![0, 1],
+            vec![0, 5],
+            vec![1],
+            vec![1, 70],
+            vec![4, 5],
+            vec![64],
+            vec![64, 65],
+        ];
         for x in &sets {
             for y in &sets {
                 assert_eq!(b(x).lex(&b(y)), x.cmp(y), "{x:?} {y:?}");

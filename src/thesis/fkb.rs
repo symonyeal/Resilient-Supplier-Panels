@@ -9,7 +9,7 @@
 //! Dualisation: C ← one greedy clause; while FK-B finds S with C(S) = 1, D(S) = 0, add the
 //! complement of a maximal false point of D above S, a new member of Tr(D).
 
-use super::{berge, Mbf};
+use super::{Mbf, berge};
 use crate::bits::Bits;
 use crate::run::{Clock, Stop};
 
@@ -36,12 +36,30 @@ fn largest<const W: usize>(M: &Mbf<W>) -> Bits<W> {
 fn conditions<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Option<Bits<W>>> {
     let (Cs, Ds) = (C.support(), D.support());
     let V = Cs.or(&Ds);
-    let c = if C.is_empty() { Some(1) } else if C.contains(&Bits::EMPTY) { Some(0) } else { None };
-    let d = if D.is_empty() { Some(0) } else if D.contains(&Bits::EMPTY) { Some(1) } else { None };
+    let c = if C.is_empty() {
+        Some(1)
+    } else if C.contains(&Bits::EMPTY) {
+        Some(0)
+    } else {
+        None
+    };
+    let d = if D.is_empty() {
+        Some(0)
+    } else if D.contains(&Bits::EMPTY) {
+        Some(1)
+    } else {
+        None
+    };
     if c.is_some() || d.is_some() {
         let S = match (c, d) {
             (Some(c), Some(d)) if c == d => return Some(None),
-            (Some(c), Some(_)) => if c == 1 { Bits::EMPTY } else { V },
+            (Some(c), Some(_)) => {
+                if c == 1 {
+                    Bits::EMPTY
+                } else {
+                    V
+                }
+            }
             (Some(1), None) => Bits::EMPTY,
             (Some(_), None) => V,
             (None, Some(0)) => C.edges.iter().fold(Bits::EMPTY, |S, c| S.or(&low(c))),
@@ -60,18 +78,26 @@ fn conditions<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Option<Bits<W>>>
             D.edges.iter().find(|m| m.meets(&xd)).unwrap().minus(&xd)
         } else {
             let xc = Cs.minus(&Ds);
-            Cs.minus(C.edges.iter().find(|c| c.meets(&xc)).unwrap()).or(&xc)
+            Cs.minus(C.edges.iter().find(|c| c.meets(&xc)).unwrap())
+                .or(&xc)
         };
         return Some(Some(S));
     }
     // 3: a term longer than the other side's term count.
     if D.edges.iter().any(|t| t.len() > C.len()) {
         let m = largest(D);
-        return Some(Some(C.edges.iter().fold(Bits::EMPTY, |S, c| S.or(&low(&c.and(&m))))));
+        return Some(Some(
+            C.edges
+                .iter()
+                .fold(Bits::EMPTY, |S, c| S.or(&low(&c.and(&m)))),
+        ));
     }
     if C.edges.iter().any(|t| t.len() > D.len()) {
         let c = largest(C);
-        let T = D.edges.iter().fold(Bits::EMPTY, |T, m| T.or(&low(&m.and(&c))));
+        let T = D
+            .edges
+            .iter()
+            .fold(Bits::EMPTY, |T, m| T.or(&low(&m.and(&c))));
         return Some(Some(V.minus(&T)));
     }
     None
@@ -82,14 +108,21 @@ fn easy<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Bits<W>> {
     let V = C.support().or(&D.support());
     let tr = |M: &Mbf<W>| berge::transversal(M, &Clock::unlimited(), usize::MAX).unwrap();
     if D.len() <= 2 {
-        tr(D).into_iter().map(|t| V.minus(&t)).find(|S| cnf_value(C, S))
+        tr(D)
+            .into_iter()
+            .map(|t| V.minus(&t))
+            .find(|S| cnf_value(C, S))
     } else {
         tr(C).into_iter().find(|s| !dnf_value(D, s))
     }
 }
 
 fn mu(n: usize) -> f64 {
-    if n < 3 { f64::INFINITY } else { (n as f64).ln() / (n as f64).ln().ln() }
+    if n < 3 {
+        f64::INFINITY
+    } else {
+        (n as f64).ln() / (n as f64).ln().ln()
+    }
 }
 
 /// x is at most μ-frequent in A: deg_A(x)/|A| ≤ 1/μ(|A||B|).
@@ -106,20 +139,33 @@ fn split_var<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<usize> {
         o
     };
     let (bc, bd) = (order(C), order(D));
-    (1..=live.len()).find_map(|i| bc[..i].iter().filter(|v| bd[..i].contains(v)).min().copied())
+    (1..=live.len()).find_map(|i| {
+        bc[..i]
+            .iter()
+            .filter(|v| bd[..i].contains(v))
+            .min()
+            .copied()
+    })
 }
 
 /// Decides C = Tr(D). OUTPUT Ok((S, nodes)): S = None for equivalence, else a conflicting
 /// assignment; Err once the clock expires.
-pub fn fk_b<const W: usize>(C: &Mbf<W>, D: &Mbf<W>, clock: &Clock)
-                            -> Result<(Option<Bits<W>>, usize), Stop> {
+pub fn fk_b<const W: usize>(
+    C: &Mbf<W>,
+    D: &Mbf<W>,
+    clock: &Clock,
+) -> Result<(Option<Bits<W>>, usize), Stop> {
     let mut nodes = 0;
     let S = node(C, D, &mut nodes, clock)?;
     Ok((S, nodes))
 }
 
-fn node<const W: usize>(Cin: &Mbf<W>, Din: &Mbf<W>, nodes: &mut usize, clock: &Clock)
-                        -> Result<Option<Bits<W>>, Stop> {
+fn node<const W: usize>(
+    Cin: &Mbf<W>,
+    Din: &Mbf<W>,
+    nodes: &mut usize,
+    clock: &Clock,
+) -> Result<Option<Bits<W>>, Stop> {
     *nodes += 1;
     if clock.expired() {
         return Err(Stop::Timeout);
@@ -144,7 +190,8 @@ fn node<const W: usize>(Cin: &Mbf<W>, Din: &Mbf<W>, nodes: &mut usize, clock: &C
         if let Some(S) = go(a, b, Bits::EMPTY)? {
             return Ok(Some(S));
         }
-        for c in &C0.edges {                             // each clause of C_x0 forced FALSE
+        for c in &C0.edges {
+            // each clause of C_x0 forced FALSE
             let (a, b) = f(&C1, c, &D0);
             if let Some(S) = go(a, b, bit)? {
                 return Ok(Some(S));
@@ -155,7 +202,8 @@ fn node<const W: usize>(Cin: &Mbf<W>, Din: &Mbf<W>, nodes: &mut usize, clock: &C
         if let Some(S) = go(a, b, bit)? {
             return Ok(Some(S));
         }
-        for m in &D0.edges {                             // each monomial of D_x0 forced TRUE
+        for m in &D0.edges {
+            // each monomial of D_x0 forced TRUE
             let (a, b) = t(&C0, m, &D1);
             if let Some(S) = go(a, b, *m)? {
                 return Ok(Some(S));
@@ -186,7 +234,9 @@ fn greedy_cover<const W: usize>(D: &Mbf<W>, allowed: &Bits<W>) -> Option<Bits<W>
                 count[v] += 1;
             }
         }
-        let best = (0..D.n).filter(|&v| count[v] > 0).max_by_key(|&v| (count[v], std::cmp::Reverse(v)))?;
+        let best = (0..D.n)
+            .filter(|&v| count[v] > 0)
+            .max_by_key(|&v| (count[v], std::cmp::Reverse(v)))?;
         picked.insert(best);
         left.retain(|m| !m.has(best));
     }
@@ -213,8 +263,11 @@ fn new_clause<const W: usize>(D: &Mbf<W>, S: &Bits<W>) -> Bits<W> {
 
 /// Tr(D) streamed as found: one greedy clause, then one clause per FK-B pass. `emit` returns
 /// false to stop. OUTPUT the FK-B node count of each pass, or the stop reason.
-pub fn dualise<const W: usize>(D: &Mbf<W>, clock: &Clock,
-                               emit: &mut dyn FnMut(Bits<W>) -> bool) -> Result<Vec<usize>, Stop> {
+pub fn dualise<const W: usize>(
+    D: &Mbf<W>,
+    clock: &Clock,
+    emit: &mut dyn FnMut(Bits<W>) -> bool,
+) -> Result<Vec<usize>, Stop> {
     let D = D.irredundant();
     if D.is_empty() {
         emit(Bits::EMPTY);
@@ -233,7 +286,10 @@ pub fn dualise<const W: usize>(D: &Mbf<W>, clock: &Clock,
         let (S, n) = fk_b(&C, &D, clock)?;
         nodes.push(n);
         let Some(S) = S else { return Ok(nodes) };
-        assert!(cnf_value(&C, &S) && !dnf_value(&D, &S), "expected C(S) = 1, D(S) = 0");
+        assert!(
+            cnf_value(&C, &S) && !dnf_value(&D, &S),
+            "expected C(S) = 1, D(S) = 0"
+        );
         let c = new_clause(&D, &S);
         assert!(!C.contains(&c), "dualisation repeated a clause");
         C = Mbf::new(C.n, C.edges.iter().copied().chain([c]).collect());

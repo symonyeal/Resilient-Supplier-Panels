@@ -3,23 +3,47 @@
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 
-use crate::audit::{self, round, Matrix};
-use crate::bench::{self, essential_json, infeasibility_json, LIMITS};
+use crate::audit::{self, Matrix, round};
+use crate::bench::{self, LIMITS, essential_json, infeasibility_json};
 use crate::certify::{self, Completeness};
 use crate::contracts;
 use crate::instance::Instance;
-use crate::json::{json, Map, Value};
-use crate::report::{median, Num};
+use crate::json::{Map, Value, json};
+use crate::report::{Num, median};
 use crate::run::Clock;
 use crate::solve::{self, Minimum};
 
 pub const CASES: [(&str, &str, &str, [&str; 3]); 3] = [
-    ("canned", "Three canned products", "Many alternatives, one precise coverage question.",
-     ["beans pinto can", "beans vegetarian can", "tomato sauce can"]),
-    ("poultry", "Three poultry products", "Overlapping qualifications permit a compact panel.",
-     ["chicken leg qtr frz bag-4/10 lb", "chicken oven roasted frz 8 pc ctn-30 lb", "chicken small chilled-bulk"]),
-    ("scarce", "A scarce-product basket", "A single-source product blocks backup coverage.",
-     ["lentils dry bag", "pears halves ex lt can", "sweet potato fresh ctn 40"]),
+    (
+        "canned",
+        "Three canned products",
+        "Many alternatives, one precise coverage question.",
+        [
+            "beans pinto can",
+            "beans vegetarian can",
+            "tomato sauce can",
+        ],
+    ),
+    (
+        "poultry",
+        "Three poultry products",
+        "Overlapping qualifications permit a compact panel.",
+        [
+            "chicken leg qtr frz bag-4/10 lb",
+            "chicken oven roasted frz 8 pc ctn-30 lb",
+            "chicken small chilled-bulk",
+        ],
+    ),
+    (
+        "scarce",
+        "A scarce-product basket",
+        "A single-source product blocks backup coverage.",
+        [
+            "lentils dry bag",
+            "pears halves ex lt can",
+            "sweet potato fresh ctn 40",
+        ],
+    ),
 ];
 
 /// Panels by (size, labels).
@@ -32,7 +56,12 @@ fn sorted(I: &Instance, C: &[Vec<usize>]) -> Vec<Vec<usize>> {
 /// Keep an optimum, representatives by size, then maximise the least symmetric difference to
 /// the panels kept (fewer members, then label order, on ties). An illustrative shortlist,
 /// not a ranking. C is in (size, labels) order.
-pub fn shortlist(I: &Instance, C: &[Vec<usize>], T: Option<&Vec<usize>>, n: usize) -> Vec<Vec<usize>> {
+pub fn shortlist(
+    I: &Instance,
+    C: &[Vec<usize>],
+    T: Option<&Vec<usize>>,
+    n: usize,
+) -> Vec<Vec<usize>> {
     let Some(T) = T else { return Vec::new() };
     let mut out = vec![T.clone()];
     let sizes: std::collections::BTreeSet<usize> = C.iter().map(Vec::len).collect();
@@ -42,12 +71,21 @@ pub fn shortlist(I: &Instance, C: &[Vec<usize>], T: Option<&Vec<usize>>, n: usiz
             out.push(S.clone());
         }
     }
-    let sym = |a: &Vec<usize>, b: &Vec<usize>| a.iter().filter(|v| !b.contains(v)).count() + b.iter().filter(|v| !a.contains(v)).count();
+    let sym = |a: &Vec<usize>, b: &Vec<usize>| {
+        a.iter().filter(|v| !b.contains(v)).count() + b.iter().filter(|v| !a.contains(v)).count()
+    };
     while out.len() < n.min(C.len()) {
-        let key = |S: &Vec<usize>| (out.iter().map(|U| sym(S, U)).min().unwrap(), std::cmp::Reverse(S.len()));
+        let key = |S: &Vec<usize>| {
+            (
+                out.iter().map(|U| sym(S, U)).min().unwrap(),
+                std::cmp::Reverse(S.len()),
+            )
+        };
         let mut best: Option<&Vec<usize>> = None;
         for S in C.iter().filter(|S| !out.contains(S)) {
-            if best.is_none_or(|b| key(S) > key(b) || (key(S) == key(b) && I.labels(S) > I.labels(b))) {
+            if best
+                .is_none_or(|b| key(S) > key(b) || (key(S) == key(b) && I.labels(S) > I.labels(b)))
+            {
                 best = Some(S);
             }
         }
@@ -58,14 +96,38 @@ pub fn shortlist(I: &Instance, C: &[Vec<usize>], T: Option<&Vec<usize>>, n: usiz
 
 /// Product coverage of a fixed panel under one explicit outage, read from E_p.
 pub fn coverage(I: &Instance, T: &[usize], F: &[usize]) -> Value {
-    let E: Vec<Vec<String>> = I.E().iter().map(|Ep| I.labels(&Ep.iter().copied().filter(|v| T.contains(v) && !F.contains(v)).collect::<Vec<_>>())).collect();
-    let uncovered: Vec<&String> = I.P().iter().zip(&E).filter(|(_, e)| e.is_empty()).map(|(p, _)| p).collect();
+    let E: Vec<Vec<String>> = I
+        .E()
+        .iter()
+        .map(|Ep| {
+            I.labels(
+                &Ep.iter()
+                    .copied()
+                    .filter(|v| T.contains(v) && !F.contains(v))
+                    .collect::<Vec<_>>(),
+            )
+        })
+        .collect();
+    let uncovered: Vec<&String> = I
+        .P()
+        .iter()
+        .zip(&E)
+        .filter(|(_, e)| e.is_empty())
+        .map(|(p, _)| p)
+        .collect();
     json!({"suppliers": E, "uncovered": uncovered, "covered": E.iter().all(|e| !e.is_empty())})
 }
 
 fn witnesses(I: &Instance, S: &[usize]) -> Value {
-    let W: Map<String, Value> = certify::witnesses(I, S).iter()
-        .map(|(v, w)| (I.V()[*v].clone(), w.as_ref().map_or(Value::Null, |w| bench::witness(I, w)))).collect();
+    let W: Map<String, Value> = certify::witnesses(I, S)
+        .iter()
+        .map(|(v, w)| {
+            (
+                I.V()[*v].clone(),
+                w.as_ref().map_or(Value::Null, |w| bench::witness(I, w)),
+            )
+        })
+        .collect();
     Value::Object(W)
 }
 
@@ -73,7 +135,10 @@ fn witnesses(I: &Instance, S: &[usize]) -> Value {
 pub fn analyse(I: &Instance) -> Result<Value, String> {
     let (C, run) = bench::run("berge", I, 10.0, 10_000, &LIMITS);
     if run["status"] != "complete" || run["count"].as_u64() != Some(C.len() as u64) {
-        return Err(format!("public case was not fully stored: {}", run["status"]));
+        return Err(format!(
+            "public case was not fully stored: {}",
+            run["status"]
+        ));
     }
     if !C.iter().all(|T| certify::minimal(I, T)) {
         return Err("public case contains an uncertified panel".into());
@@ -85,31 +150,49 @@ pub fn analyse(I: &Instance) -> Result<Value, String> {
         return Err("public case failed independent exhaustion or optimum check".into());
     }
     if let Minimum::Optimal(T) = &m
-        && (!certify::minimal(I, T) || T.len() != C[0].len()) {
-            return Err("public case minimum disagrees with its certified family".into());
+        && (!certify::minimal(I, T) || T.len() != C[0].len())
+    {
+        return Err("public case minimum disagrees with its certified family".into());
     }
     if let Minimum::Stopped(s) = m {
         return Err(format!("public case minimum unresolved: {}", s.name()));
     }
-    let T = C.first();                                   // the first optimum in label order
+    let T = C.first(); // the first optimum in label order
     let mut sizes: BTreeMap<usize, usize> = BTreeMap::new();
     for S in &C {
         *sizes.entry(S.len()).or_default() += 1;
     }
-    let family = contracts::update(contracts::document(I), Map::from_iter([
-        ("kind".to_string(), json!("enumeration")), ("run".to_string(), run),
-        ("panels".to_string(), json!(C.iter().map(|S| I.labels(S)).collect::<Vec<_>>()))]));
-    Ok(json!({"status": bench::minimum_status(&m), "minimum_size": T.map(Vec::len), "count": C.len(),
+    let family = contracts::update(
+        contracts::document(I),
+        Map::from_iter([
+            ("kind".to_string(), json!("enumeration")),
+            ("run".to_string(), run),
+            (
+                "panels".to_string(),
+                json!(C.iter().map(|S| I.labels(S)).collect::<Vec<_>>()),
+            ),
+        ]),
+    );
+    Ok(
+        json!({"status": bench::minimum_status(&m), "minimum_size": T.map(Vec::len), "count": C.len(),
               "sizes": sizes.iter().map(|(k, v)| (k.to_string(), json!(v))).collect::<Map<_, _>>(),
               "essential": essential_json(I), "infeasibility": infeasibility_json(I),
               "checks": {"all_minimal": true, "exhaustion": "complete", "minimum_matches_family": true},
               "family": family,
               "panels": shortlist(I, &C, T, 6).iter().map(|S| json!({"members": I.labels(S), "witnesses": witnesses(I, S)}))
-                  .collect::<Vec<_>>()}))
+                  .collect::<Vec<_>>()}),
+    )
 }
 
 /// Both uniform failure budgets and fixed-panel outage checks for a real basket.
-pub fn case(M: &Matrix, names: &BTreeMap<String, String>, id: &str, title: &str, note: &str, P: &[&str]) -> Result<Value, String> {
+pub fn case(
+    M: &Matrix,
+    names: &BTreeMap<String, String>,
+    id: &str,
+    title: &str,
+    note: &str,
+    P: &[&str],
+) -> Result<Value, String> {
     let P: Vec<String> = P.iter().map(|p| p.to_string()).collect();
     let I = audit::basket(M, &P, 0);
     let mut modes = Map::new();
@@ -117,50 +200,122 @@ pub fn case(M: &Matrix, names: &BTreeMap<String, String>, id: &str, title: &str,
         modes.insert(k.to_string(), analyse(&I.with_k(k))?);
     }
     let pair: Vec<String> = match modes["1"]["panels"].as_array().unwrap().first() {
-        Some(p) => p["members"].as_array().unwrap().iter().take(2).map(|x| x.as_str().unwrap().into()).collect(),
+        Some(p) => p["members"]
+            .as_array()
+            .unwrap()
+            .iter()
+            .take(2)
+            .map(|x| x.as_str().unwrap().into())
+            .collect(),
         None => I.V().iter().take(2).cloned().collect(),
     };
     let mut outages = vec![json!({"id": "none", "label": "No outage", "failed": []})];
-    outages.extend(I.V().iter().map(|v| json!({"id": v, "label": names[v], "failed": [v]})));
+    outages.extend(
+        I.V()
+            .iter()
+            .map(|v| json!({"id": v, "label": names[v], "failed": [v]})),
+    );
     outages.push(json!({"id": "pair", "label": "Two-supplier stress test", "failed": pair}));
     for m in modes.values_mut() {
         for panel in m["panels"].as_array_mut().unwrap() {
-            let T: Vec<String> = panel["members"].as_array().unwrap().iter().map(|x| x.as_str().unwrap().into()).collect();
+            let T: Vec<String> = panel["members"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|x| x.as_str().unwrap().into())
+                .collect();
             let T = I.index(&T).unwrap();
-            let o: Map<String, Value> = outages.iter().map(|o| {
-                let F: Vec<String> = o["failed"].as_array().unwrap().iter().map(|x| x.as_str().unwrap().into()).collect();
-                (o["id"].as_str().unwrap().to_string(), coverage(&I, &T, &I.index(&F).unwrap()))
-            }).collect();
+            let o: Map<String, Value> = outages
+                .iter()
+                .map(|o| {
+                    let F: Vec<String> = o["failed"]
+                        .as_array()
+                        .unwrap()
+                        .iter()
+                        .map(|x| x.as_str().unwrap().into())
+                        .collect();
+                    (
+                        o["id"].as_str().unwrap().to_string(),
+                        coverage(&I, &T, &I.index(&F).unwrap()),
+                    )
+                })
+                .collect();
             panel["outages"] = Value::Object(o);
         }
     }
-    Ok(json!({"id": id, "title": title, "note": note, "products": I.P(),
+    Ok(
+        json!({"id": id, "title": title, "note": note, "products": I.P(),
               "suppliers": I.V().iter().enumerate().map(|(v, s)| json!({"id": s, "name": names[s],
                   "qualifications": I.E().iter().map(|E| E.contains(&v)).collect::<Vec<_>>()})).collect::<Vec<_>>(),
               "eligible": I.V().len(), "product_sizes": I.E().iter().map(Vec::len).collect::<Vec<_>>(),
-              "outages": outages, "modes": modes}))
+              "outages": outages, "modes": modes}),
+    )
 }
 
 /// Keys of a saved record the explorer shows; 0.2 and 0.3 campaigns name the exhaustion
 /// check differently, and 0.3 adds the class count.
 fn keep(x: &Value) -> &'static [&'static str] {
     if x.get("exhaustion").is_some() || x.get("quotient").is_some() {
-        &["class", "rule", "size", "k", "P", "min", "essential", "infeasibility", "runs", "count_exact",
-          "complete_routes_agree", "exhaustion", "orbits", "sensitivity", "quotient", "quotient_agrees"]
+        &[
+            "class",
+            "rule",
+            "size",
+            "k",
+            "P",
+            "min",
+            "essential",
+            "infeasibility",
+            "runs",
+            "count_exact",
+            "complete_routes_agree",
+            "exhaustion",
+            "orbits",
+            "sensitivity",
+            "quotient",
+            "quotient_agrees",
+        ]
     } else {
-        &["class", "rule", "size", "k", "P", "min", "essential", "infeasibility", "runs", "count_exact",
-          "complete_routes_agree", "milp_exhaustion", "orbits", "sensitivity"]
+        &[
+            "class",
+            "rule",
+            "size",
+            "k",
+            "P",
+            "min",
+            "essential",
+            "infeasibility",
+            "runs",
+            "count_exact",
+            "complete_routes_agree",
+            "milp_exhaustion",
+            "orbits",
+            "sensitivity",
+        ]
     }
 }
 
 /// One saved record, its minimum, essential set and infeasibility witness re-certified from
 /// the matrix. Without a complete run the count is the lower bound max_r count_r.
 pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
-    let P=contracts::labels(&x["P"],"saved basket")?;
-    if P.is_empty()||P.iter().collect::<std::collections::HashSet<_>>().len()!=P.len()||P.iter().any(|p|!M.contains_key(p)){return Err("Invalid saved basket".into());}
-    let k=x["k"].as_u64().filter(|&k|k<=i64::MAX as u64).ok_or("Invalid saved failure budget")? as usize;
-    if !x["class"].as_str().is_some_and(|c|crate::catalog::CLASSES.contains(&c)&&P.iter().all(|p|M[p].0==c))
-        || contracts::count(&x["size"])?!=P.len() as u128 || !matches!(x["rule"].as_str(),Some("uniform"|"overlap"|"scarce")){return Err("Invalid saved basket size, sampling rule or class".into());}
+    let P = contracts::labels(&x["P"], "saved basket")?;
+    if P.is_empty()
+        || P.iter().collect::<std::collections::HashSet<_>>().len() != P.len()
+        || P.iter().any(|p| !M.contains_key(p))
+    {
+        return Err("Invalid saved basket".into());
+    }
+    let k = x["k"]
+        .as_u64()
+        .filter(|&k| k <= i64::MAX as u64)
+        .ok_or("Invalid saved failure budget")? as usize;
+    if !x["class"]
+        .as_str()
+        .is_some_and(|c| crate::catalog::CLASSES.contains(&c) && P.iter().all(|p| M[p].0 == c))
+        || contracts::count(&x["size"])? != P.len() as u128
+        || !matches!(x["rule"].as_str(), Some("uniform" | "overlap" | "scarce"))
+    {
+        return Err("Invalid saved basket size, sampling rule or class".into());
+    }
     let I = audit::basket(M, &P, k);
     let mut sizes: Vec<usize> = I.E().iter().map(Vec::len).collect();
     sizes.sort_unstable();
@@ -170,40 +325,84 @@ pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
     let m = &x["min"];
     let ok = match m["panel"].as_array() {
         Some(T) => {
-            let T=contracts::labels(&json!(T),"saved minimum")?;
-            m["status"] == "optimal" && I.index(&T).is_some_and(|T| certify::minimal(&I, &T)) && json!(T.len()) == m["size"]
+            let T = contracts::labels(&json!(T), "saved minimum")?;
+            m["status"] == "optimal"
+                && I.index(&T).is_some_and(|T| certify::minimal(&I, &T))
+                && json!(T.len()) == m["size"]
         }
         None => m["status"] == "infeasible" && certify::infeasibility(&I).is_some(),
     };
     if !ok {
         return Err(format!("saved minimum fails its matrix certificate: {P:?}"));
     }
-    let optimum=solve::minimum(&I,&[],&Clock::unlimited());
-    let cardinal=match &optimum {Minimum::Optimal(T)=>Some(T.len()),Minimum::Infeasible=>None,Minimum::Stopped(s)=>return Err(format!("Saved minimum admission unresolved: {}",s.name()))};
-    if cardinal!=m["panel"].as_array().map(Vec::len){return Err("saved minimum is not cardinality-optimal".into());}
-    let exact=crate::quotient::count(&I,&Clock::unlimited()).map_err(|s|format!("Saved count admission unresolved: {}",s.name()))?.panels;
-    if !x["count_exact"].is_null()&&contracts::count(&x["count_exact"])?!=exact{return Err("Saved exact count disagrees with independent class count".into());}
-    let runs=x["runs"].as_array().filter(|r|!r.is_empty()).ok_or("Saved runs must be a nonempty list")?;
-    let mut lower=0u128;
-    for run in runs {
-        let status=run["status"].as_str().and_then(crate::run::Status::parse).ok_or("Unknown saved run status")?;
-        let legacy_milp=run["method"]=="milp"; // Archived Python producer; never a current dispatch route.
-        if !legacy_milp&&run["method"].as_str().and_then(crate::run::Method::parse).is_none(){return Err("Unknown saved enumeration method".into());}
-        let count=contracts::count(&run["count"])?;
-        if count>exact||status==crate::run::Status::Complete&&count!=exact{return Err("Saved run count disagrees with independent class count".into());}
-        if let Some(stored)=run.get("stored") && contracts::count(stored)?>count{return Err("Saved stored count exceeds emitted count".into());}
-        lower=lower.max(count);
+    let optimum = solve::minimum(&I, &[], &Clock::unlimited());
+    let cardinal = match &optimum {
+        Minimum::Optimal(T) => Some(T.len()),
+        Minimum::Infeasible => None,
+        Minimum::Stopped(s) => {
+            return Err(format!("Saved minimum admission unresolved: {}", s.name()));
+        }
+    };
+    if cardinal != m["panel"].as_array().map(Vec::len) {
+        return Err("saved minimum is not cardinality-optimal".into());
     }
-    if let Some(q)=x.get("quotient").filter(|q|!q.is_null()) {
-        let status=q["status"].as_str().and_then(crate::run::Status::parse).ok_or("Unknown saved quotient status")?;
-        if status==crate::run::Status::Complete&&contracts::count(&q["count"])?!=exact{return Err("Saved quotient count disagrees with independent class count".into());}
+    let exact = crate::quotient::count(&I, &Clock::unlimited())
+        .map_err(|s| format!("Saved count admission unresolved: {}", s.name()))?
+        .panels;
+    if !x["count_exact"].is_null() && contracts::count(&x["count_exact"])? != exact {
+        return Err("Saved exact count disagrees with independent class count".into());
+    }
+    let runs = x["runs"]
+        .as_array()
+        .filter(|r| !r.is_empty())
+        .ok_or("Saved runs must be a nonempty list")?;
+    let mut lower = 0u128;
+    for run in runs {
+        let status = run["status"]
+            .as_str()
+            .and_then(crate::run::Status::parse)
+            .ok_or("Unknown saved run status")?;
+        let legacy_milp = run["method"] == "milp"; // Archived Python producer; never a current dispatch route.
+        if !legacy_milp
+            && run["method"]
+                .as_str()
+                .and_then(crate::run::Method::parse)
+                .is_none()
+        {
+            return Err("Unknown saved enumeration method".into());
+        }
+        let count = contracts::count(&run["count"])?;
+        if count > exact || status == crate::run::Status::Complete && count != exact {
+            return Err("Saved run count disagrees with independent class count".into());
+        }
+        if let Some(stored) = run.get("stored")
+            && contracts::count(stored)? > count
+        {
+            return Err("Saved stored count exceeds emitted count".into());
+        }
+        lower = lower.max(count);
+    }
+    if let Some(q) = x.get("quotient").filter(|q| !q.is_null()) {
+        let status = q["status"]
+            .as_str()
+            .and_then(crate::run::Status::parse)
+            .ok_or("Unknown saved quotient status")?;
+        if status == crate::run::Status::Complete && contracts::count(&q["count"])? != exact {
+            return Err("Saved quotient count disagrees with independent class count".into());
+        }
     }
     if infeasibility_json(&I) != x["infeasibility"] || essential_json(&I) != x["essential"] {
         return Err(format!("saved essential set or witness disagrees: {P:?}"));
     }
-    let mut out: Map<String, Value> = keep(x).iter().map(|k| (k.to_string(), x.get(*k).cloned().unwrap_or(Value::Null))).collect();
+    let mut out: Map<String, Value> = keep(x)
+        .iter()
+        .map(|k| (k.to_string(), x.get(*k).cloned().unwrap_or(Value::Null)))
+        .collect();
     out.insert("V".into(), json!(I.V().len()));
-    out.insert("E_p".into(), json!(I.E().iter().map(Vec::len).collect::<Vec<_>>()));
+    out.insert(
+        "E_p".into(),
+        json!(I.E().iter().map(Vec::len).collect::<Vec<_>>()),
+    );
     out.insert("count_lower_bound".into(), bench::count_json(lower));
     out.insert("admission".into(),json!({"minimum":"re-solved and certified minimal","exact_count":bench::count_json(exact),"count_method":"signature_classes"}));
     Ok(Value::Object(out))
@@ -242,7 +441,10 @@ pub fn spearman(x: &[f64], y: &[f64]) -> f64 {
 /// Summaries and every record of a saved campaign, retaining its revision and limits. The
 /// records are re-certified, not rerun.
 pub fn evidence(R: &Value, M: &Matrix, names: &BTreeMap<String, String>) -> Result<Value, String> {
-    let X = R["instances"].as_array().filter(|x|!x.is_empty()).ok_or("Campaign instances must be a nonempty list")?;
+    let X = R["instances"]
+        .as_array()
+        .filter(|x| !x.is_empty())
+        .ok_or("Campaign instances must be a nonempty list")?;
     let records: Vec<Value> = X.iter().map(|x| outcome(x, M)).collect::<Result<_, _>>()?;
     let mut used: std::collections::BTreeSet<String> = std::collections::BTreeSet::new();
     for x in &records {
@@ -253,8 +455,13 @@ pub fn evidence(R: &Value, M: &Matrix, names: &BTreeMap<String, String>) -> Resu
             used.extend(e.keys().cloned());
         }
     }
-    let feasible: Vec<&Value> = records.iter().filter(|x| x["min"]["status"] == "optimal").collect();
-    let primary = X.iter().filter(|x| ["uniform", "overlap"].contains(&x["rule"].as_str().unwrap()) && x["k"] == 1);
+    let feasible: Vec<&Value> = records
+        .iter()
+        .filter(|x| x["min"]["status"] == "optimal")
+        .collect();
+    let primary = X
+        .iter()
+        .filter(|x| ["uniform", "overlap"].contains(&x["rule"].as_str().unwrap()) && x["k"] == 1);
     let mut methods: Vec<String> = Vec::new();
     for r in X.iter().flat_map(|x| x["runs"].as_array().unwrap()) {
         let m = r["method"].as_str().unwrap().to_string();
@@ -268,38 +475,62 @@ pub fn evidence(R: &Value, M: &Matrix, names: &BTreeMap<String, String>) -> Resu
         json!({"method": m, "complete": runs.iter().filter(|r| r["status"] == "complete").count(), "runs": runs.len(),
                "first_median_s": median(first.clone()).f(), "first_n": first.len()})
     }).collect();
-    let (vx, cy): (Vec<f64>, Vec<f64>) = feasible.iter().map(|x| (x["V"].as_f64().unwrap(), x["count_lower_bound"].as_f64().unwrap())).unzip();
-    Ok(json!({"instances": X.len(), "resilient": primary.clone().filter(|x| x["min"]["status"] == "optimal").count(),
+    let (vx, cy): (Vec<f64>, Vec<f64>) = feasible
+        .iter()
+        .map(|x| {
+            (
+                x["V"].as_f64().unwrap(),
+                x["count_lower_bound"].as_f64().unwrap(),
+            )
+        })
+        .unzip();
+    Ok(
+        json!({"instances": X.len(), "resilient": primary.clone().filter(|x| x["min"]["status"] == "optimal").count(),
               "primary": primary.count(), "routes": routes, "provenance": R["provenance"],
               "names": used.iter().map(|v| (v.clone(), json!(names[v]))).collect::<Map<_, _>>(),
               "checks": {"matrix_records": records.len(), "partial": records.iter().filter(|x| x["count_exact"].is_null()).count()},
               "spearman_V_count": round(spearman(&vx, &cy), 2), "feasible": feasible.len(),
-              "records": records}))
+              "records": records}),
+    )
 }
 
 /// The distinct supplier names used, as a map.
 pub fn names(s: &audit::Snapshot) -> BTreeMap<String, String> {
-    s.S.iter().map(|(v, x)| (v.clone(), x.name.clone())).collect()
+    s.S.iter()
+        .map(|(v, x)| (v.clone(), x.name.clone()))
+        .collect()
 }
 
 /// Identity candidates of the snapshot.
 pub fn identity_candidates(s: &audit::Snapshot) -> usize {
-    s.issues.iter().filter(|(_, k, _)| *k == "identity_candidate").count()
+    s.issues
+        .iter()
+        .filter(|(_, k, _)| *k == "identity_candidate")
+        .count()
 }
 
 /// Every public case; fails when a certificate does not pass.
 pub fn cases(M: &Matrix, names: &BTreeMap<String, String>) -> Result<Vec<Value>, String> {
-    CASES.iter().map(|(id, t, n, P)| case(M, names, id, t, n, P)).collect()
+    CASES
+        .iter()
+        .map(|(id, t, n, P)| case(M, names, id, t, n, P))
+        .collect()
 }
 
 /// SHA-256 over the crate sources (path, then LF-normalised bytes) in path order.
 pub fn code_sha256(root: &Path) -> Result<String, String> {
-    let mut files: Vec<PathBuf> = ["Cargo.toml", "Cargo.lock", "build.rs"].map(PathBuf::from).to_vec();
+    let mut files: Vec<PathBuf> = ["Cargo.toml", "Cargo.lock", "build.rs"]
+        .map(PathBuf::from)
+        .to_vec();
     let mut stack = vec![PathBuf::from("src")];
     while let Some(d) = stack.pop() {
         for e in std::fs::read_dir(root.join(&d)).map_err(|e| e.to_string())? {
             let p = d.join(e.map_err(|e| e.to_string())?.file_name());
-            if root.join(&p).is_dir() { stack.push(p) } else if p.extension().is_some_and(|x| x == "rs") { files.push(p) }
+            if root.join(&p).is_dir() {
+                stack.push(p)
+            } else if p.extension().is_some_and(|x| x == "rs") {
+                files.push(p)
+            }
         }
     }
     let name = |p: &PathBuf| p.to_string_lossy().replace('\\', "/");
@@ -319,17 +550,35 @@ mod tests {
 
     #[test]
     fn a_minimal_saved_panel_does_not_establish_an_optimum_or_count() {
-        let M:Matrix=[("p".into(),("description".into(),["a".into(),"b".into()].into_iter().collect())),
-            ("q".into(),("description".into(),["b".into(),"c".into()].into_iter().collect()))].into_iter().collect();
-        let I=audit::basket(&M,&["p".into(),"q".into()],0);
-        let record=json!({"P":["p","q"],"k":0,"class":"description","rule":"uniform","size":2,
+        let M: Matrix = [
+            (
+                "p".into(),
+                (
+                    "description".into(),
+                    ["a".into(), "b".into()].into_iter().collect(),
+                ),
+            ),
+            (
+                "q".into(),
+                (
+                    "description".into(),
+                    ["b".into(), "c".into()].into_iter().collect(),
+                ),
+            ),
+        ]
+        .into_iter()
+        .collect();
+        let I = audit::basket(&M, &["p".into(), "q".into()], 0);
+        let record = json!({"P":["p","q"],"k":0,"class":"description","rule":"uniform","size":2,
             "stats":{"V":3,"E_p_sizes":[2,2]},"min":{"status":"optimal","panel":["a","c"],"size":2},
             "infeasibility":infeasibility_json(&I),"essential":essential_json(&I),"count_exact":2,
             "runs":[{"method":"berge","status":"complete","count":2}]});
-        assert!(outcome(&record,&M).unwrap_err().contains("cardinality"));
-        let mut wrong=record;wrong["min"]=json!({"status":"optimal","panel":["b"],"size":1});wrong["count_exact"]=json!(999);
-        assert!(outcome(&wrong,&M).unwrap_err().contains("count"));
-        assert!(outcome(&json!({"P":[123]}),&M).is_err());
+        assert!(outcome(&record, &M).unwrap_err().contains("cardinality"));
+        let mut wrong = record;
+        wrong["min"] = json!({"status":"optimal","panel":["b"],"size":1});
+        wrong["count_exact"] = json!(999);
+        assert!(outcome(&wrong, &M).unwrap_err().contains("count"));
+        assert!(outcome(&json!({"P":[123]}), &M).is_err());
     }
 
     #[test]

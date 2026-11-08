@@ -9,7 +9,7 @@
 
 use std::collections::HashMap;
 
-use super::{berge, Mbf};
+use super::{Mbf, berge};
 use crate::bits::Bits;
 use crate::run::Clock;
 
@@ -32,17 +32,23 @@ pub fn verify_ca<const W: usize>(C: &Mbf<W>, D: &Mbf<W>, S: &Bits<W>) -> bool {
 /// Conditions (i)–(iv) on irredundant sides; true when all hold.
 fn conditions<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> bool {
     if C.support() != D.support() {
-        return false;                                    // (i) equal supports
+        return false; // (i) equal supports
     }
     let big = |M: &Mbf<W>| M.edges.iter().map(|t| t.len()).max();
     if big(C).is_some_and(|s| D.len() < s) || big(D).is_some_and(|s| C.len() < s) {
-        return false;                                    // (ii) |t| ≤ size of the other side
+        return false; // (ii) |t| ≤ size of the other side
     }
     if C.edges.iter().any(|a| D.edges.iter().any(|b| !a.meets(b))) {
-        return false;                                    // (iii) cross pairs intersect
+        return false; // (iii) cross pairs intersect
     }
     // (iv) Σ 2^−|t| ≥ 1, exactly: total_s = ⌊Σ_{j≥s} cnt_j 2^{s−j}⌋ carried down to s = 0.
-    let L = C.edges.iter().chain(&D.edges).map(|t| t.len()).max().unwrap_or(0);
+    let L = C
+        .edges
+        .iter()
+        .chain(&D.edges)
+        .map(|t| t.len())
+        .max()
+        .unwrap_or(0);
     let mut cnt = vec![0u64; L + 1];
     for t in C.edges.iter().chain(&D.edges) {
         cnt[t.len()] += 1;
@@ -55,7 +61,8 @@ fn conditions<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> bool {
 pub fn find_ca<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Bits<W>> {
     let full = Bits::full(C.n.max(D.n));
     let T = berge::transversal(&C.irredundant(), &Clock::unlimited(), usize::MAX).unwrap();
-    T.into_iter().find(|t| D.edges.iter().all(|m| m.meets(&full.minus(t))))
+    T.into_iter()
+        .find(|t| D.edges.iter().all(|m| m.meets(&full.minus(t))))
 }
 
 fn trivial_ca<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Bits<W>> {
@@ -66,7 +73,10 @@ fn trivial_ca<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Bits<W>> {
         }
     }
     if D.len() == 1 {
-        if let Some(w) = D.edges[0].iter().find(|&w| verify_ca(C, D, &full.without(w))) {
+        if let Some(w) = D.edges[0]
+            .iter()
+            .find(|&w| verify_ca(C, D, &full.without(w)))
+        {
             return Some(full.without(w));
         }
     }
@@ -81,7 +91,10 @@ fn trivial_ca<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Bits<W>> {
 
 /// Step 3 and the modified Step 3′; None when the pair is not trivial.
 fn trivial<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<Verdict<W>> {
-    let settle = |dual: bool| Verdict { dual, CA: if dual { None } else { trivial_ca(C, D) } };
+    let settle = |dual: bool| Verdict {
+        dual,
+        CA: if dual { None } else { trivial_ca(C, D) },
+    };
     if C.len() * D.len() <= 1 {
         let dual = if C.is_empty() {
             D.len() == 1 && D.edges[0].is_empty()
@@ -115,14 +128,22 @@ fn split_var<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> Option<usize> {
 }
 
 /// Decides C = Tr(D). OUTPUT (verdict, τ), or None once the tree would exceed `max_nodes`.
-pub fn fk_a<const W: usize>(C: &Mbf<W>, D: &Mbf<W>, max_nodes: usize) -> Option<(Verdict<W>, usize)> {
+pub fn fk_a<const W: usize>(
+    C: &Mbf<W>,
+    D: &Mbf<W>,
+    max_nodes: usize,
+) -> Option<(Verdict<W>, usize)> {
     let mut tau = 0;
     let v = tree(C, D, &mut tau, max_nodes)?;
     Some((v, tau))
 }
 
-fn tree<const W: usize>(Cin: &Mbf<W>, Din: &Mbf<W>, tau: &mut usize, max: usize)
-                        -> Option<Verdict<W>> {
+fn tree<const W: usize>(
+    Cin: &Mbf<W>,
+    Din: &Mbf<W>,
+    tau: &mut usize,
+    max: usize,
+) -> Option<Verdict<W>> {
     if *tau >= max {
         return None;
     }
@@ -138,14 +159,17 @@ fn tree<const W: usize>(Cin: &Mbf<W>, Din: &Mbf<W>, tau: &mut usize, max: usize)
     let (C0, C1, D0, D1) = (C.phi0(x), C.phi1(x), D.phi0(x), D.phi1(x));
     let left = tree(&C1, &D0.vee(&D1), tau, max)?;
     if !left.dual {
-        return Some(no(left.CA.map(|S| S.with(x))));    // S + x still meets every clause
+        return Some(no(left.CA.map(|S| S.with(x)))); // S + x still meets every clause
     }
     let right = tree(&D1, &C0.vee(&C1), tau, max)?;
     if !right.dual {
         // sides swapped: complement within V \ {x} (thesis p.11)
         return Some(no(right.CA.map(|S| Bits::full(C.n).without(x).minus(&S))));
     }
-    Some(Verdict { dual: true, CA: None })
+    Some(Verdict {
+        dual: true,
+        CA: None,
+    })
 }
 
 /// The same recursion memoised on the reduced pair. OUTPUT (dual, δ, depth).
@@ -158,8 +182,13 @@ pub fn fk_a_memo<const W: usize>(C: &Mbf<W>, D: &Mbf<W>) -> (bool, usize, usize)
 
 type Memo<const W: usize> = HashMap<(Mbf<W>, Mbf<W>), Option<bool>>;
 
-fn dag<const W: usize>(Cin: &Mbf<W>, Din: &Mbf<W>, depth: usize, memo: &mut Memo<W>,
-                       deepest: &mut usize) -> bool {
+fn dag<const W: usize>(
+    Cin: &Mbf<W>,
+    Din: &Mbf<W>,
+    depth: usize,
+    memo: &mut Memo<W>,
+    deepest: &mut usize,
+) -> bool {
     let key = (Cin.irredundant(), Din.irredundant());
     if let Some(hit) = memo.get(&key) {
         return hit.expect("cycle in the FK-A subproblem relation");

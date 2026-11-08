@@ -6,16 +6,16 @@
 //! censored, a panicked one as an error.
 
 use std::collections::{BTreeSet, HashSet};
-use std::panic::{catch_unwind, AssertUnwindSafe};
+use std::panic::{AssertUnwindSafe, catch_unwind};
 
-use crate::audit::{self, round, Matrix, Snapshot};
+use crate::audit::{self, Matrix, Snapshot, round};
 use crate::certify::{self, Completeness};
-use crate::instance::{decode, encode, hypergraph, Instance};
-use crate::json::{json, Map, Value};
+use crate::instance::{Instance, decode, encode, hypergraph};
+use crate::json::{Map, Value, json};
 use crate::pyrand::Random;
-use crate::run::{Clock, Stop, Method, Status};
+use crate::run::{Clock, Method, Status, Stop};
 use crate::solve::{self, Minimum};
-use crate::thesis::{berge, fka, fkb, Mbf};
+use crate::thesis::{Mbf, berge, fka, fkb};
 use crate::{mmcs, quotient};
 
 pub const SIZES: [usize; 5] = [3, 5, 8, 12, 20];
@@ -37,9 +37,17 @@ pub struct Limits {
     pub berge_sets: usize,
 }
 
-pub const LIMITS: Limits = Limits { timeout_s: 10.0, cap: 10_000, K: 10, fka_nodes: 200_000,
-                                    fka_max_family: 2_000, exhaustive_support: 18,
-                                    repeat_below_s: 1.0, repeats: 3, berge_sets: 10_000_000 };
+pub const LIMITS: Limits = Limits {
+    timeout_s: 10.0,
+    cap: 10_000,
+    K: 10,
+    fka_nodes: 200_000,
+    fka_max_family: 2_000,
+    exhaustive_support: 18,
+    repeat_below_s: 1.0,
+    repeats: 3,
+    berge_sets: 10_000_000,
+};
 
 impl Limits {
     /// The limits as recorded in a campaign's provenance.
@@ -58,8 +66,16 @@ pub fn baskets(M: &Matrix, seed: u64) -> Vec<Basket> {
     let mut rng = Random::new(seed);
     let mut out = Vec::new();
     for c in CLASSES {
-        let prods: Vec<String> = M.iter().filter(|(_, (cl, _))| cl == c).map(|(p, _)| p.clone()).collect();
-        let starts: Vec<String> = prods.iter().filter(|p| M[*p].1.len() >= 2).cloned().collect();
+        let prods: Vec<String> = M
+            .iter()
+            .filter(|(_, (cl, _))| cl == c)
+            .map(|(p, _)| p.clone())
+            .collect();
+        let starts: Vec<String> = prods
+            .iter()
+            .filter(|p| M[*p].1.len() >= 2)
+            .cloned()
+            .collect();
         for s in SIZES {
             if prods.len() < s {
                 continue;
@@ -71,7 +87,8 @@ pub fn baskets(M: &Matrix, seed: u64) -> Vec<Basket> {
                 continue;
             }
             let mut P = vec![rng.choice(&starts).clone()];
-            while P.len() < s {                          // greedy Jaccard to the union
+            while P.len() < s {
+                // greedy Jaccard to the union
                 let U: BTreeSet<&String> = P.iter().flat_map(|p| &M[p].1).collect();
                 let mut rest: Vec<&String> = prods.iter().filter(|q| !P.contains(q)).collect();
                 rng.shuffle(&mut rest);
@@ -91,7 +108,11 @@ pub fn baskets(M: &Matrix, seed: u64) -> Vec<Basket> {
             P.sort();
             out.push((c, "overlap", s, P));
         }
-        let scarce: Vec<String> = prods.iter().filter(|p| M[*p].1.len() <= 2).cloned().collect();
+        let scarce: Vec<String> = prods
+            .iter()
+            .filter(|p| M[*p].1.len() <= 2)
+            .cloned()
+            .collect();
         if scarce.len() >= 3 {
             let mut P = rng.sample(&scarce, 3);
             P.sort();
@@ -103,9 +124,14 @@ pub fn baskets(M: &Matrix, seed: u64) -> Vec<Basket> {
 
 /// Runs a route to exhaustion or a stop; `emit` returns false to stop the stream. Berge
 /// emits only after its fold has finished.
-pub fn route(method: &str, I: &Instance, clock: &Clock, L: &Limits,
-             emit: &mut dyn FnMut(Vec<usize>) -> bool) -> Result<(), Stop> {
-    let method=Method::parse(method).expect("known enumeration method");
+pub fn route(
+    method: &str,
+    I: &Instance,
+    clock: &Clock,
+    L: &Limits,
+    emit: &mut dyn FnMut(Vec<usize>) -> bool,
+) -> Result<(), Stop> {
+    let method = Method::parse(method).expect("known enumeration method");
     if method == Method::Cuts {
         return solve::cut_stream(I, clock, emit);
     }
@@ -133,8 +159,17 @@ pub fn route(method: &str, I: &Instance, clock: &Clock, L: &Limits,
 ///         r ...... status complete | timeout | cap | memory | error; count = panels
 ///                  received, stored = panels kept. Berge emits only after it has finished,
 ///                  so it is never stopped at the cap: its count is exact, its storage capped.
-pub fn run(method: &str, I: &Instance, timeout: f64, cap: usize, L: &Limits) -> (Vec<Vec<usize>>, Value) {
-    assert!(timeout.is_finite() && timeout > 0.0, "timeout must be finite and positive");
+pub fn run(
+    method: &str,
+    I: &Instance,
+    timeout: f64,
+    cap: usize,
+    L: &Limits,
+) -> (Vec<Vec<usize>>, Value) {
+    assert!(
+        timeout.is_finite() && timeout > 0.0,
+        "timeout must be finite and positive"
+    );
     let (mut panels, mut times, mut n) = (Vec::new(), Vec::new(), 0usize);
     let clock = Clock::limit(timeout);
     let res = catch_unwind(AssertUnwindSafe(|| {
@@ -152,7 +187,8 @@ pub fn run(method: &str, I: &Instance, timeout: f64, cap: usize, L: &Limits) -> 
         Ok(Ok(())) => Status::Complete,
         Ok(Err(s)) => Status::Stopped(*s),
         Err(_) => Status::Error,
-    }.name();
+    }
+    .name();
     let t = |i: usize| times.get(i).map_or(Value::Null, |&x| json!(x));
     let r = json!({"method": method, "status": status, "count": n, "stored": panels.len(),
                    "t_first": t(0), "t_K": if L.K >= 1 { t(L.K - 1) } else { Value::Null },
@@ -172,12 +208,19 @@ pub fn stats(I: &Instance) -> (Value, Vec<Vec<usize>>) {
     let edges = crate::with_width!(n, W => hypergraph::<W>(I).H.len());
     let mut sizes: Vec<usize> = I.E().iter().map(Vec::len).collect();
     sizes.sort_unstable();
-    let mut deg: Vec<usize> = (0..I.V().len()).map(|v| I.E().iter().filter(|E| E.contains(&v)).count()).collect();
+    let mut deg: Vec<usize> = (0..I.V().len())
+        .map(|v| I.E().iter().filter(|E| E.contains(&v)).count())
+        .collect();
     deg.sort_unstable();
     let sig = quotient::classes(I);
     let inc: usize = sizes.iter().sum();
-    let before = I.E().iter().try_fold(0u128,|a,E| a.checked_add(quotient::binom(E.len(),I.k().min(E.len()))?.checked_add(I.F().len() as u128)?));
-    (json!({"P": I.P().len(), "V": I.V().len(), "incidences": inc,
+    let before = I.E().iter().try_fold(0u128, |a, E| {
+        a.checked_add(
+            quotient::binom(E.len(), I.k().min(E.len()))?.checked_add(I.F().len() as u128)?,
+        )
+    });
+    (
+        json!({"P": I.P().len(), "V": I.V().len(), "incidences": inc,
             "density": round(inc as f64 / (I.P().len() * I.V().len()).max(1) as f64, 4),
             "E_p_sizes": sizes,
             "supplier_degree_min_median_max": if deg.is_empty() { json!([]) } else {
@@ -185,7 +228,9 @@ pub fn stats(I: &Instance) -> (Value, Vec<Vec<usize>>) {
             "H_edges_after_reduction": edges,
             "H_edges_before_reduction": before.map(count_json),
             "signature_classes": sig.len(),
-            "largest_class": sig.iter().map(Vec::len).max().unwrap_or(0)}), sig)
+            "largest_class": sig.iter().map(Vec::len).max().unwrap_or(0)}),
+        sig,
+    )
 }
 
 /// |C| up to permutations within signature classes: the number of distinct class multisets.
@@ -196,11 +241,14 @@ pub fn orbits(C: &[Vec<usize>], sig: &[Vec<usize>]) -> usize {
             cls[v] = i;
         }
     }
-    C.iter().map(|T| {
-        let mut m: Vec<usize> = T.iter().map(|&v| cls[v]).collect();
-        m.sort_unstable();
-        m
-    }).collect::<HashSet<_>>().len()
+    C.iter()
+        .map(|T| {
+            let mut m: Vec<usize> = T.iter().map(|&v| cls[v]).collect();
+            m.sort_unstable();
+            m
+        })
+        .collect::<HashSet<_>>()
+        .len()
 }
 
 /// FK-A decides C = Tr(H) (duality certificate); tree nodes against fk_a_memo's distinct
@@ -236,7 +284,10 @@ pub fn essential_json(I: &Instance) -> Value {
     match certify::essential(I) {
         None => Value::Null,
         Some(W) => {
-            let mut m: Vec<(String, Value)> = W.iter().map(|(v, w)| (I.V()[*v].clone(), witness(I, w))).collect();
+            let mut m: Vec<(String, Value)> = W
+                .iter()
+                .map(|(v, w)| (I.V()[*v].clone(), witness(I, w)))
+                .collect();
             m.sort_by(|a, b| a.0.cmp(&b.0));
             Value::Object(m.into_iter().collect())
         }
@@ -267,17 +318,23 @@ pub fn instance_record(I: &Instance, L: &Limits) -> Value {
     let t0 = Clock::unlimited();
     let infeasible = certify::infeasibility(I);
     rec.insert("infeasibility".into(), infeasibility_json(I));
-    let T = match &m { Minimum::Optimal(T) => Some(T.clone()), _ => None };
+    let T = match &m {
+        Minimum::Optimal(T) => Some(T.clone()),
+        _ => None,
+    };
     rec.insert("min".into(), json!({"status": minimum_status(&m), "size": T.as_ref().map(Vec::len),
                                     "panel": T.as_ref().map(|T| lab(I, T)),
                                     "certified_minimal": T.as_ref().is_some_and(|T| certify::minimal(I, T))}));
     let ess = certify::essential(I);
     rec.insert("essential".into(), essential_json(I));
     rec.insert("t_certify_min".into(), json!(t0.elapsed()));
-    rec.insert("solver_agrees_with_witness".into(), match m {
-        Minimum::Stopped(_) => Value::Null,
-        _ => json!(matches!(m, Minimum::Infeasible) == infeasible.is_some()),
-    });
+    rec.insert(
+        "solver_agrees_with_witness".into(),
+        match m {
+            Minimum::Stopped(_) => Value::Null,
+            _ => json!(matches!(m, Minimum::Infeasible) == infeasible.is_some()),
+        },
+    );
     let mut runs = Vec::new();
     let mut full: Vec<HashSet<Vec<usize>>> = Vec::new();
     for method in ROUTES {
@@ -296,27 +353,44 @@ pub fn instance_record(I: &Instance, L: &Limits) -> Value {
         }
         runs.push(r);
     }
-    let exact = runs.iter().find(|r| r["status"] == "complete").map(|r| r["count"].clone());
+    let exact = runs
+        .iter()
+        .find(|r| r["status"] == "complete")
+        .map(|r| r["count"].clone());
     rec.insert("count_exact".into(), exact.unwrap_or(Value::Null));
-    rec.insert("complete_routes_agree".into(),
-               if full.is_empty() { Value::Null } else { json!(full.iter().all(|C| *C == full[0])) });
+    rec.insert(
+        "complete_routes_agree".into(),
+        if full.is_empty() {
+            Value::Null
+        } else {
+            json!(full.iter().all(|C| *C == full[0]))
+        },
+    );
     let t0 = Clock::unlimited();
     let q = quotient::count(I, &Clock::limit(L.timeout_s));
     let tq = t0.elapsed();
-    rec.insert("quotient".into(), match &q {
-        Ok(c) => json!({"status": "complete", "count": count_json(c.panels), "orbits": c.orbits,
-                        "reduced_panels": c.reduced, "t": tq}),
-        Err(s) => json!({"status": s.name(), "t": tq}),
-    });
+    rec.insert(
+        "quotient".into(),
+        match &q {
+            Ok(c) => {
+                json!({"status": "complete", "count": count_json(c.panels), "orbits": c.orbits,
+                        "reduced_panels": c.reduced, "t": tq})
+            }
+            Err(s) => json!({"status": s.name(), "t": tq}),
+        },
+    );
     if let Some(C) = full.first() {
         let mut C: Vec<Vec<usize>> = C.iter().cloned().collect();
         C.sort();
         let t0 = Clock::unlimited();
-        rec.insert("exhaustion".into(), json!(match certify::complete(I, &C) {
-            Completeness::Complete => "complete",
-            Completeness::Missing(_) => "missing",
-            Completeness::Invalid => "invalid",
-        }));
+        rec.insert(
+            "exhaustion".into(),
+            json!(match certify::complete(I, &C) {
+                Completeness::Complete => "complete",
+                Completeness::Missing(_) => "missing",
+                Completeness::Invalid => "invalid",
+            }),
+        );
         rec.insert("t_exhaustion".into(), json!(t0.elapsed()));
         if I.support().len() <= L.exhaustive_support {
             let mut X = solve::exhaustive(I);
@@ -326,13 +400,29 @@ pub fn instance_record(I: &Instance, L: &Limits) -> Value {
         let o = orbits(&C, &sig);
         rec.insert("orbits".into(), json!(o));
         if let Ok(c) = &q {
-            rec.insert("quotient_agrees".into(), json!(c.panels == C.len() as u128 && c.orbits == o));
+            rec.insert(
+                "quotient_agrees".into(),
+                json!(c.panels == C.len() as u128 && c.orbits == o),
+            );
         }
-        rec.insert("thesis".into(), if !C.is_empty() && C.len() <= L.fka_max_family {
-            thesis_check(I, &C, L.fka_nodes) } else { Value::Null });
+        rec.insert(
+            "thesis".into(),
+            if !C.is_empty() && C.len() <= L.fka_max_family {
+                thesis_check(I, &C, L.fka_nodes)
+            } else {
+                Value::Null
+            },
+        );
         if let Some(e) = &ess {
-            let inter: BTreeSet<usize> = I.support().into_iter().filter(|v| C.iter().all(|T| T.contains(v))).collect();
-            rec.insert("essential_matches_family".into(), json!(inter == e.keys().copied().collect()));
+            let inter: BTreeSet<usize> = I
+                .support()
+                .into_iter()
+                .filter(|v| C.iter().all(|T| T.contains(v)))
+                .collect();
+            rec.insert(
+                "essential_matches_family".into(),
+                json!(inter == e.keys().copied().collect()),
+            );
         }
     }
     rec.insert("runs".into(), json!(runs));
@@ -354,15 +444,26 @@ pub fn sens(J: &Instance, L: &Limits) -> Value {
 
 /// Every basket of `seed` at k ∈ {0, 1}; sensitivity variants by one minimum solve each.
 /// `log` receives one line per instance.
-pub fn suite(seed: u64, L: &Limits, s: &Snapshot, provenance: Value, variants: bool,
-             log: &mut dyn FnMut(&str)) -> Value {
+pub fn suite(
+    seed: u64,
+    L: &Limits,
+    s: &Snapshot,
+    provenance: Value,
+    variants: bool,
+    log: &mut dyn FnMut(&str),
+) -> Value {
     let t0 = Clock::unlimited();
     let M = audit::matrix(s, crate::catalog::Variant::Strict);
     let MM = audit::matrix(s, crate::catalog::Variant::Merged);
     let merged = crate::catalog::merged_of(&s.D);
-    let first: std::collections::HashMap<usize, &String> = s.S.iter().map(|(sid, x)| (x.rows[0], sid)).collect();
-    let rep: std::collections::HashMap<&String, &String> = s.issues.iter()
-        .filter(|(_, k, _)| *k == "identity_candidate").map(|(r, _, d)| (first[r], d)).collect();
+    let first: std::collections::HashMap<usize, &String> =
+        s.S.iter().map(|(sid, x)| (x.rows[0], sid)).collect();
+    let rep: std::collections::HashMap<&String, &String> = s
+        .issues
+        .iter()
+        .filter(|(_, k, _)| *k == "identity_candidate")
+        .map(|(r, _, d)| (first[r], d))
+        .collect();
     let t_matrix = t0.elapsed();
     let t_start = Clock::unlimited();
     let mut instances = Vec::new();
@@ -377,13 +478,29 @@ pub fn suite(seed: u64, L: &Limits, s: &Snapshot, provenance: Value, variants: b
                 let Ic = crate::entities::merge(&I, &rep);
                 let Pm: BTreeSet<String> = P.iter().map(|p| merged[p].clone()).collect();
                 let Im = audit::basket(&MM, &Pm.into_iter().collect::<Vec<_>>(), k);
-                rec["sensitivity"] = json!({"merged": sens(&Im, L), "identity_candidates_merged": sens(&Ic, L)});
+                rec["sensitivity"] =
+                    json!({"merged": sens(&Im, L), "identity_candidates_merged": sens(&Ic, L)});
             }
-            let runs: Vec<String> = rec["runs"].as_array().unwrap().iter()
-                .map(|r| format!("{}:{}/{}", r["method"].as_str().unwrap(), r["status"].as_str().unwrap(), r["count"]))
+            let runs: Vec<String> = rec["runs"]
+                .as_array()
+                .unwrap()
+                .iter()
+                .map(|r| {
+                    format!(
+                        "{}:{}/{}",
+                        r["method"].as_str().unwrap(),
+                        r["status"].as_str().unwrap(),
+                        r["count"]
+                    )
+                })
                 .collect();
-            log(&format!("{c:11} {rule:7} s={size:2} k={k} V={:3} min={} {} quotient={}", I.V().len(),
-                         rec["min"]["size"], runs.join(" "), rec["quotient"]["count"]));
+            log(&format!(
+                "{c:11} {rule:7} s={size:2} k={k} V={:3} min={} {} quotient={}",
+                I.V().len(),
+                rec["min"]["size"],
+                runs.join(" "),
+                rec["quotient"]["count"]
+            ));
             instances.push(rec);
         }
     }

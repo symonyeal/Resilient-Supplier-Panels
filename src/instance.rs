@@ -10,7 +10,7 @@
 use std::collections::HashMap;
 
 use crate::bits::Bits;
-use crate::thesis::{minimal, Mbf};
+use crate::thesis::{Mbf, minimal};
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Instance {
@@ -27,43 +27,82 @@ pub struct Instance {
 pub type Scenario = (usize, Vec<usize>);
 
 impl Instance {
-    pub fn V(&self)->&Vec<String> {&self.V}
-    pub fn P(&self)->&Vec<String> {&self.P}
-    pub fn E(&self)->&Vec<Vec<usize>> {&self.E}
-    pub fn F(&self)->&Vec<Vec<usize>> {&self.F}
-    pub fn k(&self)->usize {self.k}
+    pub fn V(&self) -> &Vec<String> {
+        &self.V
+    }
+    pub fn P(&self) -> &Vec<String> {
+        &self.P
+    }
+    pub fn E(&self) -> &Vec<Vec<usize>> {
+        &self.E
+    }
+    pub fn F(&self) -> &Vec<Vec<usize>> {
+        &self.F
+    }
+    pub fn k(&self) -> usize {
+        self.k
+    }
     /// Restrict qualification and failure sets while preserving their common index space.
-    pub fn restrict(&self, keep:&[usize])->Result<Self,String> {
-        if keep.iter().any(|&v|v>=self.V.len()) || keep.iter().collect::<std::collections::HashSet<_>>().len()!=keep.len(){return Err("Invalid support restriction".into());}
-        let sub=|S:&Vec<usize>|S.iter().copied().filter(|v|keep.contains(v)).collect();
-        Ok(Self{V:self.V.clone(),P:self.P.clone(),E:self.E.iter().map(sub).collect(),k:self.k,F:self.F.iter().map(sub).collect()})
+    pub fn restrict(&self, keep: &[usize]) -> Result<Self, String> {
+        if keep.iter().any(|&v| v >= self.V.len())
+            || keep.iter().collect::<std::collections::HashSet<_>>().len() != keep.len()
+        {
+            return Err("Invalid support restriction".into());
+        }
+        let sub = |S: &Vec<usize>| S.iter().copied().filter(|v| keep.contains(v)).collect();
+        Ok(Self {
+            V: self.V.clone(),
+            P: self.P.clone(),
+            E: self.E.iter().map(sub).collect(),
+            k: self.k,
+            F: self.F.iter().map(sub).collect(),
+        })
     }
     /// The instance, or the invariant it violates: distinct labels, one supplier set per
     /// product, qualification and failure sets inside V, k ≥ 0.
-    pub fn new(V: Vec<String>, P: Vec<String>, E: Vec<Vec<String>>, k: i64, F: Vec<Vec<String>>)
-               -> Result<Self, String> {
+    pub fn new(
+        V: Vec<String>,
+        P: Vec<String>,
+        E: Vec<Vec<String>>,
+        k: i64,
+        F: Vec<Vec<String>>,
+    ) -> Result<Self, String> {
         if k < 0 {
             return Err("k must be a nonnegative integer".into());
         }
-        let idx: HashMap<&str, usize> = V.iter().enumerate().map(|(i, v)| (v.as_str(), i)).collect();
+        let idx: HashMap<&str, usize> =
+            V.iter().enumerate().map(|(i, v)| (v.as_str(), i)).collect();
         let mut seen = std::collections::HashSet::new();
-        if V.iter().chain(&P).any(|x|x.trim().is_empty()) || idx.len() != V.len() || !P.iter().all(|p| seen.insert(p)) {
+        if V.iter().chain(&P).any(|x| x.trim().is_empty())
+            || idx.len() != V.len()
+            || !P.iter().all(|p| seen.insert(p))
+        {
             return Err("V and P must have distinct labels".into());
         }
         if P.len() != E.len() {
             return Err("each product must have one supplier set".into());
         }
         let index = |S: &Vec<String>| -> Result<Vec<usize>, String> {
-            let mut s: Vec<usize> = S.iter().map(|v| idx.get(v.as_str()).copied())
+            let mut s: Vec<usize> = S
+                .iter()
+                .map(|v| idx.get(v.as_str()).copied())
                 .collect::<Option<_>>()
                 .ok_or("qualification and failure sets must be subsets of V")?;
             s.sort_unstable();
-            if s.windows(2).any(|w|w[0]==w[1]){return Err("Sets must not repeat suppliers".into());}
+            if s.windows(2).any(|w| w[0] == w[1]) {
+                return Err("Sets must not repeat suppliers".into());
+            }
             Ok(s)
         };
         let E = E.iter().map(index).collect::<Result<_, _>>()?;
         let F = F.iter().map(index).collect::<Result<_, _>>()?;
-        Ok(Instance { V, P, E, k: k as usize, F })
+        Ok(Instance {
+            V,
+            P,
+            E,
+            k: k as usize,
+            F,
+        })
     }
 
     pub fn with_k(&self, k: usize) -> Self {
@@ -90,10 +129,14 @@ impl Instance {
 
     /// Indices of labels; None if some label is not in V.
     pub fn index(&self, S: &[String]) -> Option<Vec<usize>> {
-        let mut s: Vec<usize> = S.iter().map(|x| self.V.iter().position(|v| v == x))
+        let mut s: Vec<usize> = S
+            .iter()
+            .map(|x| self.V.iter().position(|v| v == x))
             .collect::<Option<_>>()?;
         s.sort_unstable();
-        if s.windows(2).any(|w|w[0]==w[1]) {return None;}
+        if s.windows(2).any(|w| w[0] == w[1]) {
+            return None;
+        }
         Some(s)
     }
 
@@ -103,9 +146,19 @@ impl Instance {
     pub fn scenarios(&self, p: usize) -> Vec<Vec<usize>> {
         let mut Ep = self.E[p].clone();
         Ep.sort_by(|a, b| self.V[*a].cmp(&self.V[*b]));
-        let mut out = if Ep.len() <= self.k { vec![Ep.clone()] } else { combinations(&Ep, self.k) };
+        let mut out = if Ep.len() <= self.k {
+            vec![Ep.clone()]
+        } else {
+            combinations(&Ep, self.k)
+        };
         for F in &self.F {
-            out.push(self.E[p].iter().copied().filter(|v| F.contains(v)).collect());
+            out.push(
+                self.E[p]
+                    .iter()
+                    .copied()
+                    .filter(|v| F.contains(v))
+                    .collect(),
+            );
         }
         out
     }
@@ -121,7 +174,9 @@ pub fn combinations<T: Clone>(s: &[T], r: usize) -> Vec<Vec<T>> {
     let mut ix: Vec<usize> = (0..r).collect();
     loop {
         out.push(ix.iter().map(|&i| s[i].clone()).collect());
-        let Some(i) = (0..r).rev().find(|&i| ix[i] != i + n - r) else { return out };
+        let Some(i) = (0..r).rev().find(|&i| ix[i] != i + n - r) else {
+            return out;
+        };
         ix[i] += 1;
         for j in i + 1..r {
             ix[j] = ix[j - 1] + 1;
@@ -154,7 +209,10 @@ pub fn hypergraph<const W: usize>(I: &Instance) -> Scenarios<W> {
             prov.entry(e).or_default().push((p, F));
         }
     }
-    let H = Mbf { n: labels.len(), edges: minimal(prov.keys().copied().collect()) };
+    let H = Mbf {
+        n: labels.len(),
+        edges: minimal(prov.keys().copied().collect()),
+    };
     let prov = H.edges.iter().map(|e| prov[e].clone()).collect();
     Scenarios { H, labels, prov }
 }
@@ -168,7 +226,10 @@ pub fn decode<const W: usize>(labels: &[usize], t: &Bits<W>) -> Vec<usize> {
 
 /// Supplier indices -> bitset over support positions.
 pub fn encode<const W: usize>(labels: &[usize], S: &[usize]) -> Bits<W> {
-    Bits::of(S.iter().map(|v| labels.iter().position(|x| x == v).expect("in the support")))
+    Bits::of(
+        S.iter()
+            .map(|v| labels.iter().position(|x| x == v).expect("in the support")),
+    )
 }
 
 #[cfg(test)]
@@ -177,9 +238,14 @@ pub mod tests {
 
     pub fn inst(V: &str, E: &[&str], k: i64, F: &[&str]) -> Instance {
         let s = |x: &str| x.chars().map(String::from).collect::<Vec<_>>();
-        Instance::new(s(V), (0..E.len()).map(|j| format!("p{j}")).collect(),
-                      E.iter().map(|e| s(e)).collect(), k, F.iter().map(|f| s(f)).collect())
-            .unwrap()
+        Instance::new(
+            s(V),
+            (0..E.len()).map(|j| format!("p{j}")).collect(),
+            E.iter().map(|e| s(e)).collect(),
+            k,
+            F.iter().map(|f| s(f)).collect(),
+        )
+        .unwrap()
     }
 
     #[test]
@@ -187,12 +253,18 @@ pub mod tests {
         let I = inst("abc", &["ab", "ab", "abc"], 0, &[]);
         let S = hypergraph::<1>(&I);
         assert_eq!(S.H.len(), 1);
-        assert_eq!(S.prov[0].iter().map(|x| x.0).collect::<Vec<_>>(), vec![0, 1]);
+        assert_eq!(
+            S.prov[0].iter().map(|x| x.0).collect::<Vec<_>>(),
+            vec![0, 1]
+        );
     }
 
     #[test]
     fn combinations_match_itertools() {
-        assert_eq!(combinations(&[1, 2, 3], 2), vec![vec![1, 2], vec![1, 3], vec![2, 3]]);
+        assert_eq!(
+            combinations(&[1, 2, 3], 2),
+            vec![vec![1, 2], vec![1, 3], vec![2, 3]]
+        );
         assert_eq!(combinations(&[1, 2], 0), vec![Vec::<i32>::new()]);
     }
 
@@ -200,8 +272,14 @@ pub mod tests {
     fn rejects_data_outside_the_model() {
         let s = |x: &str| x.chars().map(String::from).collect::<Vec<_>>();
         let ok = |V: &str, P: Vec<String>, E: &[&str], k, F: &[&str]| {
-            Instance::new(s(V), P, E.iter().map(|e| s(e)).collect(), k,
-                          F.iter().map(|f| s(f)).collect()).is_ok()
+            Instance::new(
+                s(V),
+                P,
+                E.iter().map(|e| s(e)).collect(),
+                k,
+                F.iter().map(|f| s(f)).collect(),
+            )
+            .is_ok()
         };
         let p = vec!["p".to_string()];
         assert!(ok("abc", p.clone(), &["abc"], 0, &[]));
@@ -209,7 +287,13 @@ pub mod tests {
         assert!(!ok("abc", p.clone(), &["d"], 0, &[]));
         assert!(!ok("abc", p.clone(), &["a"], 0, &["d"]));
         assert!(!ok("abc", vec![], &["a"], 0, &[]));
-        assert!(!ok("abc", vec!["p".into(), "p".into()], &["a", "b"], 0, &[]));
+        assert!(!ok(
+            "abc",
+            vec!["p".into(), "p".into()],
+            &["a", "b"],
+            0,
+            &[]
+        ));
         assert!(!ok("abc", p, &["a"], -1, &[]));
     }
 }

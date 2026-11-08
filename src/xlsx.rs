@@ -16,7 +16,8 @@ fn u32le(b: &[u8], i: usize) -> usize {
 
 /// The member `name` of a zip archive, decompressed.
 pub fn member(zip: &[u8], name: &str) -> Result<Vec<u8>, String> {
-    let eocd = (0..zip.len().saturating_sub(21)).rev()
+    let eocd = (0..zip.len().saturating_sub(21))
+        .rev()
         .find(|&i| zip[i..i + 4] == [0x50, 0x4b, 0x05, 0x06])
         .ok_or("not a zip archive")?;
     let (count, mut at) = (u16le(zip, eocd + 10), u32le(zip, eocd + 16));
@@ -25,7 +26,11 @@ pub fn member(zip: &[u8], name: &str) -> Result<Vec<u8>, String> {
             return Err("corrupt zip directory".into());
         }
         let (method, size) = (u16le(zip, at + 10), u32le(zip, at + 20));
-        let (n, x, c) = (u16le(zip, at + 28), u16le(zip, at + 30), u16le(zip, at + 32));
+        let (n, x, c) = (
+            u16le(zip, at + 28),
+            u16le(zip, at + 30),
+            u16le(zip, at + 32),
+        );
         let local = u32le(zip, at + 42);
         if &zip[at + 46..at + 46 + n] == name.as_bytes() {
             let start = local + 30 + u16le(zip, local + 26) + u16le(zip, local + 28);
@@ -44,7 +49,10 @@ pub fn member(zip: &[u8], name: &str) -> Result<Vec<u8>, String> {
 
 /// Concatenated text of every <t> below a node (ElementTree `iter('t')`).
 fn text(n: roxmltree::Node) -> String {
-    n.descendants().filter(|d| d.has_tag_name((NS, "t"))).filter_map(|t| t.text()).collect()
+    n.descendants()
+        .filter(|d| d.has_tag_name((NS, "t")))
+        .filter_map(|t| t.text())
+        .collect()
 }
 
 const NS: &str = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
@@ -53,20 +61,34 @@ const NS: &str = "http://schemas.openxmlformats.org/spreadsheetml/2006/main";
 pub fn sheet(zip: &[u8]) -> Result<Vec<Row>, String> {
     let ss = String::from_utf8(member(zip, "xl/sharedStrings.xml")?).map_err(|e| e.to_string())?;
     let ss = roxmltree::Document::parse(&ss).map_err(|e| e.to_string())?;
-    let shared: Vec<String> = ss.root_element().children().filter(|n| n.has_tag_name((NS, "si")))
-        .map(text).collect();
-    let ws = String::from_utf8(member(zip, "xl/worksheets/sheet1.xml")?).map_err(|e| e.to_string())?;
+    let shared: Vec<String> = ss
+        .root_element()
+        .children()
+        .filter(|n| n.has_tag_name((NS, "si")))
+        .map(text)
+        .collect();
+    let ws =
+        String::from_utf8(member(zip, "xl/worksheets/sheet1.xml")?).map_err(|e| e.to_string())?;
     let ws = roxmltree::Document::parse(&ws).map_err(|e| e.to_string())?;
     let mut rows = Vec::new();
     for r in ws.descendants().filter(|n| n.has_tag_name((NS, "row"))) {
         let mut cells = BTreeMap::new();
         for c in r.children().filter(|n| n.has_tag_name((NS, "c"))) {
             let at = c.attribute("r").ok_or("cell without reference")?;
-            let col: String = at.chars().take_while(|ch| ch.is_ascii_uppercase()).collect();
-            let v = c.children().find(|n| n.has_tag_name((NS, "v"))).map(|v| v.text().unwrap_or(""));
+            let col: String = at
+                .chars()
+                .take_while(|ch| ch.is_ascii_uppercase())
+                .collect();
+            let v = c
+                .children()
+                .find(|n| n.has_tag_name((NS, "v")))
+                .map(|v| v.text().unwrap_or(""));
             let value = match c.attribute("t") {
                 Some("s") => {
-                    let i: usize = v.ok_or("shared string without value")?.parse().map_err(|_| "bad index")?;
+                    let i: usize = v
+                        .ok_or("shared string without value")?
+                        .parse()
+                        .map_err(|_| "bad index")?;
                     Some(shared[i].clone())
                 }
                 Some("inlineStr") => Some(text(c)),
@@ -76,7 +98,13 @@ pub fn sheet(zip: &[u8]) -> Result<Vec<Row>, String> {
                 cells.insert(col, value);
             }
         }
-        rows.push((r.attribute("r").ok_or("row without number")?.parse().map_err(|_| "bad row")?, cells));
+        rows.push((
+            r.attribute("r")
+                .ok_or("row without number")?
+                .parse()
+                .map_err(|_| "bad row")?,
+            cells,
+        ));
     }
     Ok(rows)
 }

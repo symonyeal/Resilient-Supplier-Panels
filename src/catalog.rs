@@ -9,15 +9,27 @@
 //! Strict product = the token itself unless a mapping says otherwise.
 
 use std::collections::{BTreeMap, HashMap};
-pub const CLASSES:[&str;4]=["description","program","naics","material"];
+pub const CLASSES: [&str; 4] = ["description", "program", "naics", "material"];
 
-#[derive(Clone,Copy,Debug,PartialEq,Eq)]
-pub enum Variant { Strict,Merged }
-impl Variant {pub fn parse(s:&str)->Option<Self>{match s {"strict"=>Some(Self::Strict),"merged"=>Some(Self::Merged),_=>None}}}
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Variant {
+    Strict,
+    Merged,
+}
+impl Variant {
+    pub fn parse(s: &str) -> Option<Self> {
+        match s {
+            "strict" => Some(Self::Strict),
+            "merged" => Some(Self::Merged),
+            _ => None,
+        }
+    }
+}
 
-pub const PACK: [&str; 24] = ["can", "cans", "pkg", "ctn", "carton", "bag", "bags", "box", "pouch",
-                              "bulk", "lb", "lbs", "oz", "dozen", "jug", "bottle", "frz", "iqf",
-                              "chilled", "jar", "tote", "drum", "pail", "case"];
+pub const PACK: [&str; 24] = [
+    "can", "cans", "pkg", "ctn", "carton", "bag", "bags", "box", "pouch", "bulk", "lb", "lbs",
+    "oz", "dozen", "jug", "bottle", "frz", "iqf", "chilled", "jar", "tote", "drum", "pail", "case",
+];
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Entry {
@@ -54,12 +66,17 @@ pub fn rule(t: &str) -> (&'static str, Option<String>) {
         }
     }
     let runs = t.split(|x: char| !word(x)).filter(|w| !w.is_empty());
-    if runs.into_iter().any(|w| PACK.contains(&w)) { ("description", None) } else { ("commodity", None) }
+    if runs.into_iter().any(|w| PACK.contains(&w)) {
+        ("description", None)
+    } else {
+        ("commodity", None)
+    }
 }
 
 /// Rows of a CSV file (comma, double-quote quoting, doubled quotes), header first.
 pub fn csv(text: &str) -> Vec<Vec<String>> {
-    let (mut rows, mut row, mut cell, mut quoted, mut any) = (Vec::new(), Vec::new(), String::new(), false, false);
+    let (mut rows, mut row, mut cell, mut quoted, mut any) =
+        (Vec::new(), Vec::new(), String::new(), false, false);
     let mut it = text.chars().peekable();
     while let Some(ch) = it.next() {
         if quoted {
@@ -104,28 +121,55 @@ pub fn csv(text: &str) -> Vec<Vec<String>> {
 }
 
 /// Dictionary entry for every token, from the rules and the override file's text.
-pub fn load<'a>(tokens: impl IntoIterator<Item = &'a String>, mappings: &str) -> BTreeMap<String, Entry> {
+pub fn load<'a>(
+    tokens: impl IntoIterator<Item = &'a String>,
+    mappings: &str,
+) -> BTreeMap<String, Entry> {
     let rows = csv(mappings);
     let head = &rows[0];
-    let col = |name: &str| head.iter().position(|h| h == name).expect("mappings.csv column");
-    let (t, c, s, m, j) = (col("token"), col("class"), col("strict"), col("merged"), col("justification"));
+    let col = |name: &str| {
+        head.iter()
+            .position(|h| h == name)
+            .expect("mappings.csv column")
+    };
+    let (t, c, s, m, j) = (
+        col("token"),
+        col("class"),
+        col("strict"),
+        col("merged"),
+        col("justification"),
+    );
     let over: HashMap<&str, &Vec<String>> = rows[1..].iter().map(|r| (r[t].as_str(), r)).collect();
     let split = |x: &str| x.split('|').map(String::from).collect();
-    tokens.into_iter().map(|tok| {
-        let e = if let Some(r) = over.get(tok.as_str()) {
-            Entry { class: r[c].clone(), strict: split(&r[s]), merged: split(&r[m]),
-                    justification: format!("mapping: {}", r[j]) }
-        } else {
-            match rule(tok) {
-                (_, Some(code)) => Entry { class: "program".into(), strict: vec![tok.clone()],
-                                           justification: format!("rule: programme code {}", code.to_uppercase()),
-                                           merged: vec![code] },
-                (cls, None) => Entry { class: cls.into(), strict: vec![tok.clone()], merged: vec![tok.clone()],
-                                       justification: format!("rule: {cls}") },
-            }
-        };
-        (tok.clone(), e)
-    }).collect()
+    tokens
+        .into_iter()
+        .map(|tok| {
+            let e = if let Some(r) = over.get(tok.as_str()) {
+                Entry {
+                    class: r[c].clone(),
+                    strict: split(&r[s]),
+                    merged: split(&r[m]),
+                    justification: format!("mapping: {}", r[j]),
+                }
+            } else {
+                match rule(tok) {
+                    (_, Some(code)) => Entry {
+                        class: "program".into(),
+                        strict: vec![tok.clone()],
+                        justification: format!("rule: programme code {}", code.to_uppercase()),
+                        merged: vec![code],
+                    },
+                    (cls, None) => Entry {
+                        class: cls.into(),
+                        strict: vec![tok.clone()],
+                        merged: vec![tok.clone()],
+                        justification: format!("rule: {cls}"),
+                    },
+                }
+            };
+            (tok.clone(), e)
+        })
+        .collect()
 }
 
 /// Strict product -> merged product, read off the parallel lists.
@@ -157,7 +201,9 @@ mod tests {
 
     #[test]
     fn csv_quotes() {
-        assert_eq!(csv("a,b\n\"x, y\",\"he said \"\"no\"\"\"\n"),
-                   vec![vec!["a", "b"], vec!["x, y", "he said \"no\""]]);
+        assert_eq!(
+            csv("a,b\n\"x, y\",\"he said \"\"no\"\"\"\n"),
+            vec![vec!["a", "b"], vec!["x, y", "he said \"no\""]]
+        );
     }
 }

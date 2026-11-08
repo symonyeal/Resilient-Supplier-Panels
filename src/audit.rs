@@ -5,7 +5,7 @@ use std::collections::{BTreeMap, BTreeSet, HashMap};
 
 use crate::catalog::{self, Entry};
 use crate::instance::Instance;
-use crate::json::{json, Map, Value};
+use crate::json::{Map, Value, json};
 use crate::qbl::{self, Issue, Row, Supplier};
 
 /// product -> (granularity class, E_p).
@@ -32,8 +32,14 @@ pub fn matrix(s: &Snapshot, variant: catalog::Variant) -> Matrix {
     let mut M: Matrix = BTreeMap::new();
     for (sid, t, _) in &s.Q {
         let e = &s.D[t];
-        for p in match variant {catalog::Variant::Strict=>&e.strict,catalog::Variant::Merged=>&e.merged} {
-            M.entry(p.clone()).or_insert_with(|| (e.class.clone(), BTreeSet::new())).1.insert(sid.clone());
+        for p in match variant {
+            catalog::Variant::Strict => &e.strict,
+            catalog::Variant::Merged => &e.merged,
+        } {
+            M.entry(p.clone())
+                .or_insert_with(|| (e.class.clone(), BTreeSet::new()))
+                .1
+                .insert(sid.clone());
         }
     }
     M
@@ -43,7 +49,8 @@ pub fn matrix(s: &Snapshot, variant: catalog::Variant) -> Matrix {
 pub fn basket(M: &Matrix, P: &[String], k: usize) -> Instance {
     let E: Vec<Vec<String>> = P.iter().map(|p| M[p].1.iter().cloned().collect()).collect();
     let V: BTreeSet<String> = E.iter().flatten().cloned().collect();
-    Instance::new(V.into_iter().collect(), P.to_vec(), E, k as i64, Vec::new()).expect("matrix basket")
+    Instance::new(V.into_iter().collect(), P.to_vec(), E, k as i64, Vec::new())
+        .expect("matrix basket")
 }
 
 fn hist(xs: impl Iterator<Item = usize>, top: usize) -> Value {
@@ -53,7 +60,14 @@ fn hist(xs: impl Iterator<Item = usize>, top: usize) -> Value {
     }
     let mut m = Map::new();
     for (n, c) in h.into_iter().enumerate() {
-        m.insert(if n < top { n.to_string() } else { format!(">={top}") }, json!(c));
+        m.insert(
+            if n < top {
+                n.to_string()
+            } else {
+                format!(">={top}")
+            },
+            json!(c),
+        );
     }
     Value::Object(m)
 }
@@ -85,8 +99,11 @@ pub fn audit(rows: &[Row], s: &Snapshot) -> Value {
     }
     let mut sig: HashMap<Vec<&str>, usize> = HashMap::new();
     for v in s.S.keys() {
-        let ps: Vec<&str> = M.iter().filter(|(_, (c, E))| E.contains(v) && c != "broad")
-            .map(|(p, _)| p.as_str()).collect();
+        let ps: Vec<&str> = M
+            .iter()
+            .filter(|(_, (c, E))| E.contains(v) && c != "broad")
+            .map(|(p, _)| p.as_str())
+            .collect();
         if !ps.is_empty() {
             *sig.entry(ps).or_default() += 1;
         }
@@ -100,9 +117,13 @@ pub fn audit(rows: &[Row], s: &Snapshot) -> Value {
     for (_, t, _) in &s.Q {
         *inc.entry(s.D[t].class.as_str()).or_default() += 1;
     }
-    let precise: usize = ["material", "naics", "program", "description"].iter()
-        .map(|c| inc.get(c).copied().unwrap_or(0)).sum();
-    let spp: Map<String, Value> = by_class.iter().map(|(c, v)| (c.to_string(), hist(v.iter().copied(), 3)))
+    let precise: usize = ["material", "naics", "program", "description"]
+        .iter()
+        .map(|c| inc.get(c).copied().unwrap_or(0))
+        .sum();
+    let spp: Map<String, Value> = by_class
+        .iter()
+        .map(|(c, v)| (c.to_string(), hist(v.iter().copied(), 3)))
         .collect();
     json!({
         "rows": rows.len(),

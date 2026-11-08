@@ -7,7 +7,7 @@
 
 use crate::bits::Bits;
 use crate::certify;
-use crate::instance::{combinations, decode, encode, Instance};
+use crate::instance::{Instance, combinations, decode, encode};
 use crate::run::{Clock, Stop};
 
 /// Rows R x ≥ d over support positions.
@@ -69,7 +69,9 @@ impl<const W: usize> Bnb<'_, W> {
                 break;
             }
         }
-        let mut short: Vec<(Bits<W>, usize)> = self.A.iter()
+        let mut short: Vec<(Bits<W>, usize)> = self
+            .A
+            .iter()
             .filter_map(|(R, d)| {
                 let have = R.meet_len(&inn);
                 (have < *d).then(|| (R.minus(&inn).minus(&out), d - have))
@@ -93,9 +95,15 @@ impl<const W: usize> Bnb<'_, W> {
         if self.best.is_some_and(|b| bound >= b.len()) {
             return;
         }
-        let v = tight.iter().max_by_key(|&v| {
-            (short.iter().filter(|(f, _)| f.has(v)).count(), std::cmp::Reverse(v))
-        }).unwrap();
+        let v = tight
+            .iter()
+            .max_by_key(|&v| {
+                (
+                    short.iter().filter(|(f, _)| f.has(v)).count(),
+                    std::cmp::Reverse(v),
+                )
+            })
+            .unwrap();
         self.go(inn.with(v), out);
         self.go(inn, out.with(v));
     }
@@ -107,7 +115,15 @@ pub enum Minimum {
     Infeasible,
     Stopped(Stop),
 }
-impl Minimum {pub fn status(&self)->&'static str{match self {Self::Optimal(_)=>"optimal",Self::Infeasible=>"infeasible",Self::Stopped(s)=>s.name()}}}
+impl Minimum {
+    pub fn status(&self) -> &'static str {
+        match self {
+            Self::Optimal(_) => "optimal",
+            Self::Infeasible => "infeasible",
+            Self::Stopped(s) => s.name(),
+        }
+    }
+}
 
 /// Minimum-cardinality feasible panel containing no S ∈ cuts (supplier indices).
 pub fn minimum(I: &Instance, cuts: &[Vec<usize>], clock: &Clock) -> Minimum {
@@ -122,9 +138,19 @@ pub fn minimum(I: &Instance, cuts: &[Vec<usize>], clock: &Clock) -> Minimum {
 }
 
 /// None when stopped by the clock; Some(None) when infeasible.
-fn min_bits<const W: usize>(A: &[(Bits<W>, usize)], cuts: &[Bits<W>], clock: &Clock)
-                            -> Option<Option<Bits<W>>> {
-    let mut b = Bnb { A, cuts, best: None, clock, nodes: 0, stopped: false };
+fn min_bits<const W: usize>(
+    A: &[(Bits<W>, usize)],
+    cuts: &[Bits<W>],
+    clock: &Clock,
+) -> Option<Option<Bits<W>>> {
+    let mut b = Bnb {
+        A,
+        cuts,
+        best: None,
+        clock,
+        nodes: 0,
+        stopped: false,
+    };
     b.go(Bits::EMPTY, Bits::EMPTY);
     (!b.stopped).then_some(b.best)
 }
@@ -132,8 +158,11 @@ fn min_bits<const W: usize>(A: &[(Bits<W>, usize)], cuts: &[Bits<W>], clock: &Cl
 /// All minimal panels in nondecreasing size: an optimum avoiding supersets of the panels
 /// found is minimal (a proper feasible subset would be cheaper and still avoid them);
 /// infeasibility of the cut problem proves completeness. `emit` returns false to stop.
-pub fn cut_stream(I: &Instance, clock: &Clock, emit: &mut dyn FnMut(Vec<usize>) -> bool)
-                  -> Result<(), Stop> {
+pub fn cut_stream(
+    I: &Instance,
+    clock: &Clock,
+    emit: &mut dyn FnMut(Vec<usize>) -> bool,
+) -> Result<(), Stop> {
     let labels = I.support();
     crate::with_width!(labels.len(), W => {
         let A = rows::<W>(I, &labels);
@@ -181,11 +210,20 @@ mod tests {
     fn hand_example_minimum_and_resilience() {
         let I = inst("abcd", &["ab", "bc", "cd"], 0, &[]);
         let c = Clock::unlimited();
-        let Minimum::Optimal(T) = minimum(&I, &[], &c) else { panic!() };
+        let Minimum::Optimal(T) = minimum(&I, &[], &c) else {
+            panic!()
+        };
         assert_eq!(T.len(), 2);
-        assert_eq!(minimum(&I.with_k(1), &[], &c), Minimum::Optimal(vec![0, 1, 2, 3]));
+        assert_eq!(
+            minimum(&I.with_k(1), &[], &c),
+            Minimum::Optimal(vec![0, 1, 2, 3])
+        );
         let mut all = Vec::new();
-        cut_stream(&I, &c, &mut |T| { all.push(T); true }).unwrap();
+        cut_stream(&I, &c, &mut |T| {
+            all.push(T);
+            true
+        })
+        .unwrap();
         all.sort();
         assert_eq!(all, vec![vec![0, 2], vec![1, 2], vec![1, 3]]);
         assert_eq!(exhaustive(&I), vec![vec![0, 2], vec![1, 2], vec![1, 3]]);
@@ -194,7 +232,13 @@ mod tests {
     #[test]
     fn empty_cases() {
         let c = Clock::unlimited();
-        assert_eq!(minimum(&inst("ab", &[], 0, &[]), &[], &c), Minimum::Optimal(vec![]));
-        assert_eq!(minimum(&inst("ab", &["a", ""], 0, &[]), &[], &c), Minimum::Infeasible);
+        assert_eq!(
+            minimum(&inst("ab", &[], 0, &[]), &[], &c),
+            Minimum::Optimal(vec![])
+        );
+        assert_eq!(
+            minimum(&inst("ab", &["a", ""], 0, &[]), &[], &c),
+            Minimum::Infeasible
+        );
     }
 }

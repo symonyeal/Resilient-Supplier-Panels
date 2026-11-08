@@ -54,12 +54,17 @@ impl<const W: usize> Mmcs<'_, W> {
         }
     }
 
-    fn go(&mut self, cand: &mut Bits<W>, emit: &mut dyn FnMut(Bits<W>) -> bool) -> Result<(), Stop> {
+    fn go(
+        &mut self,
+        cand: &mut Bits<W>,
+        emit: &mut dyn FnMut(Bits<W>) -> bool,
+    ) -> Result<(), Stop> {
         self.nodes += 1;
         if self.nodes.is_multiple_of(4096) && self.clock.expired() {
             return Err(Stop::Timeout);
         }
-        let e = (0..self.H.len()).filter(|&e| self.hit[e] == 0)
+        let e = (0..self.H.len())
+            .filter(|&e| self.hit[e] == 0)
             .min_by_key(|&e| self.H[e].meet_len(cand));
         let Some(e) = e else {
             return if emit(self.S) { Ok(()) } else { Err(Stop::Cap) };
@@ -84,8 +89,11 @@ impl<const W: usize> Mmcs<'_, W> {
 }
 
 /// Streams Tr(H); `emit` returns false to stop. Tr(∅) = {∅}; an empty edge gives Tr = ∅.
-pub fn transversals<const W: usize>(H: &Mbf<W>, clock: &Clock,
-                                    emit: &mut dyn FnMut(Bits<W>) -> bool) -> Result<(), Stop> {
+pub fn transversals<const W: usize>(
+    H: &Mbf<W>,
+    clock: &Clock,
+    emit: &mut dyn FnMut(Bits<W>) -> bool,
+) -> Result<(), Stop> {
     if H.edges.iter().any(|e| e.is_empty()) {
         return Ok(());
     }
@@ -95,8 +103,15 @@ pub fn transversals<const W: usize>(H: &Mbf<W>, clock: &Clock,
             by_v[v].push(j);
         }
     }
-    let mut m = Mmcs { H: &H.edges, by_v, hit: vec![0; H.len()], crit: vec![0; H.n],
-                       S: Bits::EMPTY, clock, nodes: 0 };
+    let mut m = Mmcs {
+        H: &H.edges,
+        by_v,
+        hit: vec![0; H.len()],
+        crit: vec![0; H.n],
+        S: Bits::EMPTY,
+        clock,
+        nodes: 0,
+    };
     let mut cand = H.support();
     m.go(&mut cand, emit)
 }
@@ -110,19 +125,30 @@ mod tests {
     fn agrees_with_berge_on_small_hypergraphs() {
         let mut seed = 7u64;
         let mut rnd = |m: u64| {
-            seed = seed.wrapping_mul(6364136223846793005).wrapping_add(1442695040888963407);
+            seed = seed
+                .wrapping_mul(6364136223846793005)
+                .wrapping_add(1442695040888963407);
             (seed >> 33) % m
         };
         for _ in 0..300 {
             let n = 1 + rnd(12) as usize;
-            let edges = (0..rnd(8)).map(|_| Bits::<1>::of((0..n).filter(|_| rnd(3) == 0)))
+            let edges = (0..rnd(8))
+                .map(|_| Bits::<1>::of((0..n).filter(|_| rnd(3) == 0)))
                 .collect();
             let H = Mbf::new(n, crate::thesis::minimal(edges));
             let c = Clock::unlimited();
             let mut got = Vec::new();
-            transversals(&H, &c, &mut |t| { got.push(t); true }).unwrap();
+            transversals(&H, &c, &mut |t| {
+                got.push(t);
+                true
+            })
+            .unwrap();
             got.sort_by(|a, b| a.lex(b));
-            assert_eq!(got, berge::transversal(&H, &c, usize::MAX).unwrap(), "{H:?}");
+            assert_eq!(
+                got,
+                berge::transversal(&H, &c, usize::MAX).unwrap(),
+                "{H:?}"
+            );
         }
     }
 }

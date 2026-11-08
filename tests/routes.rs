@@ -8,16 +8,22 @@ use srl::bench::{self, LIMITS};
 use srl::certify::{self, Completeness};
 use srl::instance::Instance;
 use srl::pyrand::Random;
+use srl::quotient;
 use srl::run::Clock;
 use srl::solve::{self, Minimum};
-use srl::quotient;
 
 type Family = BTreeSet<Vec<usize>>;
 
 fn inst(V: &str, E: &[&str], k: i64, F: &[&str]) -> Instance {
     let s = |x: &str| x.chars().map(String::from).collect::<Vec<_>>();
-    Instance::new(s(V), (0..E.len()).map(|j| format!("p{j}")).collect(), E.iter().map(|e| s(e)).collect(), k,
-                  F.iter().map(|f| s(f)).collect()).unwrap()
+    Instance::new(
+        s(V),
+        (0..E.len()).map(|j| format!("p{j}")).collect(),
+        E.iter().map(|e| s(e)).collect(),
+        k,
+        F.iter().map(|f| s(f)).collect(),
+    )
+    .unwrap()
 }
 
 fn fam(I: &Instance, C: &Family) -> BTreeSet<String> {
@@ -29,10 +35,17 @@ fn all_routes(I: &Instance) -> Family {
     let X: Family = solve::exhaustive(I).into_iter().collect();
     for m in bench::ROUTES {
         let mut C = Family::new();
-        bench::route(m, I, &Clock::unlimited(), &LIMITS, &mut |T| { assert!(C.insert(T), "{m} repeated a panel"); true }).unwrap();
+        bench::route(m, I, &Clock::unlimited(), &LIMITS, &mut |T| {
+            assert!(C.insert(T), "{m} repeated a panel");
+            true
+        })
+        .unwrap();
         assert_eq!(C, X, "{m} on {I:?}");
     }
-    assert_eq!(quotient::count(I, &Clock::unlimited()).unwrap().panels, X.len() as u128);
+    assert_eq!(
+        quotient::count(I, &Clock::unlimited()).unwrap().panels,
+        X.len() as u128
+    );
     X
 }
 
@@ -47,7 +60,10 @@ fn empty_edge_is_infeasible_with_witness() {
     let I = inst("ab", &["a", ""], 0, &[]);
     assert!(all_routes(&I).is_empty());
     assert_eq!(certify::infeasibility(&I), Some((1, vec![])));
-    assert_eq!(solve::minimum(&I, &[], &Clock::unlimited()), Minimum::Infeasible);
+    assert_eq!(
+        solve::minimum(&I, &[], &Clock::unlimited()),
+        Minimum::Infeasible
+    );
     assert_eq!(certify::essential(&I), None);
 }
 
@@ -55,8 +71,18 @@ fn empty_edge_is_infeasible_with_witness() {
 fn single_supplier_product_is_essential_and_kills_resilience() {
     // E = {a, bc}: k=0 panels ab, ac with a essential; k=1 needs |E_p| ≥ 2, fails on p
     let I = inst("abc", &["a", "bc"], 0, &[]);
-    assert_eq!(fam(&I, &all_routes(&I)), BTreeSet::from(["ab".into(), "ac".into()]));
-    assert_eq!(certify::essential(&I).unwrap().keys().copied().collect::<Vec<_>>(), vec![0]);
+    assert_eq!(
+        fam(&I, &all_routes(&I)),
+        BTreeSet::from(["ab".into(), "ac".into()])
+    );
+    assert_eq!(
+        certify::essential(&I)
+            .unwrap()
+            .keys()
+            .copied()
+            .collect::<Vec<_>>(),
+        vec![0]
+    );
     assert!(all_routes(&I.with_k(1)).is_empty());
     assert_eq!(certify::infeasibility(&I.with_k(1)).unwrap().0, 0);
 }
@@ -64,15 +90,24 @@ fn single_supplier_product_is_essential_and_kills_resilience() {
 #[test]
 fn duplicate_and_superset_edges_leave_tr_unchanged() {
     let I = inst("abc", &["ab", "ab", "abc"], 0, &[]);
-    assert_eq!(fam(&I, &all_routes(&I)), BTreeSet::from(["a".into(), "b".into()]));
+    assert_eq!(
+        fam(&I, &all_routes(&I)),
+        BTreeSet::from(["a".into(), "b".into()])
+    );
 }
 
 #[test]
 fn identical_signatures_both_needed_for_resilience() {
     // E_p = E_q = {a, b}: interchangeable for k=0 (panels a, b), both needed for k=1
     let I = inst("abc", &["ab", "ab"], 0, &[]);
-    assert_eq!(fam(&I, &all_routes(&I)), BTreeSet::from(["a".into(), "b".into()]));
-    assert_eq!(fam(&I, &all_routes(&I.with_k(1))), BTreeSet::from(["ab".into()]));
+    assert_eq!(
+        fam(&I, &all_routes(&I)),
+        BTreeSet::from(["a".into(), "b".into()])
+    );
+    assert_eq!(
+        fam(&I, &all_routes(&I.with_k(1))),
+        BTreeSet::from(["ab".into()])
+    );
 }
 
 #[test]
@@ -80,28 +115,58 @@ fn correlated_scenario() {
     // E_p = abc, a and b fail together (F = ab): edges abc and c, so Tr = {c}
     let I = inst("abc", &["abc"], 0, &["ab"]);
     assert_eq!(fam(&I, &all_routes(&I)), BTreeSet::from(["c".into()]));
-    assert_eq!(certify::essential(&I).unwrap().keys().copied().collect::<Vec<_>>(), vec![2]);
+    assert_eq!(
+        certify::essential(&I)
+            .unwrap()
+            .keys()
+            .copied()
+            .collect::<Vec<_>>(),
+        vec![2]
+    );
 }
 
 #[test]
 fn hand_example() {
     // E = ab, bc, cd: Tr = {ac, bc, bd} (ad misses bc); k = 1 forces abcd
     let I = inst("abcd", &["ab", "bc", "cd"], 0, &[]);
-    assert_eq!(fam(&I, &all_routes(&I)), BTreeSet::from(["ac".into(), "bc".into(), "bd".into()]));
-    assert_eq!(fam(&I, &all_routes(&I.with_k(1))), BTreeSet::from(["abcd".into()]));
+    assert_eq!(
+        fam(&I, &all_routes(&I)),
+        BTreeSet::from(["ac".into(), "bc".into(), "bd".into()])
+    );
+    assert_eq!(
+        fam(&I, &all_routes(&I.with_k(1))),
+        BTreeSet::from(["abcd".into()])
+    );
     let W = certify::witnesses(&I, &[1, 3]);
     assert!(W.iter().all(|(v, w)| {
         let (p, F) = w.as_ref().unwrap();
-        F.is_empty() && I.E()[*p].iter().filter(|u| [1, 3].contains(u)).collect::<Vec<_>>() == [v]
+        F.is_empty()
+            && I.E()[*p]
+                .iter()
+                .filter(|u| [1, 3].contains(u))
+                .collect::<Vec<_>>()
+                == [v]
     }));
 }
 
 fn random_instance(rng: &mut Random, n: usize, m: usize, k: usize, scenarios: bool) -> Instance {
     let V: Vec<String> = (0..n).map(|i| format!("s{i}")).collect();
-    let E: Vec<Vec<String>> = (0..m).map(|_| { let r = rng.randint(1, (n / 2).max(1) as i64) as usize; rng.sample(&V, r) }).collect();
+    let E: Vec<Vec<String>> = (0..m)
+        .map(|_| {
+            let r = rng.randint(1, (n / 2).max(1) as i64) as usize;
+            rng.sample(&V, r)
+        })
+        .collect();
     let F: Vec<Vec<String>> = if scenarios {
-        (0..rng.randint(1, 3)).map(|_| { let r = rng.randint(1, 3.min(n) as i64) as usize; rng.sample(&V, r) }).collect()
-    } else { Vec::new() };
+        (0..rng.randint(1, 3))
+            .map(|_| {
+                let r = rng.randint(1, 3.min(n) as i64) as usize;
+                rng.sample(&V, r)
+            })
+            .collect()
+    } else {
+        Vec::new()
+    };
     Instance::new(V, (0..m).map(|j| format!("p{j}")).collect(), E, k as i64, F).unwrap()
 }
 
@@ -110,10 +175,22 @@ fn certificates(I: &Instance, Tr: &Family) {
     let C: Vec<Vec<usize>> = Tr.iter().cloned().collect();
     assert_eq!(certify::complete(I, &C), Completeness::Complete);
     if let Some(T) = C.first() {
-        assert_eq!(certify::complete(I, &C[1..]), Completeness::Missing(T.clone()));
-        let inter: BTreeSet<usize> = I.support().into_iter().filter(|v| C.iter().all(|T| T.contains(v))).collect();
-        assert_eq!(inter, certify::essential(I).unwrap().keys().copied().collect());
-        let Minimum::Optimal(m) = solve::minimum(I, &[], &Clock::unlimited()) else { panic!("feasible") };
+        assert_eq!(
+            certify::complete(I, &C[1..]),
+            Completeness::Missing(T.clone())
+        );
+        let inter: BTreeSet<usize> = I
+            .support()
+            .into_iter()
+            .filter(|v| C.iter().all(|T| T.contains(v)))
+            .collect();
+        assert_eq!(
+            inter,
+            certify::essential(I).unwrap().keys().copied().collect()
+        );
+        let Minimum::Optimal(m) = solve::minimum(I, &[], &Clock::unlimited()) else {
+            panic!("feasible")
+        };
         assert_eq!(m.len(), C.iter().map(Vec::len).min().unwrap());
     } else {
         assert!(certify::infeasibility(I).is_some());
@@ -133,7 +210,14 @@ fn random_agreement_certificates_and_permutation_invariance() {
         let mut pi = I.V().clone();
         rng.shuffle(&mut pi);
         let E: Vec<Vec<String>> = I.E().iter().rev().map(|E| I.labels(E)).collect();
-        let J = Instance::new(pi, I.P().iter().rev().cloned().collect(), E, I.k() as i64, vec![]).unwrap();
+        let J = Instance::new(
+            pi,
+            I.P().iter().rev().cloned().collect(),
+            E,
+            I.k() as i64,
+            vec![],
+        )
+        .unwrap();
         let TJ: BTreeSet<Vec<String>> = all_routes(&J).iter().map(|T| J.labels(T)).collect();
         assert_eq!(TJ, Tr.iter().map(|T| I.labels(T)).collect());
     }
@@ -165,7 +249,13 @@ fn signature_classes_break_on_scenario_membership() {
 #[test]
 fn stats_count_edges_before_superset_reduction() {
     let (st, _) = bench::stats(&inst("abc", &["ab", "ab", "abc"], 0, &[]));
-    assert_eq!((st["H_edges_before_reduction"].as_u64(), st["H_edges_after_reduction"].as_u64()), (Some(3), Some(1)));
+    assert_eq!(
+        (
+            st["H_edges_before_reduction"].as_u64(),
+            st["H_edges_after_reduction"].as_u64()
+        ),
+        (Some(3), Some(1))
+    );
 }
 
 #[test]
@@ -201,25 +291,64 @@ fn timeout_is_partial_and_every_returned_panel_is_certified() {
 #[test]
 fn cap_stops_a_stream_and_berge_counts_exactly() {
     let (_, r) = bench::run("cuts", &big(), 30.0, 3, &LIMITS);
-    assert_eq!((r["status"].as_str(), r["count"].as_u64(), r["stored"].as_u64()), (Some("cap"), Some(4), Some(3)));
+    assert_eq!(
+        (
+            r["status"].as_str(),
+            r["count"].as_u64(),
+            r["stored"].as_u64()
+        ),
+        (Some("cap"), Some(4), Some(3))
+    );
     let (_, r) = bench::run("mmcs", &big(), 30.0, 3, &LIMITS);
-    assert_eq!((r["status"].as_str(), r["count"].as_u64(), r["stored"].as_u64()), (Some("cap"), Some(4), Some(3)));
-    let (_, r) = bench::run("berge", &inst("abcd", &["ab", "bc", "cd"], 0, &[]), 30.0, 2, &LIMITS);
-    assert_eq!((r["status"].as_str(), r["count"].as_u64(), r["stored"].as_u64()), (Some("complete"), Some(3), Some(2)));
+    assert_eq!(
+        (
+            r["status"].as_str(),
+            r["count"].as_u64(),
+            r["stored"].as_u64()
+        ),
+        (Some("cap"), Some(4), Some(3))
+    );
+    let (_, r) = bench::run(
+        "berge",
+        &inst("abcd", &["ab", "bc", "cd"], 0, &[]),
+        30.0,
+        2,
+        &LIMITS,
+    );
+    assert_eq!(
+        (
+            r["status"].as_str(),
+            r["count"].as_u64(),
+            r["stored"].as_u64()
+        ),
+        (Some("complete"), Some(3), Some(2))
+    );
 }
 
 #[test]
 fn a_failed_route_is_an_error_not_a_censored_timeout() {
     let prev = std::panic::take_hook();
     std::panic::set_hook(Box::new(|_| {}));
-    let (_, r) = bench::run("no such method", &inst("ab", &["ab"], 0, &[]), 30.0, 10, &LIMITS);
+    let (_, r) = bench::run(
+        "no such method",
+        &inst("ab", &["ab"], 0, &[]),
+        30.0,
+        10,
+        &LIMITS,
+    );
     std::panic::set_hook(prev);
-    assert_eq!((r["status"].as_str(), r["count"].as_u64()), (Some("error"), Some(0)));
+    assert_eq!(
+        (r["status"].as_str(), r["count"].as_u64()),
+        (Some("error"), Some(0))
+    );
 }
 
 #[test]
 fn berge_working_set_limit_is_reported_as_memory() {
-    let L = bench::Limits { berge_sets: 1000, ..LIMITS };
+    let L = bench::Limits {
+        berge_sets: 1000,
+        ..LIMITS
+    };
     let (_, r) = bench::run("berge", &big(), 30.0, 10, &L);
     assert_eq!(r["status"], "memory");
 }

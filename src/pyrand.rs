@@ -27,7 +27,9 @@ impl Random {
         let (mut i, mut j) = (1usize, 0usize);
         for _ in 0..N.max(key.len()) {
             let x = r.mt[i - 1] ^ (r.mt[i - 1] >> 30);
-            r.mt[i] = (r.mt[i] ^ x.wrapping_mul(1664525)).wrapping_add(key[j]).wrapping_add(j as u32);
+            r.mt[i] = (r.mt[i] ^ x.wrapping_mul(1664525))
+                .wrapping_add(key[j])
+                .wrapping_add(j as u32);
             i += 1;
             j += 1;
             if i >= N {
@@ -79,7 +81,11 @@ impl Random {
 
     /// k ≤ 32 random bits.
     pub fn getrandbits(&mut self, k: u32) -> u32 {
-        if k == 0 { 0 } else { self.genrand() >> (32 - k) }
+        if k == 0 {
+            0
+        } else {
+            self.genrand() >> (32 - k)
+        }
     }
 
     /// Uniform on 0..n, n > 0, by rejection on n.bit_length() bits.
@@ -119,21 +125,25 @@ impl Random {
         }
         if n <= setsize {
             let mut pool: Vec<T> = pop.to_vec();
-            (0..k).map(|i| {
-                let j = self.below(n - i);
-                let x = pool[j].clone();
-                pool[j] = pool[n - i - 1].clone();
-                x
-            }).collect()
+            (0..k)
+                .map(|i| {
+                    let j = self.below(n - i);
+                    let x = pool[j].clone();
+                    pool[j] = pool[n - i - 1].clone();
+                    x
+                })
+                .collect()
         } else {
             let mut seen = std::collections::HashSet::new();
-            (0..k).map(|_| {
-                let mut j = self.below(n);
-                while !seen.insert(j) {
-                    j = self.below(n);
-                }
-                pop[j].clone()
-            }).collect()
+            (0..k)
+                .map(|_| {
+                    let mut j = self.below(n);
+                    while !seen.insert(j) {
+                        j = self.below(n);
+                    }
+                    pop[j].clone()
+                })
+                .collect()
         }
     }
 }

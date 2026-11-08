@@ -10,12 +10,18 @@ pub struct Clock {
 
 impl Clock {
     pub fn unlimited() -> Self {
-        Clock { t0: Instant::now(), deadline: None }
+        Clock {
+            t0: Instant::now(),
+            deadline: None,
+        }
     }
 
     pub fn limit(seconds: f64) -> Self {
         let t0 = Instant::now();
-        Clock { t0, deadline: Some(t0 + Duration::from_secs_f64(seconds)) }
+        Clock {
+            t0,
+            deadline: Some(t0 + Duration::from_secs_f64(seconds)),
+        }
     }
 
     pub fn expired(&self) -> bool {
@@ -47,15 +53,50 @@ impl Stop {
     }
 }
 
-#[derive(Clone,Copy,Debug,PartialEq,Eq)]
-pub enum Status { Complete,Stopped(Stop),Error }
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Status {
+    Complete,
+    Stopped(Stop),
+    Error,
+}
 impl Status {
-    pub fn parse(s:&str)->Option<Self> {Some(match s {"complete"=>Self::Complete,"timeout"=>Self::Stopped(Stop::Timeout),"cap"=>Self::Stopped(Stop::Cap),"memory"=>Self::Stopped(Stop::Memory),"overflow"=>Self::Stopped(Stop::Overflow),"error"=>Self::Error,_=>return None})}
-    pub fn name(self)->&'static str {match self {Self::Complete=>"complete",Self::Stopped(s)=>s.name(),Self::Error=>"error"}}
+    pub fn parse(s: &str) -> Option<Self> {
+        Some(match s {
+            "complete" => Self::Complete,
+            "timeout" => Self::Stopped(Stop::Timeout),
+            "cap" => Self::Stopped(Stop::Cap),
+            "memory" => Self::Stopped(Stop::Memory),
+            "overflow" => Self::Stopped(Stop::Overflow),
+            "error" => Self::Error,
+            _ => return None,
+        })
+    }
+    pub fn name(self) -> &'static str {
+        match self {
+            Self::Complete => "complete",
+            Self::Stopped(s) => s.name(),
+            Self::Error => "error",
+        }
+    }
 }
 
-#[derive(Clone,Copy,Debug,PartialEq,Eq)]
-pub enum Method { Berge,Fkb,Cuts,Mmcs,Exhaustive }
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+pub enum Method {
+    Berge,
+    Fkb,
+    Cuts,
+    Mmcs,
+    Exhaustive,
+}
 impl Method {
-    pub fn parse(s:&str)->Option<Self> {Some(match s {"berge"=>Self::Berge,"fkb"=>Self::Fkb,"cuts"=>Self::Cuts,"mmcs"=>Self::Mmcs,"exhaustive"=>Self::Exhaustive,_=>return None})}
+    pub fn parse(s: &str) -> Option<Self> {
+        Some(match s {
+            "berge" => Self::Berge,
+            "fkb" => Self::Fkb,
+            "cuts" => Self::Cuts,
+            "mmcs" => Self::Mmcs,
+            "exhaustive" => Self::Exhaustive,
+            _ => return None,
+        })
+    }
 }

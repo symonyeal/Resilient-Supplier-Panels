@@ -7,21 +7,38 @@
 mod common;
 
 use common::{diff, instance, record, snapshot};
-use srl::json::{self, json, Value};
+use srl::json::{self, Value, json};
 use srl::{audit, bench};
 
 fn reference(name: &str) -> Value {
-    let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/reference").join(name);
+    let p = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+        .join("tests/reference")
+        .join(name);
     json::loads(&std::fs::read(p).unwrap()).unwrap()
 }
 
 #[test]
 fn random_instances() {
     let mut d = Vec::new();
-    for (i, x) in reference("random.json")["instances"].as_array().unwrap().iter().enumerate() {
-        diff(&format!("random[{i}]"), &record(&instance(x), true, 300, x), x, &mut d);
+    for (i, x) in reference("random.json")["instances"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .enumerate()
+    {
+        diff(
+            &format!("random[{i}]"),
+            &record(&instance(x), true, 300, x),
+            x,
+            &mut d,
+        );
     }
-    assert!(d.is_empty(), "{} differences:\n{}", d.len(), d[..d.len().min(40)].join("\n"));
+    assert!(
+        d.is_empty(),
+        "{} differences:\n{}",
+        d.len(),
+        d[..d.len().min(40)].join("\n")
+    );
 }
 
 #[test]
@@ -36,9 +53,17 @@ fn seed1_instances() {
         for k in [0usize, 1] {
             let x = &X[i];
             i += 1;
-            assert_eq!(json!([c, rule, size, k]), json!([x["class"], x["rule"], x["size"], x["k"]]));
+            assert_eq!(
+                json!([c, rule, size, k]),
+                json!([x["class"], x["rule"], x["size"], x["k"]])
+            );
             let I = audit::basket(&M, &P, k);
-            let mut r = record(&I, true, 50, &json!({"H": 0, "berge": 0, "fkb_prefix": 0, "orbits": 0, "thesis": 0}));
+            let mut r = record(
+                &I,
+                true,
+                50,
+                &json!({"H": 0, "berge": 0, "fkb_prefix": 0, "orbits": 0, "thesis": 0}),
+            );
             r["count"] = json!(r["berge"].as_array().unwrap().len());
             r.as_object_mut().unwrap().remove("berge");
             for key in ["class", "rule", "size", "k"] {
@@ -51,5 +76,10 @@ fn seed1_instances() {
         }
     }
     assert_eq!(i, X.len());
-    assert!(d.is_empty(), "{} differences:\n{}", d.len(), d[..d.len().min(40)].join("\n"));
+    assert!(
+        d.is_empty(),
+        "{} differences:\n{}",
+        d.len(),
+        d[..d.len().min(40)].join("\n")
+    );
 }
