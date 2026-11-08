@@ -3,6 +3,7 @@
 //! Exit status 2 is an argument or input error, 1 a failed verification or build check.
 
 use std::path::{Path, PathBuf};
+#[allow(dead_code)] // shared byte for byte with Supply-Chain-Cuts, which also uses `accept_new`
 mod publication;
 use std::process::{Command, ExitCode};
 

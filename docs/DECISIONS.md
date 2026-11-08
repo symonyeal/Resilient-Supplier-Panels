@@ -163,7 +163,8 @@ roxmltree, same output on every row).
 - Campaign files are synced before exclusive publication and cannot be replaced by a
   competing writer. Site data are generated off-tree, under one OS writer lease, then
   projected with rollback and next-writer recovery. Readers needing a consistent set
-  pin the immutable accepted inventory under `.srl-releases`. Fixed-path readers are
+  pin the immutable accepted inventory under `.releases`. `src/publication.rs` is the same file as in Supply-Chain-Cuts;
+  `tests/publication_parity.rs` pins its hash in both. Fixed-path readers are
   not promised atomic multi-file visibility or directory durability under power loss.
   Rust 1.89 supplies the standard-library file locks; no locking crate is added.
 - Pages requires successful checks from this repository's main push. Manual unchecked

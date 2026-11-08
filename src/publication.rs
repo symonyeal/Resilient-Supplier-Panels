@@ -1,5 +1,7 @@
 //! Immutable analytical generations with one writer and recoverable fixed-path projection.
+//! One file shared byte for byte by Chokepoint-Lab and Resilient-Supplier-Panels; `tests/publication_parity.rs` pins its hash in both.
 use serde_json::{Value, json};
+use sha2::{Digest, Sha256};
 use std::{
     fs::{self, File, OpenOptions},
     io::Write,
@@ -71,7 +73,7 @@ impl Generation {
             .map_err(|e| e.to_string())?;
         lock.try_lock()
             .map_err(|e| format!("Output writer already active: {e}"))?;
-        let store = parent.join(".srl-releases").join(name).join(kind);
+        let store = parent.join(".releases").join(name).join(kind);
         fs::create_dir_all(&store).map_err(|e| e.to_string())?;
         let id = format!(
             "{}-{}",
@@ -95,6 +97,13 @@ impl Generation {
     }
     pub fn root(&self) -> &Path {
         &self.stage
+    }
+    pub fn require_new(&self) -> Result<()> {
+        if self.out.exists() {
+            Err("Run output already exists; choose a new directory".into())
+        } else {
+            Ok(())
+        }
     }
     fn recover(&self) -> Result<()> {
         let path = self.store.join("pending.json");
@@ -125,6 +134,10 @@ impl Generation {
         }
         fs::remove_file(path).map_err(|e| e.to_string())
     }
+    pub fn accept_new(self) -> Result<()> {
+        self.require_new()?;
+        fs::rename(&self.stage, &self.out).map_err(|e| e.to_string())
+    }
     pub fn project(self) -> Result<()> {
         fs::create_dir_all(&self.out).map_err(|e| e.to_string())?;
         let mut names = fs::read_dir(&self.stage)
@@ -148,8 +161,9 @@ impl Generation {
             inventory.push(json!({"path":name,"existed":existed}));
             hashes.insert(
                 name.clone(),
-                json!(srl::data::sha256(
-                    &fs::read(self.stage.join(name)).map_err(|e| e.to_string())?
+                json!(format!(
+                    "{:x}",
+                    Sha256::digest(fs::read(self.stage.join(name)).map_err(|e| e.to_string())?)
                 )),
             );
         }
@@ -173,7 +187,10 @@ impl Generation {
             )
         })();
         match result {
-            Ok(()) => self.recover(),
+            Ok(()) => {
+                self.recover()?;
+                fs::remove_dir_all(self.stage.parent().unwrap()).map_err(|e| e.to_string())
+            }
             Err(e) => {
                 self.recover()?;
                 Err(e)
@@ -186,7 +203,7 @@ impl Generation {
 mod tests {
     use super::*;
     fn fixture() -> PathBuf {
-        let base = std::env::var_os("SRL_TEST_ROOT")
+        let base = std::env::var_os("PUBLICATION_TEST_ROOT")
             .map(PathBuf::from)
             .unwrap_or_else(|| {
                 Path::new(env!("CARGO_MANIFEST_DIR")).join("target/publication-tests")
@@ -203,13 +220,15 @@ mod tests {
         root
     }
     #[test]
-    fn one_site_writer_accepts_an_immutable_inventory() {
-        let out = fixture().join("site");
-        let generation = Generation::new(&out, "site").unwrap();
-        assert!(Generation::new(&out, "site").is_err());
-        fs::write(generation.root().join("data.js"), b"accepted").unwrap();
-        generation.project().unwrap();
-        assert_eq!(fs::read(out.join("data.js")).unwrap(), b"accepted");
+    fn one_writer_and_write_once_runs() {
+        let out = fixture().join("run");
+        let generation = Generation::new(&out, "run").unwrap();
+        assert!(Generation::new(&out, "run").is_err());
+        fs::write(generation.root().join("result.json"), b"accepted").unwrap();
+        generation.accept_new().unwrap();
+        let next = Generation::new(&out, "run").unwrap();
+        assert!(next.require_new().is_err());
+        assert_eq!(fs::read(out.join("result.json")).unwrap(), b"accepted");
     }
     #[test]
     fn an_unpublished_failed_producer_keeps_the_previous_generation() {

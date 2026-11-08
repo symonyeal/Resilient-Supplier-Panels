@@ -5,5 +5,6 @@ results/scratch/
 dist/
 playwright-report/
 test-results/
+.releases/
 .srl-releases/
 *.writer.lock
