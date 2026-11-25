@@ -217,301 +217,18 @@ fn command(a: &Args, dataset: &data::Dataset) -> Result<(), Fail> {
     let out = out.as_deref();
     match a.cmd.as_str() {
         "acquire" => println!("{}", json::dumps(&acquire(dataset)?, Style::Indent(1))),
-        "audit" => {
-            let (rows, s) = snapshot(dataset)?;
-            let m = json::loads(&dataset.bytes("manifest.json")?)?;
-            let e = &m[dataset.snapshot()];
-            let r = e["captured_utc"]
-                .as_str()
-                .or(e["retrieved_utc"].as_str())
-                .ok_or("manifest without retrieved_utc")?
-                .to_string();
-            let mut A = audit::audit(&rows, &s);
-            A["snapshot_age_days"] = json!(qbl::age_days(&r, &today()));
-            A["stale"] = json!(qbl::stale(&r, &today()));
-            contracts::write(&A, out)?;
-        }
-        "change" => {
-            let m = json::loads(&dataset.bytes("manifest.json")?)?;
-            let mappings = dataset.text("catalog/mappings.csv")?;
-            let mut W = Vec::new();
-            for name in data::SNAPSHOTS {
-                let e = &m[name];
-                let date = e["captured_utc"]
-                    .as_str()
-                    .or(e["retrieved_utc"].as_str())
-                    .ok_or("manifest without date")?;
-                let rows = qbl::read(&dataset.bytes(&format!("raw/{name}"))?)?;
-                W.push((
-                    name.to_string(),
-                    date[..10].to_string(),
-                    audit::snapshot(&rows, &mappings),
-                ));
-            }
-            let mut d = change::series(&W, a.num("--seed", 1)?);
-            d["provenance"] = analysis_provenance(dataset)?;
-            contracts::write(&d, out)?;
-        }
-        "entities" => {
-            if dataset.snapshot() != "QBL.xlsx" {
-                return Err(Fail::Usage("entity catalogs apply only to QBL.xlsx".into()));
-            }
-            let n = a.num("--seeds", 1000)?;
-            if n == 0 {
-                return Err(Fail::Usage("--seeds must be positive".into()));
-            }
-            let (_, s) = snapshot(dataset)?;
-            let pairs = entities::identities(&dataset.text("catalog/identities.csv")?, &s)?;
-            let G = entities::owners(&dataset.text("catalog/owners.csv")?, &s)?;
-            let A = json::loads(&dataset.bytes("catalog/usaspending.json")?)?;
-            entities::awards(&A, &s)?;
-            let mut d = entities::report(&s, &pairs, &G, &A, n);
-            d["provenance"] = analysis_provenance(dataset)?;
-            contracts::write(&d, out)?;
-        }
-        "gaps" => {
-            let (_, s) = snapshot(dataset)?;
-            let n: u64 = a.num("--seeds", 1000)?;
-            if n == 0 {
-                return Err(Fail::Usage("--seeds must be positive".into()));
-            }
-            let k: usize = a.num("--k", 1)?;
-            if k > i64::MAX as usize {
-                return Err(Fail::Usage(
-                    "--k exceeds the supported integer range".into(),
-                ));
-            }
-            let mut d = gaps::gaps(&audit::matrix(&s, srl::catalog::Variant::Strict), n, k);
-            d["provenance"] = analysis_provenance(dataset)?;
-            contracts::write(&d, out)?;
-        }
+        "audit" => return audit_command(out, dataset),
+        "change" => return change_command(a, out, dataset),
+        "entities" => return entities_command(a, out, dataset),
+        "gaps" => return gaps_command(a, out, dataset),
         "schema" => contracts::write(&json::loads(SCHEMA.as_bytes())?, out)?,
         "build" => build(a, out, dataset)?,
-        "solve" => {
-            let (d, I) = file(a)?;
-            let m = solve::minimum(&I, &[], &Clock::unlimited());
-            let T = match &m {
-                Minimum::Optimal(T) => Some(T),
-                _ => None,
-            };
-            let W = T.map(|T| -> Value {
-                certify::witnesses(&I, T)
-                    .iter()
-                    .map(|(v, w)| {
-                        (
-                            I.V()[*v].clone(),
-                            w.as_ref().map_or(Value::Null, |w| bench::witness(&I, w)),
-                        )
-                    })
-                    .collect::<Map<_, _>>()
-                    .into()
-            });
-            contracts::write(
-                &json!({"schema_version": SCHEMA_VERSION, "kind": "solution", "software_version": VERSION,
-                "instance": update(d, contracts::document(&I)), "status": bench::minimum_status(&m),
-                "panel": T.map(|T| I.labels(T)), "witnesses": W, "infeasibility": bench::infeasibility_json(&I),
-                "essential": bench::essential_json(&I)}),
-                out,
-            )?;
-        }
-        "enum" => {
-            let (d, I) = file(a)?;
-            let method = a.get("--method").unwrap_or("berge");
-            let (C, r) = if method == "exhaustive" {
-                if I.support().len() > 22 {
-                    return Err(Fail::Usage(
-                        "exhaustive search is for supports of at most 22 suppliers".into(),
-                    ));
-                }
-                let C = solve::exhaustive(&I);
-                let n = C.len();
-                (
-                    C,
-                    json!({"method": "exhaustive", "status": "complete", "count": n, "stored": n}),
-                )
-            } else if bench::ROUTES.contains(&method) {
-                let timeout: f64 = a.num("--timeout", LIMITS.timeout_s)?;
-                if !timeout.is_finite() || timeout <= 0.0 {
-                    return Err(Fail::Usage("timeout must be finite and positive".into()));
-                }
-                bench::run(method, &I, timeout, a.num("--cap", LIMITS.cap)?, &LIMITS)
-            } else {
-                return Err(Fail::Usage(format!(
-                    "argument --method: invalid choice: {method:?}"
-                )));
-            };
-            let mut o = update(d, contracts::document(&I));
-            o.insert("kind".into(), json!("enumeration"));
-            o.insert("run".into(), r);
-            o.insert(
-                "panels".into(),
-                json!(C.iter().map(|T| I.labels(T)).collect::<Vec<_>>()),
-            );
-            contracts::write(&Value::Object(o), out)?;
-        }
-        "count" => {
-            let (_, I) = file(a)?;
-            let timeout: f64 = a.num("--timeout", LIMITS.timeout_s)?;
-            if !timeout.is_finite() || timeout <= 0.0 {
-                return Err(Fail::Usage("timeout must be finite and positive".into()));
-            }
-            let c = quotient::count(&I, &Clock::limit(timeout));
-            contracts::write(
-                &match c {
-                    Ok(c) => {
-                        json!({"status": "complete", "panels": bench::count_json(c.panels), "orbits": c.orbits,
-                                "reduced_panels": c.reduced, "classes": quotient::classes(&I).len()})
-                    }
-                    Err(s) => json!({"status": s.name()}),
-                },
-                out,
-            )?;
-        }
-        "verify" => {
-            let (d, I) = file(a)?;
-            let panels = d
-                .get("panels")
-                .and_then(Value::as_array)
-                .ok_or("expected an enumeration document".to_string())?;
-            let L: Vec<Vec<String>> = panels
-                .iter()
-                .map(|T| contracts::labels(T, "panels"))
-                .collect::<Result<_, _>>()?;
-            let C: Vec<Option<Vec<usize>>> = L.iter().map(|T| I.index(T)).collect();
-            let all = C
-                .iter()
-                .all(|T| T.as_ref().is_some_and(|T| certify::minimal(&I, T)));
-            let distinct = L
-                .iter()
-                .map(|T| {
-                    let mut t = T.clone();
-                    t.sort();
-                    t
-                })
-                .collect::<std::collections::HashSet<_>>()
-                .len()
-                == L.len();
-            let r = &d["run"];
-            let status =
-                srl::run::Status::parse(r["status"].as_str().ok_or("run status must be a string")?)
-                    .ok_or("Unknown run status")?;
-            if let Some(m) = r.get("method")
-                && m.as_str().and_then(srl::run::Method::parse).is_none()
-            {
-                return Err(Fail::Usage("Unknown enumeration method".into()));
-            }
-            let count = contracts::count(&r["count"])?;
-            let stored = match r.get("stored") {
-                Some(n) => n.as_u64().ok_or("stored must be a nonnegative integer")? as u128,
-                None if !d.contains_key("schema_version") => L.len() as u128,
-                _ => return Err(Fail::Usage("Versioned enumeration requires stored".into())),
-            };
-            if stored != L.len() as u128 || stored > count {
-                return Err(Fail::Usage(
-                    "stored must equal panel length and not exceed count".into(),
-                ));
-            }
-            let mut o = json!({"panels": L.len(), "all_feasible_and_minimal": all, "distinct_panels": distinct, "run": r["status"]});
-            let mut ok = all && distinct;
-            if ok && status == srl::run::Status::Complete && count == stored {
-                let C: Vec<Vec<usize>> = C.into_iter().map(Option::unwrap).collect();
-                let e = match certify::complete(&I, &C) {
-                    Completeness::Complete => "complete",
-                    Completeness::Missing(_) => "missing",
-                    Completeness::Invalid => "invalid",
-                };
-                o["exhaustion"] = json!(e);
-                ok = e == "complete";
-            } else if ok {
-                let exact = quotient::count(&I, &Clock::unlimited())
-                    .map_err(|s| Fail::Check(format!("Count admission unresolved: {}", s.name())))?
-                    .panels;
-                ok = if status == srl::run::Status::Complete {
-                    count == exact
-                } else {
-                    count <= exact
-                };
-                o["count_admission"] = json!(if ok { "verified" } else { "invalid" });
-                o["exhaustion"] =
-                    json!(if status == srl::run::Status::Complete && stored < count {
-                        "stored subset"
-                    } else {
-                        "not claimed"
-                    });
-            }
-            contracts::write(&o, out)?;
-            if !ok {
-                return Err(Fail::Silent);
-            }
-        }
-        "bench" => {
-            let seed: u64 = a
-                .get("--seed")
-                .ok_or("the following arguments are required: --seed".to_string())?
-                .parse()
-                .map_err(|_| "argument --seed: invalid int value".to_string())?;
-            let path = out.ok_or(
-                "bench needs -o FILE; the saved campaigns in results/ are never overwritten"
-                    .to_string(),
-            )?;
-            if path.exists() {
-                return Err(Fail::Usage(format!(
-                    "{} exists; a campaign is written once",
-                    path.display()
-                )));
-            }
-            let _writer = contracts::claim(path)?;
-            let L = bench::Limits {
-                timeout_s: a.num("--timeout", LIMITS.timeout_s)?,
-                ..LIMITS
-            };
-            let (_, s) = snapshot(dataset)?;
-            let res = bench::suite(
-                seed,
-                &L,
-                &s,
-                provenance(&L, seed, dataset)?,
-                !a.flags.iter().any(|f| f == "--no-variants"),
-                &mut |line| println!("{line}"),
-            );
-            if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
-                std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
-            }
-            contracts::write_once(&res, path)?;
-        }
-        "report" => {
-            let f = PathBuf::from(
-                a.pos
-                    .first()
-                    .ok_or("the following arguments are required: FILE".to_string())?,
-            );
-            let R = json::loads(&std::fs::read(&f).map_err(|e| format!("{}: {e}", f.display()))?)?;
-            let (rows, s) = snapshot(dataset)?;
-            let md = report::markdown(
-                &R,
-                &f.file_name().unwrap().to_string_lossy(),
-                verdicts::score(&R, &audit::audit(&rows, &s)),
-            );
-            // results/suite-<name>.json -> docs/findings/results-<name>.md
-            let dest = out.map(PathBuf::from).unwrap_or_else(|| {
-                let root = f
-                    .parent()
-                    .and_then(Path::parent)
-                    .map(Path::to_path_buf)
-                    .unwrap_or_default();
-                let stem = f
-                    .file_stem()
-                    .unwrap()
-                    .to_string_lossy()
-                    .replacen("suite-", "results-", 1);
-                root.join(format!("docs/findings/{stem}.md"))
-            });
-            if let Some(dir) = dest.parent() {
-                std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
-            }
-            std::fs::write(&dest, md).map_err(|e| e.to_string())?;
-            println!("{}", dest.display());
-        }
+        "solve" => return solve_command(a, out),
+        "enum" => return enum_command(a, out),
+        "count" => return count_command(a, out),
+        "verify" => return verify_command(a, out),
+        "bench" => return bench_command(a, out, dataset),
+        "report" => return report_command(a, out, dataset),
         "site" => site(a, dataset)?,
         c => {
             return Err(Fail::Usage(format!(
@@ -520,6 +237,326 @@ fn command(a: &Args, dataset: &data::Dataset) -> Result<(), Fail> {
         }
     }
     Ok(())
+}
+
+fn audit_command(out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
+    let (rows, s) = snapshot(dataset)?;
+    let m = json::loads(&dataset.bytes("manifest.json")?)?;
+    let e = &m[dataset.snapshot()];
+    let r = e["captured_utc"]
+        .as_str()
+        .or(e["retrieved_utc"].as_str())
+        .ok_or("manifest without retrieved_utc")?
+        .to_string();
+    let mut A = audit::audit(&rows, &s);
+    A["snapshot_age_days"] = json!(qbl::age_days(&r, &today()));
+    A["stale"] = json!(qbl::stale(&r, &today()));
+    contracts::write(&A, out)?;
+    Ok(())
+}
+
+fn change_command(a: &Args, out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
+    let m = json::loads(&dataset.bytes("manifest.json")?)?;
+    let mappings = dataset.text("catalog/mappings.csv")?;
+    let mut W = Vec::new();
+    for name in data::SNAPSHOTS {
+        let e = &m[name];
+        let date = e["captured_utc"]
+            .as_str()
+            .or(e["retrieved_utc"].as_str())
+            .ok_or("manifest without date")?;
+        let rows = qbl::read(&dataset.bytes(&format!("raw/{name}"))?)?;
+        W.push((
+            name.to_string(),
+            date[..10].to_string(),
+            audit::snapshot(&rows, &mappings),
+        ));
+    }
+    let mut d = change::series(&W, a.num("--seed", 1)?);
+    d["provenance"] = analysis_provenance(dataset)?;
+    contracts::write(&d, out)?;
+    Ok(())
+}
+
+fn entities_command(a: &Args, out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
+    if dataset.snapshot() != "QBL.xlsx" {
+        return Err(Fail::Usage("entity catalogs apply only to QBL.xlsx".into()));
+    }
+    let n = a.num("--seeds", 1000)?;
+    if n == 0 {
+        return Err(Fail::Usage("--seeds must be positive".into()));
+    }
+    let (_, s) = snapshot(dataset)?;
+    let pairs = entities::identities(&dataset.text("catalog/identities.csv")?, &s)?;
+    let G = entities::owners(&dataset.text("catalog/owners.csv")?, &s)?;
+    let A = json::loads(&dataset.bytes("catalog/usaspending.json")?)?;
+    entities::awards(&A, &s)?;
+    let mut d = entities::report(&s, &pairs, &G, &A, n);
+    d["provenance"] = analysis_provenance(dataset)?;
+    contracts::write(&d, out)?;
+    Ok(())
+}
+
+fn gaps_command(a: &Args, out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
+    let (_, s) = snapshot(dataset)?;
+    let n: u64 = a.num("--seeds", 1000)?;
+    if n == 0 {
+        return Err(Fail::Usage("--seeds must be positive".into()));
+    }
+    let k: usize = a.num("--k", 1)?;
+    if k > i64::MAX as usize {
+        return Err(Fail::Usage(
+            "--k exceeds the supported integer range".into(),
+        ));
+    }
+    let mut d = gaps::gaps(&audit::matrix(&s, srl::catalog::Variant::Strict), n, k);
+    d["provenance"] = analysis_provenance(dataset)?;
+    contracts::write(&d, out)?;
+    Ok(())
+}
+
+fn solve_command(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
+    let (d, I) = file(a)?;
+    let m = solve::minimum(&I, &[], &Clock::unlimited());
+    let T = match &m {
+        Minimum::Optimal(T) => Some(T),
+        _ => None,
+    };
+    let W = T.map(|T| -> Value {
+        certify::witnesses(&I, T)
+            .iter()
+            .map(|(v, w)| {
+                (
+                    I.V()[*v].clone(),
+                    w.as_ref().map_or(Value::Null, |w| bench::witness(&I, w)),
+                )
+            })
+            .collect::<Map<_, _>>()
+            .into()
+    });
+    contracts::write(
+        &json!({"schema_version": SCHEMA_VERSION, "kind": "solution", "software_version": VERSION,
+        "instance": update(d, contracts::document(&I)), "status": bench::minimum_status(&m),
+        "panel": T.map(|T| I.labels(T)), "witnesses": W, "infeasibility": bench::infeasibility_json(&I),
+        "essential": bench::essential_json(&I)}),
+        out,
+    )?;
+    Ok(())
+}
+
+fn enum_command(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
+    let (d, I) = file(a)?;
+    let method = a.get("--method").unwrap_or("berge");
+    let (C, r) = if method == "exhaustive" {
+        if I.support().len() > 22 {
+            return Err(Fail::Usage(
+                "exhaustive search is for supports of at most 22 suppliers".into(),
+            ));
+        }
+        let C = solve::exhaustive(&I);
+        let n = C.len();
+        (
+            C,
+            json!({"method": "exhaustive", "status": "complete", "count": n, "stored": n}),
+        )
+    } else if bench::ROUTES.contains(&method) {
+        let timeout: f64 = a.num("--timeout", LIMITS.timeout_s)?;
+        if !timeout.is_finite() || timeout <= 0.0 {
+            return Err(Fail::Usage("timeout must be finite and positive".into()));
+        }
+        bench::run(method, &I, timeout, a.num("--cap", LIMITS.cap)?, &LIMITS)
+    } else {
+        return Err(Fail::Usage(format!(
+            "argument --method: invalid choice: {method:?}"
+        )));
+    };
+    let mut o = update(d, contracts::document(&I));
+    o.insert("kind".into(), json!("enumeration"));
+    o.insert("run".into(), r);
+    o.insert(
+        "panels".into(),
+        json!(C.iter().map(|T| I.labels(T)).collect::<Vec<_>>()),
+    );
+    contracts::write(&Value::Object(o), out)?;
+    Ok(())
+}
+
+fn count_command(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
+    let (_, I) = file(a)?;
+    let timeout: f64 = a.num("--timeout", LIMITS.timeout_s)?;
+    if !timeout.is_finite() || timeout <= 0.0 {
+        return Err(Fail::Usage("timeout must be finite and positive".into()));
+    }
+    let c = quotient::count(&I, &Clock::limit(timeout));
+    contracts::write(
+        &match c {
+            Ok(c) => {
+                json!({"status": "complete", "panels": bench::count_json(c.panels), "orbits": c.orbits,
+                        "reduced_panels": c.reduced, "classes": quotient::classes(&I).len()})
+            }
+            Err(s) => json!({"status": s.name()}),
+        },
+        out,
+    )?;
+    Ok(())
+}
+
+fn verify_command(a: &Args, out: Option<&Path>) -> Result<(), Fail> {
+    let (d, I) = file(a)?;
+    let panels = d
+        .get("panels")
+        .and_then(Value::as_array)
+        .ok_or("expected an enumeration document".to_string())?;
+    let L: Vec<Vec<String>> = panels
+        .iter()
+        .map(|T| contracts::labels(T, "panels"))
+        .collect::<Result<_, _>>()?;
+    let C: Vec<Option<Vec<usize>>> = L.iter().map(|T| I.index(T)).collect();
+    let all = C
+        .iter()
+        .all(|T| T.as_ref().is_some_and(|T| certify::minimal(&I, T)));
+    let distinct = L
+        .iter()
+        .map(|T| {
+            let mut t = T.clone();
+            t.sort();
+            t
+        })
+        .collect::<std::collections::HashSet<_>>()
+        .len()
+        == L.len();
+    let r = &d["run"];
+    let (status, count, stored) = enumeration_claim(&d, L.len())?;
+    let mut o = json!({"panels": L.len(), "all_feasible_and_minimal": all, "distinct_panels": distinct, "run": r["status"]});
+    let mut ok = all && distinct;
+    if ok && status == srl::run::Status::Complete && count == stored {
+        let C: Vec<Vec<usize>> = C.into_iter().map(Option::unwrap).collect();
+        let e = match certify::complete(&I, &C) {
+            Completeness::Complete => "complete",
+            Completeness::Missing(_) => "missing",
+            Completeness::Invalid => "invalid",
+        };
+        o["exhaustion"] = json!(e);
+        ok = e == "complete";
+    } else if ok {
+        let exact = quotient::count(&I, &Clock::unlimited())
+            .map_err(|s| Fail::Check(format!("Count admission unresolved: {}", s.name())))?
+            .panels;
+        ok = if status == srl::run::Status::Complete {
+            count == exact
+        } else {
+            count <= exact
+        };
+        o["count_admission"] = json!(if ok { "verified" } else { "invalid" });
+        o["exhaustion"] = json!(if status == srl::run::Status::Complete && stored < count {
+            "stored subset"
+        } else {
+            "not claimed"
+        });
+    }
+    contracts::write(&o, out)?;
+    if !ok {
+        return Err(Fail::Silent);
+    }
+    Ok(())
+}
+
+fn bench_command(a: &Args, out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
+    let seed: u64 = a
+        .get("--seed")
+        .ok_or("the following arguments are required: --seed".to_string())?
+        .parse()
+        .map_err(|_| "argument --seed: invalid int value".to_string())?;
+    let path = out.ok_or(
+        "bench needs -o FILE; the saved campaigns in results/ are never overwritten".to_string(),
+    )?;
+    if path.exists() {
+        return Err(Fail::Usage(format!(
+            "{} exists; a campaign is written once",
+            path.display()
+        )));
+    }
+    let _writer = contracts::claim(path)?;
+    let L = bench::Limits {
+        timeout_s: a.num("--timeout", LIMITS.timeout_s)?,
+        ..LIMITS
+    };
+    let (_, s) = snapshot(dataset)?;
+    let res = bench::suite(
+        seed,
+        &L,
+        &s,
+        provenance(&L, seed, dataset)?,
+        !a.flags.iter().any(|f| f == "--no-variants"),
+        &mut |line| println!("{line}"),
+    );
+    if let Some(dir) = path.parent().filter(|d| !d.as_os_str().is_empty()) {
+        std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
+    }
+    contracts::write_once(&res, path)?;
+    Ok(())
+}
+
+fn report_command(a: &Args, out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
+    let f = PathBuf::from(
+        a.pos
+            .first()
+            .ok_or("the following arguments are required: FILE".to_string())?,
+    );
+    let R = json::loads(&std::fs::read(&f).map_err(|e| format!("{}: {e}", f.display()))?)?;
+    let (rows, s) = snapshot(dataset)?;
+    let md = report::markdown(
+        &R,
+        &f.file_name().unwrap().to_string_lossy(),
+        verdicts::score(&R, &audit::audit(&rows, &s)),
+    );
+    // results/suite-<name>.json -> docs/findings/results-<name>.md
+    let dest = out.map(PathBuf::from).unwrap_or_else(|| {
+        let root = f
+            .parent()
+            .and_then(Path::parent)
+            .map(Path::to_path_buf)
+            .unwrap_or_default();
+        let stem = f
+            .file_stem()
+            .unwrap()
+            .to_string_lossy()
+            .replacen("suite-", "results-", 1);
+        root.join(format!("docs/findings/{stem}.md"))
+    });
+    if let Some(dir) = dest.parent() {
+        std::fs::create_dir_all(dir).map_err(|e| e.to_string())?;
+    }
+    std::fs::write(&dest, md).map_err(|e| e.to_string())?;
+    println!("{}", dest.display());
+    Ok(())
+}
+
+fn enumeration_claim(
+    d: &Map<String, Value>,
+    n: usize,
+) -> Result<(srl::run::Status, u128, u128), Fail> {
+    let r = &d["run"];
+    let status =
+        srl::run::Status::parse(r["status"].as_str().ok_or("run status must be a string")?)
+            .ok_or("Unknown run status")?;
+    if let Some(m) = r.get("method")
+        && m.as_str().and_then(srl::run::Method::parse).is_none()
+    {
+        return Err(Fail::Usage("Unknown enumeration method".into()));
+    }
+    let count = contracts::count(&r["count"])?;
+    let stored = match r.get("stored") {
+        Some(n) => n.as_u64().ok_or("stored must be a nonnegative integer")? as u128,
+        None if !d.contains_key("schema_version") => n as u128,
+        _ => return Err(Fail::Usage("Versioned enumeration requires stored".into())),
+    };
+    if stored != n as u128 || stored > count {
+        return Err(Fail::Usage(
+            "stored must equal panel length and not exceed count".into(),
+        ));
+    }
+    Ok((status, count, stored))
 }
 
 fn build(a: &Args, out: Option<&Path>, dataset: &data::Dataset) -> Result<(), Fail> {
@@ -662,23 +699,20 @@ fn provenance(L: &bench::Limits, seed: u64, dataset: &data::Dataset) -> Result<V
     )
 }
 
-/// Writes the public case data only after their certificates pass.
-fn site(a: &Args, dataset: &data::Dataset) -> Result<(), Fail> {
-    let root = PathBuf::from(a.get("--root").unwrap_or("."));
-    let generation = publication::Generation::new(&root.join("site"), "site")?;
-    let results = root.join(a.get("--results").unwrap_or(CAMPAIGN));
-    let (_, s) = snapshot(dataset)?;
-    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
-    let names = portfolio::names(&s);
+fn site_provenance(
+    root: &Path,
+    dataset: &data::Dataset,
+    s: &audit::Snapshot,
+) -> Result<Map<String, Value>, Fail> {
     let manifest = json::loads(&dataset.bytes("manifest.json")?)?;
     let mut prov = contracts::provenance(dataset)?;
-    prov.insert("code_rev".into(), json!(git(&root, &["rev-parse", "HEAD"])));
-    prov.insert("code_sha256".into(), json!(portfolio::code_sha256(&root)?));
+    prov.insert("code_rev".into(), json!(git(root, &["rev-parse", "HEAD"])));
+    prov.insert("code_sha256".into(), json!(portfolio::code_sha256(root)?));
     prov.insert(
         "dirty".into(),
         json!(
             !git(
-                &root,
+                root,
                 &[
                     "status",
                     "--porcelain",
@@ -694,7 +728,7 @@ fn site(a: &Args, dataset: &data::Dataset) -> Result<(), Fail> {
     );
     prov.insert(
         "identity_candidates".into(),
-        json!(portfolio::identity_candidates(&s)),
+        json!(portfolio::identity_candidates(s)),
     );
     prov.insert("snapshot".into(), manifest[dataset.snapshot()].clone());
     if prov["data_sha256"] != prov["snapshot"]["sha256"] {
@@ -702,6 +736,18 @@ fn site(a: &Args, dataset: &data::Dataset) -> Result<(), Fail> {
             "public case data does not match the frozen manifest".into(),
         ));
     }
+    Ok(prov)
+}
+
+/// Writes the public case data only after their certificates pass.
+fn site(a: &Args, dataset: &data::Dataset) -> Result<(), Fail> {
+    let root = PathBuf::from(a.get("--root").unwrap_or("."));
+    let generation = publication::Generation::new(&root.join("site"), "site")?;
+    let results = root.join(a.get("--results").unwrap_or(CAMPAIGN));
+    let (_, s) = snapshot(dataset)?;
+    let M = audit::matrix(&s, srl::catalog::Variant::Strict);
+    let names = portfolio::names(&s);
+    let prov = site_provenance(&root, dataset, &s)?;
     let R =
         json::loads(&std::fs::read(&results).map_err(|e| format!("{}: {e}", results.display()))?)?;
     if R["provenance"]["data_sha256"] != prov["data_sha256"] {

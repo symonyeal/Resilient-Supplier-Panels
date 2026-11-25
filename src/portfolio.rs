@@ -297,9 +297,7 @@ fn keep(x: &Value) -> &'static [&'static str] {
     }
 }
 
-/// One saved record, its minimum, essential set and infeasibility witness re-certified from
-/// the matrix. Without a complete run the count is the lower bound max_r count_r.
-pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
+fn saved_instance(x: &Value, M: &Matrix) -> Result<Instance, String> {
     let P = contracts::labels(&x["P"], "saved basket")?;
     if P.is_empty()
         || P.iter().collect::<std::collections::HashSet<_>>().len() != P.len()
@@ -325,20 +323,25 @@ pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
     if json!(sizes) != x["stats"]["E_p_sizes"] || json!(I.V().len()) != x["stats"]["V"] {
         return Err(format!("saved record disagrees with the matrix: {P:?}"));
     }
+    Ok(I)
+}
+
+fn admit_minimum(x: &Value, I: &Instance) -> Result<u128, String> {
+    let P = I.P();
     let m = &x["min"];
     let ok = match m["panel"].as_array() {
         Some(T) => {
             let T = contracts::labels(&json!(T), "saved minimum")?;
             m["status"] == "optimal"
-                && I.index(&T).is_some_and(|T| certify::minimal(&I, &T))
+                && I.index(&T).is_some_and(|T| certify::minimal(I, &T))
                 && json!(T.len()) == m["size"]
         }
-        None => m["status"] == "infeasible" && certify::infeasibility(&I).is_some(),
+        None => m["status"] == "infeasible" && certify::infeasibility(I).is_some(),
     };
     if !ok {
         return Err(format!("saved minimum fails its matrix certificate: {P:?}"));
     }
-    let optimum = solve::minimum(&I, &[], &Clock::unlimited());
+    let optimum = solve::minimum(I, &[], &Clock::unlimited());
     let cardinal = match &optimum {
         Minimum::Optimal(T) => Some(T.len()),
         Minimum::Infeasible => None,
@@ -349,12 +352,16 @@ pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
     if cardinal != m["panel"].as_array().map(Vec::len) {
         return Err("saved minimum is not cardinality-optimal".into());
     }
-    let exact = crate::quotient::count(&I, &Clock::unlimited())
+    let exact = crate::quotient::count(I, &Clock::unlimited())
         .map_err(|s| format!("Saved count admission unresolved: {}", s.name()))?
         .panels;
     if !x["count_exact"].is_null() && contracts::count(&x["count_exact"])? != exact {
         return Err("Saved exact count disagrees with independent class count".into());
     }
+    Ok(exact)
+}
+
+fn admit_runs(x: &Value, exact: u128) -> Result<u128, String> {
     let runs = x["runs"]
         .as_array()
         .filter(|r| !r.is_empty())
@@ -392,6 +399,16 @@ pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
             return Err("Saved quotient count disagrees with independent class count".into());
         }
     }
+    Ok(lower)
+}
+
+/// One saved record, its minimum, essential set and infeasibility witness re-certified from
+/// the matrix. Without a complete run the count is the lower bound max_r count_r.
+pub fn outcome(x: &Value, M: &Matrix) -> Result<Value, String> {
+    let I = saved_instance(x, M)?;
+    let P = I.P();
+    let exact = admit_minimum(x, &I)?;
+    let lower = admit_runs(x, exact)?;
     if infeasibility_json(&I) != x["infeasibility"] || essential_json(&I) != x["essential"] {
         return Err(format!("saved essential set or witness disagrees: {P:?}"));
     }

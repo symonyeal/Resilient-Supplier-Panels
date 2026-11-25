@@ -1,3 +1,4 @@
 * text=auto eol=lf
 *.xlsx binary
 *.pdf binary
+site/vendor/** linguist-vendored=true

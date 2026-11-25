@@ -30,6 +30,68 @@ fn first(x: &Value, m: &str) -> f64 {
     run(x, m)["t_first"].as_f64().unwrap_or(f64::INFINITY)
 }
 
+struct VariantScores {
+    h2v: Map<String, Value>,
+    dirn: Map<String, Value>,
+    flip: Map<String, Value>,
+    dmin: Map<String, Value>,
+}
+
+fn variant_scores(prim: &[&Value], small1: &[&Value]) -> VariantScores {
+    let size = |x: &Value| x["min"]["size"].as_i64();
+    let (mut h2v, mut dirn, mut flip, mut dmin) = (Map::new(), Map::new(), Map::new(), Map::new());
+    for v in VARIANTS {
+        let sf = |x: &Value| {
+            x.get("sensitivity")
+                .and_then(|s| s.get(v))
+                .and_then(|s| s.get("feasible"))
+                .and_then(Value::as_bool)
+        };
+        if prim.is_empty()
+            || prim.iter().any(|x| {
+                sf(x).is_none()
+                    || !["optimal", "infeasible"].contains(&x["min"]["status"].as_str().unwrap())
+            })
+        {
+            for m in [&mut h2v, &mut dirn, &mut flip, &mut dmin] {
+                m.insert(v.into(), json!("not measured"));
+            }
+            continue;
+        }
+        h2v.insert(
+            v.into(),
+            json!(small1.iter().filter(|x| sf(x) == Some(true)).count()),
+        );
+        dirn.insert(v.into(), json!({
+            "infeasible->feasible": prim.iter().filter(|x| sf(x) == Some(true) && size(x).is_none()).count(),
+            "feasible->infeasible": prim.iter().filter(|x| sf(x) == Some(false) && size(x).is_some()).count()}));
+        flip.insert(
+            v.into(),
+            json!(
+                prim.iter()
+                    .filter(|x| sf(x) != Some(size(x).is_some()))
+                    .count()
+            ),
+        );
+        dmin.insert(
+            v.into(),
+            json!(
+                prim.iter()
+                    .filter(|x| sf(x) == Some(true)
+                        && size(x).is_some()
+                        && x["sensitivity"][v]["min"].as_i64() != size(x))
+                    .count()
+            ),
+        );
+    }
+    VariantScores {
+        h2v,
+        dirn,
+        flip,
+        dmin,
+    }
+}
+
 /// The scores in their registered order. `A` is the audit of the snapshot the results name.
 pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
     let X: Vec<&Value> = R["instances"].as_array().unwrap().iter().collect();
@@ -109,51 +171,12 @@ pub fn score(R: &Value, A: &Value) -> Vec<(String, Value)> {
         .iter()
         .filter(|x| total(x, "berge") > 0.1 && size(x).is_some())
         .collect();
-    let (mut h2v, mut dirn, mut flip, mut dmin) = (Map::new(), Map::new(), Map::new(), Map::new());
-    for v in VARIANTS {
-        let sf = |x: &Value| {
-            x.get("sensitivity")
-                .and_then(|s| s.get(v))
-                .and_then(|s| s.get("feasible"))
-                .and_then(Value::as_bool)
-        };
-        if prim.is_empty()
-            || prim.iter().any(|x| {
-                sf(x).is_none()
-                    || !["optimal", "infeasible"].contains(&x["min"]["status"].as_str().unwrap())
-            })
-        {
-            for m in [&mut h2v, &mut dirn, &mut flip, &mut dmin] {
-                m.insert(v.into(), json!("not measured"));
-            }
-            continue;
-        }
-        h2v.insert(
-            v.into(),
-            json!(small1.iter().filter(|x| sf(x) == Some(true)).count()),
-        );
-        dirn.insert(v.into(), json!({
-            "infeasible->feasible": prim.iter().filter(|x| sf(x) == Some(true) && size(x).is_none()).count(),
-            "feasible->infeasible": prim.iter().filter(|x| sf(x) == Some(false) && size(x).is_some()).count()}));
-        flip.insert(
-            v.into(),
-            json!(
-                prim.iter()
-                    .filter(|x| sf(x) != Some(size(x).is_some()))
-                    .count()
-            ),
-        );
-        dmin.insert(
-            v.into(),
-            json!(
-                prim.iter()
-                    .filter(|x| sf(x) == Some(true)
-                        && size(x).is_some()
-                        && x["sensitivity"][v]["min"].as_i64() != size(x))
-                    .count()
-            ),
-        );
-    }
+    let VariantScores {
+        h2v,
+        dirn,
+        flip,
+        dmin,
+    } = variant_scores(&prim, &small1);
     let tmin: Vec<Num> = X.iter().map(|x| Num::of(&x["t_min"])).collect();
     let tmax = tmin.iter().map(|t| t.f()).fold(f64::NEG_INFINITY, f64::max);
     let num = |x: Num| match x {

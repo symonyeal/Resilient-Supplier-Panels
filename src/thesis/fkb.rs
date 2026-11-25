@@ -178,6 +178,17 @@ fn node<const W: usize>(
         return Ok(easy(&C, &D));
     }
     let x = split_var(&C, &D).expect("a live variable past condition 2");
+    split_node(&C, &D, x, nodes, clock)
+}
+
+/// The two FK-B frequency cases and their balanced fallback, preserving recursive order.
+fn split_node<const W: usize>(
+    C: &Mbf<W>,
+    D: &Mbf<W>,
+    x: usize,
+    nodes: &mut usize,
+    clock: &Clock,
+) -> Result<Option<Bits<W>>, Stop> {
     let bit = Bits::unit(x);
     let (C0, C1, D0, D1) = (C.phi0(x), C.phi1(x), D.phi0(x), D.phi1(x));
     let mut go = |C: Mbf<W>, D: Mbf<W>, add: Bits<W>| -> Result<Option<Bits<W>>, Stop> {
@@ -185,8 +196,8 @@ fn node<const W: usize>(
     };
     let f = |A: &Mbf<W>, s: &Bits<W>, B: &Mbf<W>| (A.set_false(s, true), B.set_false(s, false));
     let t = |A: &Mbf<W>, s: &Bits<W>, B: &Mbf<W>| (A.set_true(s, true), B.set_true(s, false));
-    if mu_frequent(x, &D, &C) {
-        let (a, b) = f(&C, &bit, &D);
+    if mu_frequent(x, D, C) {
+        let (a, b) = f(C, &bit, D);
         if let Some(S) = go(a, b, Bits::EMPTY)? {
             return Ok(Some(S));
         }
@@ -197,8 +208,8 @@ fn node<const W: usize>(
                 return Ok(Some(S));
             }
         }
-    } else if mu_frequent(x, &C, &D) {
-        let (a, b) = t(&C, &bit, &D);
+    } else if mu_frequent(x, C, D) {
+        let (a, b) = t(C, &bit, D);
         if let Some(S) = go(a, b, bit)? {
             return Ok(Some(S));
         }
@@ -210,11 +221,11 @@ fn node<const W: usize>(
             }
         }
     } else {
-        let (a, b) = f(&C, &bit, &D);
+        let (a, b) = f(C, &bit, D);
         if let Some(S) = go(a, b, Bits::EMPTY)? {
             return Ok(Some(S));
         }
-        let (a, b) = t(&C, &bit, &D);
+        let (a, b) = t(C, &bit, D);
         if let Some(S) = go(a, b, bit)? {
             return Ok(Some(S));
         }
